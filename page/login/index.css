@@ -1,0 +1,34 @@
+:root {
+    --background-input: #6d6d6d1c;
+    --color-input: rgb(31, 31, 31);
+    --background-login: #fff;
+    --color-login: #000;
+}
+
+.box-login {
+    background-color: var(--background-login);
+}
+
+.title-hr {
+    background-color: var(--background-login);
+    color: var(--color-login);
+    width: 50px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.alert {
+    background: grey;
+    bottom: 20px;
+    left: 20px;
+}
+
+.icon-snack {
+    width: 20px;
+}
+
+.button-delete {
+    background: transparent;
+    border: none;
+}
