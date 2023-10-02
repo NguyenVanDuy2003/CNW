@@ -3,9 +3,7 @@
     $query = "SHOW TABLES LIKE 'users'";
     $result = $db->query($query);
 
-    if ($result->num_rows > 0) {
-        echo "Da co db";
-    } else {
+    if ($result->num_rows == 0){
         $sql = 'CREATE TABLE users (
             id INT AUTO_INCREMENT PRIMARY KEY,
             name VARCHAR(255),
@@ -19,7 +17,7 @@
         if ($db->query($sql) === TRUE) {
             echo "New record created successfully";
         } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            echo "Error: " . $sql . "<br>" . $db->error;
         }
         $db->close();
     }
