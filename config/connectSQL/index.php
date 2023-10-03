@@ -2,7 +2,7 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname = "FinalProduct";
+    $dbname = "AcademyLiorion";
 
     $db = new mysqli($servername, $username, $password, $dbname);
     
