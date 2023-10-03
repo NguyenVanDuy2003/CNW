@@ -1,6 +1,6 @@
 <?php
 include "../../extension/snack.php";
-function checkForm($name, $email, $username, $password, $cfpassword, $agree)
+function checkFormSignUp($name, $email, $username, $password, $cfpassword, $agree, $db)
 {
     // check empty
     $empty = check_empty($agree) ? "Agree to the request" :
@@ -49,6 +49,28 @@ function checkForm($name, $email, $username, $password, $cfpassword, $agree)
         return showSnack("password and confirm password must match", false);
     }
 
+    // Check for duplicate username 
+    $sql = "SELECT * FROM users WHERE username = '$username'";
+    $result = $db->query($sql);
+    if ($result->num_rows > 0) {
+        return showSnack("Username already exists", false);
+    }
 
+    // Check for duplicate email 
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = $db->query($sql);
+    if ($result->num_rows > 0) {
+        return showSnack("Email already exists", false);
+    }
+
+    // Hash password
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    date_default_timezone_set('Asia/Ho_Chi_Minh');
+    $currentDateTime = date("d/m/Y H:i");
+    $sql = "INSERT INTO users (name, username, password, email, address, createAt, updateAt, status) VALUES ('$name', '$username', '$password', '$email', '', '$currentDateTime', '$currentDateTime', 'Active')";
+    $result = $db->query($sql);
+
+    return showSnack("Successfully registered account", true);
 }
 ?>
