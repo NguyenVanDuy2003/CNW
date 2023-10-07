@@ -1,0 +1,27 @@
+.snack {
+    border-radius: 0px 20px 0px 20px;
+}
+.alert {
+    bottom: 20px;
+    left: 20px;
+}
+.true {
+    background: #4e8e5a45;
+}
+
+.false {
+    background: #e99f9f45;
+}
+.icon-snack {
+    width: 25px;
+}
+
+.button-delete {
+    background: transparent;
+    border: none;
+}
+
+.content-snack {
+    color: #595959;
+    font-size: 14px;
+}

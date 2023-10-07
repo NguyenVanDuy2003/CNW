@@ -1,5 +1,5 @@
 <?php
-include "../../extension/snack.php";
+include "../../extension/snack/index.php";
 function checkFormSignUp($name, $email, $username, $password, $cfpassword, $agree, $db)
 {
     // check empty

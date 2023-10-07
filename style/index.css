@@ -5,11 +5,16 @@
     --color-input: rgb(31, 31, 31);
     --background-login: #fff;
     --color-login: #000;
+    --padding-header-home: 10px 100px; 
 }
 
 * {
     margin: 0;
     padding: 0;
+}
+
+li {
+    list-style: none;
 }
 
 body {
@@ -183,13 +188,22 @@ body {
 .jc-spacebetween {
     justify-content: space-between;
 }
+.jc-start {
+    justify-content: start;
+}
 
 .ai-center {
     align-items: center;
 }
-
 .ai-spacebetween {
     align-items: space-between;
+}
+.ai-start {
+    align-items: start;
+}
+
+.pointer {
+    cursor: pointer;
 }
 
 .btn {
@@ -263,7 +277,7 @@ body {
     font-weight: 300;
     font-size: 60px;
     line-height: 0.6;
-    font-family: 'Bangers', cursive;
+    font-family: 'Bangers';
     letter-spacing: 5px;
 }
 
