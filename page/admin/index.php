@@ -55,125 +55,70 @@
 
             <?php
             $sideBarLeft = array(
-                "dashboard" => [
-                    [
-                        "icon" => "../../images/admin/dashboard.png",
-                        "text" => "Dashboard",
-                        "utilitys" => []
-                    ],
-                ],
-                "interface" => [
-
-                    [
-                        "icon" => "../../images/admin/setting.png",
-                        "text" => "Components",
-                        "utilitys" => [
-                            "duy", "duy", "duy", "duy",
-                        ]
-                    ],
-                    [
-                        "icon" => "../../images/admin/utilities.png",
-                        "text" => "Utilities",
-                        "utilitys" => []
-                    ],
+                [
+                    "icon" => "../../images/admin/dashboard.png",
+                    "text" => "Dashboard",
+                    "id" => "dashboard",
+                    "utilitys" => []
                 ],
 
+                [
+                    "icon" => "../../images/admin/setting.png",
+                    "text" => "Components",
+                    "id" => "components",
+
+                    "utilitys" => [
+                        "Page1", "Page2"
+                    ]
+                ],
+                [
+                    "icon" => "../../images/admin/utilities.png",
+                    "text" => "Utilities",
+                    "id" => "utilities",
+                    "utilitys" => []
+                ],
+                [
+                    "icon" => "../../images/admin/table.png",
+                    "text" => "Table",
+                    "id" => "table",
+                    "utilitys" => []
+                ],
             );
 
-            foreach ($sideBarLeft as $key => $value) {
+            foreach ($sideBarLeft as $item) {
+                $icon = $item["icon"];
+                $text = $item["text"];
+                $utilities = $item["utilitys"];
+                $id = $item['id'];
             ?>
-                <hr />
-                <?php
-                if ($key !== "dashboard") {
-                ?>
-                    <p class="text_intro"><?php echo $key; ?></p>
-                <?php
-                }
-
-                ?>
-
-                <?php
-                if (is_array($value)) {
-                    foreach ($value as $item) {
-                        $icon = $item["icon"];
-                        $text = $item["text"];
-                        $utility = $item["utilitys"];
-                ?>
-
-                        <form class="item" action="" method="post">
-                            <div name="<?php echo $key; ?>">
-                                <img src="<?php echo $icon; ?>" class="icon" alt="error">
-                                <a class="text_icon" href="#<?php echo $key; ?>"><?php echo $text; ?></a>
-                                <?php
-                                if ($utility !== []) {
-                                ?>
-
-                                    <img src=" ../../images/admin/chevron_right.png" class="icon" name="icon_show_down" alt="error">
-                                <?php } ?>
-                            </div>
-                            <?php
-                            if ($utility !== []) {
-                            ?>
-
-                                <ul type="none" class="show_down">
-                                    <?php
-                                    foreach ($utility as $element) {
-                                        $text_element = $element;
-                                    ?>
-                                        <li><?php echo $text_element; ?></li>
-                                    <?php
-                                    }
-
-                                    ?>
-                                </ul>
-                            <?php
-                            }
-
-                            ?>
-
-                        </form>
-                <?php
-                    }
-                }
-                ?>
-            <?php
-            }
-            ?>
-
-
-
+                <form class="item">
+                    <div name="<?php echo  $id; ?>">
+                        <img src="<?php echo $icon; ?>" class="icon" alt="error">
+                        <span class="text_icon"><?php echo $text; ?></span>
+                        <?php if (!empty($utilities)) { ?>
+                            <img src="../../images/admin/chevron_right.png" class="icon" name="icon_show_down" alt="error">
+                        <?php } ?>
+                    </div>
+                    <?php if (!empty($utilities)) { ?>
+                        <ul type="none" class="show_down">
+                            <?php foreach ($utilities as $text_element) { ?>
+                                <li><?php echo $text_element; ?></li>
+                            <?php } ?>
+                        </ul>
+                    <?php } ?>
+                </form>
+            <?php } ?>
         </div>
-
-        <div id="dashboard">
-            <div class="item">
-                <div>
-                    Dashboard
-                </div>
-                <div>
-                    <a>Generate reqort</a>
-                </div>
+        <div id="layout">
+            <div id="dashboard">
+                <iframe src="../../components/admin/dashboard/index.php"></iframe>
             </div>
-            <div class="item">
-                <div>
-                    <div>
-                        <p>Sum User</p>
-                        <span>2222222</span>
-                    </div>
-                    <div>
-                        <img src="../../images/admin/dashboard.png" class="icon" alt="error">
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        <p>Sum GV</p>
-                        <span>2222222</span>
-                    </div>
-                    <div>
-                        <img src="../../images/admin/dashboard.png" class="icon" alt="error">
-                    </div>
-                </div>
+            <div id="table" style="display:none">
+                <iframe src="../../components/admin/tableUser/index.php"></iframe>
             </div>
-            <div class="item"></div>
+            <div id="utilities" style="display:none">Utility</div>
+            <div id="page1" style="display:none">page1</div>
+            <div id="page2" style="display:none">page2</div>
         </div>
     </main>
 </body>

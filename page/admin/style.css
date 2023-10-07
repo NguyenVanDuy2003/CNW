@@ -1,18 +1,35 @@
+body {
+  padding: 0;
+  margin: 0;
+}
 #container {
   display: grid;
   grid-template-areas:
     "logo nawBar nawBar "
-    "sideBarLeft dashboard dashboard  "
-    "sideBarLeft dashboard dashboard "
-    "sideBarLeft dashboard dashboard  ";
+    "sideBarLeft layout layout  "
+    "sideBarLeft layout layout "
+    "sideBarLeft layout layout  ";
   gap: 10px;
   padding: 10px;
-  max-width: 1440px;
   height: 100vh;
   grid-template-columns: 0.3fr 1fr 1fr;
   grid-template-rows: 0.2fr 1fr 1fr;
   padding: 0;
   gap: 0px;
+}
+#layout {
+  grid-area: layout;
+  height: 100%;
+  background-color: #f8f9fc;
+  padding: 20px;
+}
+#layout > div {
+  height: 100%;
+}
+iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 #nawBar {
   grid-area: nawBar;
@@ -118,62 +135,4 @@
   background: #ffffff;
   border-radius: 10px;
   margin-top: 10px;
-}
-/* dashboard */
-#dashboard {
-  grid-area: dashboard;
-  height: 100%;
-  background-color: #f8f9fc;
-  padding: 20px;
-}
-#dashboard > .item:first-child {
-  display: flex;
-  justify-content: space-between;
-}
-#dashboard > .item:first-child > div {
-  font-size: 32px;
-}
-
-#dashboard > .item:first-child > div > a {
-  color: #fff;
-  background-color: #4e73df;
-  border-color: #4e73df;
-  padding: 5px;
-  border-radius: 5px;
-  font-size: 16px;
-}
-#dashboard > .item:nth-child(2) {
-  display: flex;
-  justify-content: space-between;
-}
-
-#dashboard > .item:nth-child(2) > div {
-  display: flex;
-  justify-content: space-between;
-  border-left: 0.25rem solid #4e73df !important;
-  padding: 24px;
-  background-color: #ffffff;
-  width: 100%;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-#dashboard > .item:nth-child(2) > div > div > p {
-  color: #4e73df !important;
-  font-size: 24px;
-}
-#dashboard > .item:nth-child(2) > div > div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-#dashboard > .item:nth-child(2) > div:nth-child(1) {
-  margin-right: 10px;
-}
-#dashboard > .item:nth-child(2) > div:nth-child(2) {
-  margin-left: 10px;
-}
-
-#dashboard .icon {
-  width: 32px;
-  height: 32px;
 }
