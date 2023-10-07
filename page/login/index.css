@@ -17,18 +17,3 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
-
-.alert {
-    background: grey;
-    bottom: 20px;
-    left: 20px;
-}
-
-.icon-snack {
-    width: 20px;
-}
-
-.button-delete {
-    background: transparent;
-    border: none;
-}

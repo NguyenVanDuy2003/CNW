@@ -22,6 +22,7 @@ if (isset($_POST['btnRegister'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="../../extension/snack/index.css">
     <title>Login</title>
 </head>
 
@@ -52,17 +53,35 @@ if (isset($_POST['btnRegister'])) {
             <?php
             if (!isset($_GET['Register'])) {
                 echo '<form class="column w-full gap-10 ai-center" method="get" action="">
-                            <input name="username_login" type="text" placeholder="Email or username" class="input-basic w-full"/>
-                            <input name="password_login" type="password" placeholder="Password" class="input-basic w-full"/>
+                        <input name="username_login" id="username_input" type="text" placeholder="Email or username" class="input-basic w-full"/>
+                        <input name="password_login" id="password_input" type="password" placeholder="Password" class="input-basic w-full"/>
+                        
+                        <script>
+                            document.getElementById("username_input").addEventListener("blur", function() {
+                                var username = this.value;
+                                
+                                if(localStorage.getItem("rememberAccount")) {
+                                    var existingData = JSON.parse(localStorage.getItem("rememberAccount"));
+                                    
+                                    var account = existingData.find(function(item) {
+                                        return item.username === username;
+                                    });
+                                    
+                                    if (account) {
+                                        document.getElementById("password_input").value = account.password;
+                                    }
+                                }
+                            });
+                        </script>
                             <div class="d-flex jc-spacebetween pd-10 w-full">
                                 <div class="d-flex ai-center gap-5">
-                                    <input type="checkbox"/>
+                                    <input type="checkbox" name="remember"/>
                                     <span>Remember me</span>
                                 </div>
                                 <p class="link">Forgot password?</p>
                             </div>
                             <input type="submit" name="btnLogin" value="Login" class="w-haft btn btn-success pd-10"/> 
-                        </form>';
+                    </form>';
             } else {
                 echo '<form class="column w-full gap-10 ai-center" method="post">
                             <input name="name" type="text" placeholder="Full name" class="input-basic w-full" value="' . (isset($_POST['name']) ? $_POST['name'] : '') . '"/>

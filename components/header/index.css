@@ -1,0 +1,98 @@
+.header {
+    background: var(--background-login);
+}
+.icon {
+    width: 17px;
+    height: 17px;
+    padding: 10px;
+    border-radius: 10px;
+}
+.icon:hover, .contact:hover {
+    cursor: pointer;
+    background: rgba(215, 218, 220, 0.347);
+}
+.contact {
+    position: relative;
+    border-radius: 10px;
+    padding: 3px 8px;
+}
+.icon-arrow {
+    width: 10px;
+    height: 10px;
+    transform: rotate(180deg);
+}
+
+.icon-profile {
+    width: 40px;
+    height: 40px;
+}
+
+.icon-list {
+    width: 30px;
+    height: 30px;
+}
+
+.header {
+    z-index: 1000;
+    box-shadow: 0 0 5px 1px #9099a1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: var(--padding-header-home) !important;
+}
+
+.hr-list-icon {
+    height: 21px;
+    width: 2px;
+    border: none;
+    background: #b8bfc2;
+}
+
+.hr-list-menu {
+    border: none;
+    background: #b8bfc285;
+    height: 1px;
+}
+
+.name {
+    font-size: 15px;
+    color: #353030;
+}
+
+.list-menu-extension {
+    list-style: none;
+}
+.list-menu-extension li {
+    border-radius: 10px;
+    padding: 2px 3px;
+}
+.list-menu-extension li:hover {
+    background: rgba(186, 186, 186, 0.247);
+}
+.list-menu-extension p {
+    font-size: 14px;
+    color:rgba(223, 223, 223, 0.898);
+}
+.list-menu-extension .icon {
+    filter: invert(95%) sepia(100%) saturate(0%) hue-rotate(31deg) brightness(101%) contrast(90%);
+}
+.popover {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #212121;
+    border-radius: 5px;
+    padding: 5px;
+    min-width: 200px;
+}
+
+.logout {
+    background: #e14f4fdb;
+}
+.logout:hover {
+    background: #a21f1fdb !important;
+}
+
+.header .logo>h3 {
+    font-size: 42px;
+}

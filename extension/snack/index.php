@@ -3,10 +3,10 @@ function showSnack($content, $mode) {
     if (isset($_POST['delete'])) {
         return ""; 
     } else {
-        $snack = '<div class="btn box-shadow pst-fixed w-20 alert pd-10 d-flex ai-center jc-spacebetween">
+        $snack = '<div class="'.(!$mode ? 'false' : 'true').' snack box-shadow pst-fixed w-20 alert pd-10 d-flex ai-center gap-10 jc-spacebetween">
             <div class="d-flex ai-center gap-10">
                 <img class="icon-snack" src="' . (!$mode ? 'https://cdn-icons-png.flaticon.com/128/6711/6711656.png' : 'https://cdn-icons-png.flaticon.com/128/190/190411.png') . '"/>
-                <p>' . $content . '</p>
+                <p class="content-snack">' . $content . '</p>
             </div>
             <form method="post">
                 <input type="hidden" name="delete" value="1">
