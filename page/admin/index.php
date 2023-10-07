@@ -17,7 +17,7 @@
                 <div>
                     <input type="text" placeholder="Search for...">
                     <div>
-                        <img src="../../images/admin/chevron_right.png" class="icon" alt="error">
+                        <img src="../../images/admin/search.png" class="icon" alt="error">
                     </div>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                 ],
 
                 [
-                    "icon" => "../../images/admin/setting.png",
+                    "icon" => "../../images/admin/components.png",
                     "text" => "Components",
                     "id" => "components",
 
@@ -78,9 +78,9 @@
                     "utilitys" => []
                 ],
                 [
-                    "icon" => "../../images/admin/table.png",
-                    "text" => "Table",
-                    "id" => "table",
+                    "icon" => "../../images/admin/management.png",
+                    "text" => "User Manager",
+                    "id" => "user manager",
                     "utilitys" => []
                 ],
             );
@@ -92,7 +92,7 @@
                 $id = $item['id'];
             ?>
                 <form class="item">
-                    <div name="<?php echo  $id; ?>">
+                    <div name="<?php echo  $text; ?>">
                         <img src="<?php echo $icon; ?>" class="icon" alt="error">
                         <span class="text_icon"><?php echo $text; ?></span>
                         <?php if (!empty($utilities)) { ?>
@@ -102,7 +102,7 @@
                     <?php if (!empty($utilities)) { ?>
                         <ul type="none" class="show_down">
                             <?php foreach ($utilities as $text_element) { ?>
-                                <li><?php echo $text_element; ?></li>
+                                <li name="<?php echo  $text_element; ?>"><?php echo $text_element; ?></li>
                             <?php } ?>
                         </ul>
                     <?php } ?>
@@ -113,7 +113,7 @@
             <div id="dashboard">
                 <iframe src="../../components/admin/dashboard/index.php"></iframe>
             </div>
-            <div id="table" style="display:none">
+            <div id="user manager" style="display:none">
                 <iframe src="../../components/admin/tableUser/index.php"></iframe>
             </div>
             <div id="utilities" style="display:none">Utility</div>

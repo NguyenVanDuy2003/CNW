@@ -18,24 +18,40 @@
         </div>
     </div>
     <div class="item">
-        <div>
+        <?php
+        $data = [
+            [
+                "title" => "User",
+                "value" => "22222",
+                "icon" => "../../../images/admin/user.png"
+            ], [
+                "title" => "Class",
+                "value" => "22222",
+                "icon" => "../../../images/admin/class.png"
+            ],
+        ];
+        foreach ($data as $item) {
+            $title = $item['title'];
+            $value = $item['value'];
+            $icon = $item['icon'];
+
+        ?>
             <div>
-                <p>Sum User</p>
-                <span>2222222</span>
+                <div>
+                    <div>
+                        <p><?php echo $title; ?></p>
+                        <span><?php echo  $value; ?></span>
+                    </div>
+                    <div>
+                        <img src="<?php echo $icon; ?>" class="icon" alt="error">
+                    </div>
+                </div>
             </div>
-            <div>
-                <img src="../../../images/admin/dashboard.png" class="icon" alt="error">
-            </div>
-        </div>
-        <div>
-            <div>
-                <p>Sum GV</p>
-                <span>2222222</span>
-            </div>
-            <div>
-                <img src="../../../images/admin/dashboard.png" class="icon" alt="error">
-            </div>
-        </div>
+        <?php
+        }
+
+        ?>
+
     </div>
     <div class="item"></div>
 </body>
