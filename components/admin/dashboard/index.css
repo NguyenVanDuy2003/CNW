@@ -17,17 +17,21 @@
 .item:nth-child(2) {
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 .item:nth-child(2) > div {
+  width: 50%;
+  margin-top: 20px;
+}
+.item:nth-child(2) > div > div {
   display: flex;
   justify-content: space-between;
   border-left: 0.25rem solid #4e73df !important;
   padding: 24px;
   background-color: #ffffff;
-  width: 100%;
   border-radius: 5px;
-  margin-top: 20px;
 }
 .item:nth-child(2) > div > div > p {
   color: #4e73df !important;
@@ -35,13 +39,12 @@
 }
 .item:nth-child(2) > div > div {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
-.item:nth-child(2) > div:nth-child(1) {
+.item:nth-child(2) > div:nth-child(odd) > div {
   margin-right: 10px;
 }
-.item:nth-child(2) > div:nth-child(2) {
+.item:nth-child(2) > div:nth-child(even) > div {
   margin-left: 10px;
 }
 
