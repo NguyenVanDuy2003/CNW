@@ -1,9 +1,10 @@
 <?php
 include "../../config/connectSQL/index.php";
-include "../../config/createDB/index.php";
+include "../../config/getTime/index.php";
 include "../../config/signup/index.php";
 include "../../config/signin/index.php";
 include "../../config/checkform/index.php";
+include "../../config/accessToken/index.php";
 
 if (isset($_GET['btnLogin'])) {
     echo checkFormSignIn($_GET['username_login'], $_GET['password_login'], $db);
