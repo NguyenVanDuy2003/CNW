@@ -8,6 +8,12 @@
     --padding-header-home: 10px 100px; 
 }
 
+main {
+    margin-top: 66px;
+    padding: var(--padding-header-home);
+    position: relative;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -77,10 +83,12 @@ body {
     width: 15px;
 }
 
+.w-auto {
+    width: auto;
+}
 .w-10 {
     width: 10rem;
 }
-
 .w-20 {
     width: 20rem;
 }

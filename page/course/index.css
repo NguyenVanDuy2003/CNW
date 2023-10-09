@@ -1,0 +1,55 @@
+.course .lesson {
+    border-radius: 10px;
+    border: 3px solid rgb(35, 159, 231);
+    border-width: 3px 0.5px 0.5px 0.5px;
+    border-color: rgb(35, 159, 231) #80808073 #80808073 #80808073;
+}
+
+.course .icon-of-lesson {
+    width: 35px;
+    padding: 10px;
+    background: #80808030;
+    border-radius: 10px;
+}
+
+.course .btn-tick {
+    height: fit-content;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 0px #b7b2b273;
+    background: transparent;
+}
+
+.course .complete {
+    background: #42aa40 !important;
+    color: white;
+}
+
+.course .btn-tick:hover {
+    box-shadow: 0 4px 5px 3px #645e5e73;
+}
+
+.course .title-of-lesson {
+    font-size: 17px;
+    color: #ea965a;
+}
+
+.course .title-of-lesson:hover {
+    text-decoration: underline;
+}
+
+.course hr {
+    height: 1px;
+    background: #80808038;
+    border: none;
+}
+
+.course .icon-donation {
+    width: 25px;
+}
+
+.course .btn-donation {
+    font-weight: 600;
+    color: #e07631;
+}
