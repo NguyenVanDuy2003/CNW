@@ -1,22 +1,119 @@
 <?php
+include "../../config/connectSQL/index.php";
+include "../../config/checkCookie/index.php";
+include "../../config/getTime/index.php";
 include "../../extension/snack/index.php";
+$userId = checkActiveCookie($db);
 session_start();
-if (!isset($_SESSION['typeQuestion'])) {
-    $_SESSION['typeQuestion'] = "checkbox";
+if (!isset($_SESSION['type'])) {
+    $_SESSION['type'] = "checkbox";
     $_SESSION['question'] = "";
     $_SESSION['answer'] = "";
     $_SESSION['answerCorrect'] = "";
-    $_SESSION['type'] = "";
+}
+
+function getForm()
+{
+    $_SESSION['question'] = $_POST['question'];
+    switch ($_SESSION['type']) {
+        case 'text':
+            $answer = [];
+            $answerCorrect = $_POST['answer'];
+            $_SESSION['type'] = 'text';
+            break;
+        case 'radio':
+            $i = 1;
+            $answer = [];
+            while ($_POST["answer$i"]) {
+                array_push($answer, $_POST["answer$i"]);
+                $i++;
+            }
+            $answerCorrect = $_POST['answer'];
+            $_SESSION['type'] = 'radio';
+            break;
+        default:
+            $i = 1;
+            $answer = [];
+            $answerCorrect = [];
+            while ($_POST["answer$i"]) {
+                array_push($answer, $_POST["answer$i"]);
+                if ($_POST["cbanswer$i"]) {
+                    array_push($answerCorrect, $_POST["answer$i"]);
+                }
+                $i++;
+            }
+            $_SESSION['type'] = 'checkbox';
+            break;
+    }
+    $_SESSION['question'] = $_POST['question'];
+    $_SESSION['answer'] = $answer;
+    $_SESSION['answerCorrect'] = $answerCorrect;
+}
+
+function hasDuplicates($array)
+{
+    $uniqueArray = array_unique($array); // delete item duplicates
+    return count($array) !== count($uniqueArray);
+}
+function validation($db)
+{
+    getForm();
+    $question = $_SESSION['question'];
+    $answer = $_SESSION['answer'];
+    $answerCorrect = $_SESSION['answerCorrect'];
+
+    // check emply question and answer
+    if (!$question) {
+        echo showSnack("You must fill out your question completely and cannot leave it blank", false);
+        return false;
+    }
+    if ((count($answer) < $_POST['counter']) && ($_SESSION['type'] != 'text')) {
+        echo showSnack("You must fill out your answer completely and cannot leave it blank", false);
+        return false;
+    }
+
+    // check question
+    if (strlen($question) > 15) {
+        $spaceCount = substr_count($question, ' ');
+        if ($spaceCount < 2) {
+            echo showSnack("Invalid question part", false);
+            return false;
+        }
+    } else {
+        echo showSnack("Invalid question part", false);
+        return false;
+    }
+
+    // check answer correct min 1 right answer
+    if (($_SESSION['type'] != 'text' && count($answerCorrect) < 1) || ($_SESSION['type'] == 'text' && strlen($answerCorrect) == 0)) {
+        echo showSnack("Must choose at least 1 answer", false);
+        return false;
+    }
+
+    // check answer duplicates
+    if (hasDuplicates($answer)) {
+        echo showSnack("The answers cannot overlap", false);
+        return false;
+    }
+
+    // check duplicate question
+    $sql = "SELECT * FROM question WHERE question = '$question'";
+    $result = $db->query($sql);
+    if ($result->num_rows > 0) {
+        echo showSnack("The question has been duplicated", false);
+        return false;
+    }
+    return true;
 }
 function answer($name, $namecb, $type)
 {
     $checked = '';
-    if (!isset($_POST['save'])) {
+    if (!isset($_POST['completed'])) {
         if (isset($_POST[$namecb])) {
             $checked = 'checked';
         }
     }
-    $inputValue = (isset($_POST['save'])) ? '' : $_POST[$name];
+    $inputValue = (isset($_POST['completed'])) ? '' : $_POST[$name];
     $isChecked = (isset($_POST['answer']) && in_array($inputValue, $_POST['answer'])) ? 'checked' : '';
 
     $tick = ($type == "checkbox") ? (
@@ -35,7 +132,7 @@ function answer($name, $namecb, $type)
 
 function question()
 {
-    if (!isset($_POST['save'])) {
+    if (!isset($_POST['completed'])) {
         if (isset($_POST['question'])) {
             $question = $_POST['question'];
         }
@@ -100,7 +197,7 @@ function chooseAnswer($type)
 
 function textAnswer()
 {
-    if (!isset($_POST['save'])) {
+    if (!isset($_POST['completed'])) {
         if (isset($_POST['answer'])) {
             $answer = $_POST['answer'];
         }
@@ -114,45 +211,30 @@ function textAnswer()
     ";
 }
 
-function preview($question, $answer, $answerCorrect)
+function resetDataForm()
 {
-    $_SESSION['question'] = $question;
-    $_SESSION['answer'] = $answer;
-    $_SESSION['answerCorrect'] = $answerCorrect;
+    $_SESSION['question'] = "";
+    $_SESSION['answer'] = "";
+    $_SESSION['answerCorrect'] = "";
 }
 
 if (isset($_POST['preview'])) {
-    switch ($_SESSION['typeQuestion']) {
-        case 'text':
-            $answer = [];
-            $answerCorrect = $_POST['answer'];
-            $_SESSION['type'] = 'text';
-            break;
-        case 'radio':
-            $i = 1;
-            $answer = [];
-            while ($_POST["answer$i"]) {
-                array_push($answer, $_POST["answer$i"]);
-                $i++;
-            }
-            $answerCorrect = $_POST['answer'];
-            $_SESSION['type'] = 'radio';
-            break;
-        default:
-            $i = 1;
-            $answer = [];
-            $answerCorrect = [];
-            while ($_POST["answer$i"]) {
-                array_push($answer, $_POST["answer$i"]);
-                if ($_POST["cbanswer$i"]) {
-                    array_push($answerCorrect, $_POST["answer$i"]);
-                }
-                $i++;
-            }
-            $_SESSION['type'] = 'checkbox';
-            break;
+    echo validation($db) ? showSnack("Questions are ready to be added", true) : '';
+}
+
+if (isset($_POST['save'])) {
+    if (validation($db)) {
+        $type = $_SESSION['type'];
+        $time = getCurrentTimeInVietnam();
+        $question = $_POST['question'];
+        $answer = serialize($_SESSION['answer']);
+        $answerCorrect = serialize($_SESSION['answerCorrect']);
+        $sql = "INSERT INTO question (creator, approved, lesson, courseId, question, answer, answerCorrect, type, createAt, updateAt) 
+        VALUES ('$userId', 0, 1, 1, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
+        echo $sql;
+        $result = $db->query($sql);
+        echo showSnack("Question added successfully", true);
     }
-    preview($_POST['question'], $answer, $answerCorrect);
 }
 
 ?>
@@ -196,13 +278,16 @@ if (isset($_POST['preview'])) {
                 <?php
                 if (isset($_GET['anAnswer'])) {
                     chooseAnswer("radio");
-                    $_SESSION['typeQuestion'] = "radio";
+                    $_SESSION['type'] = "radio";
+                    // resetDataForm();
                 } elseif (isset($_GET['fillInTheAnswer'])) {
                     textAnswer();
-                    $_SESSION['typeQuestion'] = "text";
+                    $_SESSION['type'] = "text";
+                    // resetDataForm();
                 } else {
                     chooseAnswer("checkbox");
-                    $_SESSION['typeQuestion'] = "checkbox";
+                    $_SESSION['type'] = "checkbox";
+                    // resetDataForm();
                 }
                 ?>
 
@@ -222,7 +307,7 @@ if (isset($_POST['preview'])) {
                 <?php
                 switch ($_SESSION['type']) {
                     case 'text':
-                        $result = $_SESSION['answerCorrect'];
+                        $result = $_SESSION['answerCorrect'][0];
                         echo "
                         <input type='text' name='answer_preview' placeholder='Fill in the answer' class='inptxt' readonly/>
                         <p class='answer-text-preview'>Answer Correct: <b>$result</b></p>
@@ -238,7 +323,7 @@ if (isset($_POST['preview'])) {
                             echo "
                             <div class='d-flex gap-10'>
                                 <input type=$type name='cb_answer_preview$i' $checked/>
-                                <input type='text' name='answer_preview$i' class='inptxt w-full' value='$answer'/>
+                                <input type='text' name='answer_preview$i' class='inptxt w-full' value='$answer' readonly/>
                             </div>
                             ";
                         }
@@ -247,6 +332,54 @@ if (isset($_POST['preview'])) {
                 ?>
             </div>
         </div>
+
+        <h3>Questions you contributed</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="w-4percent">STT</th>
+                    <th>Question</th>
+                    <th class='w-10percent'>Type</th>
+                    <th>Lesson</th>
+                    <th class='w-15percent'>CreateAt</th>
+                    <th class='w-15percent'>UpdateAt</th>
+                    <th class='w-10percent'>Status</th>
+                    <th class="w-2percent"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $sql = "SELECT question, type, lesson, createAt, updateAt, approved FROM question ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
+                $result = $db->query($sql);
+                if ($result->num_rows > 0) {
+                    $i = 0;
+                    while ($row = $result->fetch_assoc()) {
+                        $i++;
+                        $question = $row['question'];
+                        $type = ($row['type'] == "radio") ? "An answer" : (($row['type'] == "checkbox") ? "Many answer" : ("Fill in the answer"));
+                        $lesson = $row['lesson'];
+                        $createAt = $row['createAt'];
+                        $updateAt = $row['updateAt'];
+                        $status = ($row['approved'] != 0) ? "Approved" : "Not approved";
+                        echo "
+                        <tr>
+                            <td class='txt-center w-4percent'>$i</td>
+                            <td>$question</td>
+                            <td class='w-10percent'>$type</td>
+                            <td class='w-10percent'>Lesson $lesson</td>
+                            <td class='w-15percent'>$createAt</td>
+                            <td class='w-15percent'>$updateAt</td>
+                            <td class='w-10percent'>$status</td>
+                            <td class='txt-center pointer w-4percent'><img class='icon-add' src='https://cdn-icons-png.flaticon.com/128/2311/2311523.png'/></td>
+                        </tr>
+                        ";
+                    }
+                }
+                ?>
+            </tbody>
+        </table>
+        <p class="note">Please contact your class instructor or admin to make the approval process faster. Thank you!</p>
 
     </main>
     <?php

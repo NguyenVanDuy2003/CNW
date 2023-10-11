@@ -29,7 +29,7 @@ $course = [
             'detailContent' => [
                 [
                     'titleLesson' => 'Silde tuần 1 - Các khái niệm cơ bản',
-                    
+
                     'status' => 'false',
                 ],
                 [
@@ -97,10 +97,13 @@ $course = [
             <h1>
                 <?php echo $course['nameCourse']; ?>
             </h1>
-            <button class="d-flex ai-center btn-tick pointer gap-10 btn-donation">
-                <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/5432/5432915.png" />
-                Contribute questions
-            </button>
+            <form method="get" action="../contribute/index.php">
+                <input type="hidden" name="id" value="<?php echo $_GET['id']?>">
+                <button class="d-flex ai-center btn-tick pointer gap-10 btn-donation">
+                    <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/5432/5432915.png" />
+                    Contribute questions
+                </button>
+            </form>
         </div>
         <?php
         foreach ($course['contents'] as $detailCourse) {

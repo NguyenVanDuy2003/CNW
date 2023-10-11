@@ -1,3 +1,17 @@
+<?php
+session_start();
+if (!$_SESSION['teacher']) {
+    $_SESSION['teacher'] = [];
+}
+if (isset($_POST['add'])) {
+    array_push($_SESSION['teacher'], $_POST['maGV']);
+    print_r($_SESSION['teacher']);
+}
+// if (isset($_POST['remove'])) {
+//     $_SESSION['teacher'], $_POST['maGV'];
+//     print_r($_SESSION['teacher']);
+// }
+?>
 <!DOCTYPE html>
 <html>
 
@@ -52,7 +66,7 @@
         ?>
 
         <h2>Thêm Giảng Viên và Học Sinh</h2>
-        <form action="#" method="post">
+        <form action="" method="post">
             <label for="name">Title:</label>
             <input type="text" id="name" name="name" required>
 
@@ -68,15 +82,16 @@
                 ?>
             </select>
 
-            <input type="button" name="add" value="Add" onclick="addSelectedUsers()">
-            <input type="button" name="remove" value="Remove" onclick="removeSelectedUsers()">
+            <input type="submit" name="add" value="Add" onclick="addSelectedUsers()">
+            <input type="submit" name="remove" value="Remove" onclick="removeSelectedUsers()">
 
             <select id="selectedUsers" name="selectedUsers[]" multiple>
                 <?php
                 foreach ($selectedUsers as $userId) {
-                    foreach ($dataTeacher as $item) {
-                        if ($item['id'] == $userId) {
-                            echo '<option value="' . $userId . '" selected>' . $item['name'] . '</option>';
+                    foreach ($_SESSION['teacher'] as $item) {
+                        echo $item;
+                        if ($item == $userId) {
+                            echo '<option value="' . $userId . '" name='. $userId .' selected>' . $item . '</option>';
                             break;
                         }
                     }
@@ -88,7 +103,6 @@
         </form>
         <?php
         if (isset($_POST['submit'])) {
-            // Lấy giá trị từ phần tử select có tên "selectedUsers"
             // $selectedUserIds = $_POST["selectedUsers"];
 
             // Hiển thị tất cả giá trị đã chọn
@@ -101,7 +115,7 @@
         }
         ?>
 
-        <script>
+        <!-- <script>
             function addSelectedUsers() {
                 let optionsDropdown = document.getElementById("optionsDropdown");
                 let selectedUsers = document.getElementById("selectedUsers");
@@ -151,7 +165,7 @@
                     selectedUsers.removeChild(optionsToRemove[i]);
                 }
             }
-        </script>
+        </script> -->
     </div>
 </body>
 
