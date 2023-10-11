@@ -159,9 +159,9 @@ $courses = [
                                 <div class="d-flex">';
                             foreach ($course['teacher'] as $teacher) {
                                 echo '<div>
-                                                        <img class="pointer" src="' . $teacher["avt"] . '" alt="' . $teacher["name"] . '"/>
-                                                        <p>' . $teacher["name"] . '</p>
-                                                    </div>';
+                                        <img class="pointer" src="' . $teacher["avt"] . '" alt="' . $teacher["name"] . '"/>
+                                        <p>' . $teacher["name"] . '</p>
+                                    </div>';
                             }
                             echo '</div>
                                 <button class="pointer">' . $course['semester'] . '</button>

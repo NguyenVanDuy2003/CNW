@@ -31,7 +31,7 @@
     padding: 10px;
 }
 
-.formAddQuestion .icon-add {
+.contribute .icon-add {
     width: 18px;
 }
 
@@ -73,4 +73,45 @@
     padding: 8px;
     border-radius: 10px;
     color: #f6f6f6;
+}
+
+.contribute table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.contribute th, td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+
+.contribute thead {
+    background: #b5b5b582;
+}
+
+.contribute>h3 {
+    text-align: center;
+    margin: 40px 0 0 0;
+    font-weight: 600;
+    font-size: 25px;
+    color: #d17185;
+    text-shadow: 3px 4px 5px #9E9E9E;
+}
+
+.contribute .note {
+    color: #6d4f4fab;
+    text-align: center;
+}
+
+.contribute .w-15percent {
+    width: 15%;
+}
+
+.contribute .w-4percent {
+    width: 4%;
+}
+
+.contribute .w-10percent {
+    width: 10%;
 }
