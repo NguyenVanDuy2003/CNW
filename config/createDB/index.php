@@ -17,7 +17,7 @@ try {
             status VARCHAR(255)
         )';
         $db->close();
-    }
+    }   
 } catch (Exception $e) {
     echo 'Message: ' . $e->getMessage();
 }

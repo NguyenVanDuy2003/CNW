@@ -13,7 +13,6 @@ document.querySelectorAll(".item").forEach(function (item, index) {
       arrayButton.push(e.innerText);
     });
   }
-  console.log(arrayButton, button);
   let isItemOn = false;
   item.addEventListener("click", function () {
     isItemOn = !isItemOn;

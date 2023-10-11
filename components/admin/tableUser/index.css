@@ -34,3 +34,12 @@ select option {
   color: #333; /* Màu chữ */
   background-color: #f2f2f2; /* Màu nền */
 }
+.number {
+  padding: 10px;
+}
+.current {
+  color: red;
+}
+a {
+  text-decoration-line: none;
+}
