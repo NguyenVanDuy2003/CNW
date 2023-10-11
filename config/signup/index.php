@@ -68,7 +68,7 @@ function checkFormSignUp($name, $email, $username, $password, $cfpassword, $agre
 
     date_default_timezone_set('Asia/Ho_Chi_Minh');
     $currentDateTime = date("d/m/Y H:i");
-    $sql = "INSERT INTO users (name, username, password, email, address, createAt, updateAt, status) VALUES ('$name', '$username', '$password', '$email', '', '$currentDateTime', '$currentDateTime', 'Active')";
+    $sql = "INSERT INTO users (name, username, password, email, address, createAt, updateAt, role, status) VALUES ('$name', '$username', '$password', '$email', '', '$currentDateTime', '$currentDateTime', 'student', 'Active')";
     $result = $db->query($sql);
 
     return showSnack("Successfully registered account", true);

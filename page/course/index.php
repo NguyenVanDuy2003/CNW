@@ -1,4 +1,6 @@
 <?php
+include "../../config/connectSQL/index.php";
+include "../../config/checkCookie/index.php";
 $course = [
     'nameCourse' => 'COMP 254 - Phân tích thiết kế thuật toán',
     'teacher' => [
