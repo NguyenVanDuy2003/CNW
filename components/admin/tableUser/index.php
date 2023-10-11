@@ -1,34 +1,32 @@
 <?php
-function generateFakeData($id)
-{
-    $names = ["John Doe", "Jane Smith", "Alice Johnson"];
-    $usernames = ["johndoe123", "janesmith456", "alicej"];
-    $emails = ["johndoe@example.com", "janesmith@example.com", "alice@example.com"];
-    $createdAt = date("Y-m-d H:i:s");
-    $statuses = ["active", "inactive"];
-    $addresses = ["123 Main St, City", "456 Elm St, Town", "789 Oak St, Village"];
-    $authors = ["Học sinh", "Giảng viên", "Admin"]; // Các tùy chọn cho trường Author
+include "../../../config/connectSQL/index.php";
 
-    $data = [
-        "id" => $id,
-        "name" => $names[array_rand($names)],
-        "username" => $usernames[array_rand($usernames)],
-        "email" => $emails[array_rand($emails)],
-        "createdAt" => $createdAt,
-        "status" => $statuses[array_rand($statuses)],
-        "address" => $addresses[array_rand($addresses)],
-        "author" => $authors[array_rand($authors)],
-    ];
+$sql = "SELECT * FROM users WHERE 1";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$result = $stmt->get_result();
 
-    return $data;
+$totalDataPoints = $result->num_rows; // Get the total number of data points from the result
+$dataPerPage = 10;
+$totalPages = ceil($totalDataPoints / $dataPerPage);
+$currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
+
+$offset = ($currentPage - 1) * $dataPerPage;
+
+$data = [];
+
+// Fetch and store the data for the current page
+for ($i = 0; $i < $totalDataPoints; $i++) {
+    $row = $result->fetch_assoc();
+    if (!$row) {
+        break; // Break the loop if there is no more data
+    }
+    $data[] = $row;
 }
 
-$fakeDataArray = [];
-for ($i = 1; $i <= 5; $i++) {
-    $fakeDataArray[] = generateFakeData($i);
-}
+$dataForPage = array_slice($data, $offset, $dataPerPage);
+
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,25 +54,39 @@ for ($i = 1; $i <= 5; $i++) {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($fakeDataArray as $fakeData) { ?>
+            <?php foreach ($dataForPage as $item) { ?>
                 <tr>
-                    <td><?php echo $fakeData["id"]; ?></td>
-                    <td><?php echo $fakeData["name"]; ?></td>
-                    <td><?php echo $fakeData["username"]; ?></td>
-                    <td><?php echo $fakeData["email"]; ?></td>
-                    <td><?php echo $fakeData["address"]; ?></td>
+
+                    <td><?php echo $item["id"]; ?></td>
+                    <td><?php echo $item["name"]; ?></td>
+                    <td><?php echo $item["username"]; ?></td>
+                    <td><?php echo $item["email"]; ?></td>
+                    <td><?php echo $item["address"]; ?></td>
                     <td>
                         <select>
-                            <option value="active" <?php if ($fakeData["status"] === "active") echo "selected"; ?>>Active</option>
-                            <option value="inactive" <?php if ($fakeData["status"] === "inactive") echo "selected"; ?>>Inactive</option>
+                            <option value="active" <?php if ($item["status"] === "active") echo "selected"; ?>>Active</option>
+                            <option value="inactive" <?php if ($item["status"] === "inactive") echo "selected"; ?>>Inactive</option>
                         </select>
                     </td>
-                    <td><?php echo $fakeData["author"]; ?></td> <!-- Hiển thị giá trị Author -->
-                    <td><?php echo $fakeData["createdAt"]; ?></td>
+                    <!-- <td><?php echo $item["author"]; ?></td> -->
+                    <td><?php echo $item["createAt"]; ?></td>
+                    <td><?php echo $item["updateAt"]; ?></td>
+
                 </tr>
             <?php } ?>
         </tbody>
     </table>
+    <div class="pagination">
+        <?php if ($currentPage > 1) { ?>
+            <a href='index.php?page=<?php echo $currentPage - 1; ?>' class='number'>Previous</a>
+        <?php } ?>
+        <?php for ($page = 1; $page <= $totalPages; $page++) { ?>
+            <a href='index.php?page=<?php echo $page; ?>' class='number <?php echo ($currentPage == $page) ? 'current' : ''; ?>'><?php echo $page; ?></a>
+        <?php } ?>
+        <?php if ($currentPage < $totalPages) { ?>
+            <a href='index.php?page=<?php echo $currentPage + 1; ?>' class='number'>Next</a>
+        <?php } ?>
+    </div>
 </body>
 
 </html>

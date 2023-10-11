@@ -68,7 +68,7 @@
                     "id" => "components",
 
                     "utilitys" => [
-                        "Page1", "Page2"
+                        "Add User To Class", "create class"
                     ]
                 ],
                 [
@@ -116,9 +116,14 @@
             <div id="user manager" style="display:none">
                 <iframe src="../../components/admin/tableUser/index.php"></iframe>
             </div>
-            <div id="utilities" style="display:none">Utility</div>
-            <div id="page1" style="display:none">page1</div>
-            <div id="page2" style="display:none">page2</div>
+            <div id="utilities" style="display:none">
+                utility
+            </div>
+            <div id="add user to class" style="display:none"> <iframe src="../../components/admin/addUserToClass/index.php"></iframe>
+            </div>
+            <div id="create class" style="display:none"> <iframe src="../../components/admin/createClass/index.php"></iframe>
+            </div>
+        </div>
         </div>
     </main>
 </body>
