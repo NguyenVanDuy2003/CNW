@@ -10,6 +10,11 @@ function generateAccessToken($length = 64)
     return $accessToken;
 }
 
+function saveCookie($accessToken) {
+    setcookie('liorion', $accessToken, time() + (86400 * 30), "/"); 
+}
+
+
 function checkAccountAccessToken($username, $db)
 {
     $accessToken = generateAccessToken();
@@ -25,7 +30,6 @@ function checkAccountAccessToken($username, $db)
 
         if ($result->num_rows > 0) {
             $sql = "UPDATE accessToken SET accessToken = '$accessToken', createAt = '$createAt', expiry = '30' WHERE userId = '$userId'";
-            echo $sql;
             $db->query($sql);
         } else {
             $sql = "INSERT INTO accessToken (userId, accessToken, createAt, expiry) VALUES ('$userId', '$accessToken', '$createAt', '30')";
@@ -33,6 +37,7 @@ function checkAccountAccessToken($username, $db)
         }
         break;
     }
+    saveCookie($accessToken);
 }
 
 ?>

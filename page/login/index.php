@@ -1,5 +1,6 @@
 <?php
 include "../../config/connectSQL/index.php";
+include "../../config/checkCookie/index.php";
 include "../../config/getTime/index.php";
 include "../../config/signup/index.php";
 include "../../config/signin/index.php";

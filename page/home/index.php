@@ -1,4 +1,7 @@
 <?php
+include "../../config/connectSQL/index.php";
+include "../../config/checkCookie/index.php";
+$userId = checkActiveCookie($db);
 $courses = [
     [
         'id' => '1',

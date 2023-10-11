@@ -1,0 +1,76 @@
+.contribute .title {
+    color: #2ba782;
+    font-weight: 500;
+    font-size: 27px;
+    background: #9fb0a263;
+    padding: 10px;
+    border-radius: 15px;
+    width: fit-content;
+    box-shadow: 0 0 5px 4px #aa94945e;
+}
+
+.formAddQuestion {
+    width: 55%;
+    min-height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 2px #80808070;
+    padding: 15px;
+}
+
+.formPreview {
+    width: 40%;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 2px #80808070;
+    padding: 15px;
+}
+
+.formAddQuestion .inptxt, .formPreview .inptxt {
+    border: none;
+    background: #c4c4c473;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.formAddQuestion .icon-add {
+    width: 18px;
+}
+
+.formAddQuestion .add-answer {
+    border: none;
+    padding: 6px;
+    width: fit-content;
+    border-radius: 7px;
+    box-shadow: 0 0 3px 3px gainsboro;
+}
+
+.formAddQuestion .active {
+    background: #67a2d0;
+}
+
+.formAddQuestion .answer .inptxt {
+    flex: 1;
+}
+
+.formAddQuestion div a {
+    color: #324c67e6;
+}
+
+.contribute .question-preview > h3 {
+    background: #79827f;
+    padding: 8px;
+    border-radius: 10px;
+    color: #f6f6f6;
+}
+
+.contribute .question-preview > p {
+    font-weight: 600;
+    color: #504d4d;
+    font-size: 17px;
+}
+
+.contribute .answer-text-preview {
+    background: #3e7663;
+    padding: 8px;
+    border-radius: 10px;
+    color: #f6f6f6;
+}
