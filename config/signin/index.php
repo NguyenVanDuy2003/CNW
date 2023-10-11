@@ -9,8 +9,7 @@ function checkFormSignIn($username, $password, $db)
     }
 
     // get db has username or email = $username user 
-    $stmt = $db->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-    $stmt->bind_param("ss", $username, $username);
+    $stmt = $db->prepare("SELECT * FROM users WHERE username = '$username' OR email = '$username'");
 
     // Thực hiện truy vấn
     $stmt->execute();
@@ -25,6 +24,7 @@ function checkFormSignIn($username, $password, $db)
             if ($_GET['remember']) {
                 rememberAccount($username, $password);
             }
+            checkAccountAccessToken($username, $db);
             return showSnack("Logged in successfully", true);
         }
     } else {

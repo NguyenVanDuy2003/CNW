@@ -13,23 +13,14 @@ $courses = [
         ],
     ],
     [
-        'id' => '1',
+        'id' => '2',
         'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
         'semester' => 'Học kì I',
         'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-        ],
+          
     ],
     [
-        'id' => '1',
+        'id' => '3',
         'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
         'semester' => 'Học kì I',
         'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
@@ -49,7 +40,7 @@ $courses = [
         ],
     ],
     [
-        'id' => '1',
+        'id' => '4',
         'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
         'semester' => 'Học kì I',
         'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
@@ -65,7 +56,7 @@ $courses = [
         ],
     ],
     [
-        'id' => '1',
+        'id' => '5',
         'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
         'semester' => 'Học kì I',
         'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
@@ -81,7 +72,7 @@ $courses = [
         ],
     ],
     [
-        'id' => '1',
+        'id' => '6',
         'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
         'semester' => 'Học kì I',
         'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
@@ -97,7 +88,7 @@ $courses = [
         ],
     ],
     [
-        'id' => '1',
+        'id' => '7',
         'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
         'semester' => 'Học kì I',
         'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
@@ -113,7 +104,7 @@ $courses = [
         ],
     ],
     [
-        'id' => '1',
+        'id' => '8',
         'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
         'semester' => 'Học kì I',
         'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
@@ -150,7 +141,6 @@ $courses = [
     ?>
 
     <main class="d-flex">
-        <div style="menu-hori"></div>
         <div class="d-flex jc-spacebetween">
             <div class="courses-detail">
                 <h3 class="title-main">My courses</h3>
@@ -175,10 +165,13 @@ $courses = [
                             </div>
                             <div class="contact-course column gap-20">
                                 <h3>' . $course['name'] . '</h3>
-                                <div class="go-to-course d-flex gap-10 jc-center ai-center">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/2436/2436805.png" />
-                                    <p>Into Course</p>
-                                </div>
+                                <form method="get" action="../course/index.php">
+                                    <input type="hidden" name="id" value="'. $course["id"] .'">
+                                    <button class="go-to-course d-flex gap-10 jc-center ai-center">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/2436/2436805.png" alt="Go to Course" />
+                                        <p>Into Course</p>
+                                    </button>
+                                </form> 
                             </div>
                         </li>';
                         }
