@@ -8,17 +8,17 @@ include "../../config/checkform/index.php";
 include "../../config/accessToken/index.php";
 
 if (isset($_GET['btnLogin'])) {
-    if (checkFormSignIn($_GET['username_login'], $_GET['password_login'], $db) ) {
+    if (checkFormSignIn($_GET['username_login'], $_GET['password_login'], $db)) {
         echo "<script>
             setTimeout(() => {
                 window.location.href = '../home';
             }, 500);
-        </script>";  
+        </script>";
     }
 }
 
 if (isset($_POST['btnRegister'])) {
-    if(checkFormSignUp($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['cfpassword'], $_POST['agree'], $db)) {
+    if (checkFormSignUp($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['cfpassword'], $_POST['agree'], 'student', $db)) {
         echo "<script>
             setTimeout(() => {
                 window.location.href = './?Login=';
@@ -53,11 +53,11 @@ if (isset($_POST['btnRegister'])) {
             <div class="w-full">
                 <form method="get" actions="" class="w-full gap-20 d-flex">
                     <button class="btn w-haft pd-15 <?php if (!isset($_GET['Register'])) {
-                        echo 'btn-focus';
-                    } ?>" name="Login">login</button>
+                                                        echo 'btn-focus';
+                                                    } ?>" name="Login">login</button>
                     <button class="btn w-haft pd-15 <?php if (isset($_GET['Register'])) {
-                        echo 'btn-focus';
-                    } ?>" name="Register">register</button>
+                                                        echo 'btn-focus';
+                                                    } ?>" name="Register">register</button>
                 </form>
             </div>
             <div class="pst-relative w-full">

@@ -1,3 +1,6 @@
+<?php include "../../extension/variableSession/index.php";
+$user = $_SESSION['user'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,6 +26,9 @@
             </div>
             <div id="item_right">
                 <?php
+                if (!$_GET['name']) {
+                    header('Location: index.php?name=dashboard');
+                }
                 $icon = [
                     "../../images/admin/notification.png",
                     "../../images/admin/email.png",
@@ -39,7 +45,7 @@
                 ?>
 
                 <div>
-                    <label for="avata">Name</label>
+                    <label for="avata"><?php echo $user['name']; ?></label>
                     <img src="../../images/admin/avatar.png" class="icon" name="avatar" alt="error">
                 </div>
             </div>
@@ -54,7 +60,6 @@
         <div id="sideBarLeft">
 
             <?php
-            session_start();
             $_SESSION['page'] = 'dashboard';
             $sideBarLeft = array(
                 [
@@ -66,14 +71,14 @@
                 [
                     "icon" => "../../images/admin/components.png",
                     "text" => "Create class",
-                    "id" => "create class",
+                    "id" => "create_class",
 
 
                 ],
                 [
                     "icon" => "../../images/admin/components.png",
-                    "text" => "Add User To Class",
-                    "id" => "Add User To Class",
+                    "text" => "Create user",
+                    "id" => "create_user",
 
 
                 ],
@@ -123,12 +128,12 @@
                 utility
             </div>';
             } ?>
-            <?php if ($_GET['name'] === 'Add User To Class') {
-                echo '<div id="add user to class" > <iframe src="../../components/admin/addUserToClass/index.php"></iframe>
+            <?php if ($_GET['name'] === 'create_user') {
+                echo '<div id="create_user" > <iframe src="../../components/admin/createUser/index.php"></iframe>
                 </div>';
             } ?>
-            <?php if ($_GET['name'] === 'create class') {
-                echo '<div id="create class"> <iframe src="../../components/admin/createClass/index.php"></iframe>
+            <?php if ($_GET['name'] === 'create_class') {
+                echo '<div id="create_class"> <iframe src="../../components/admin/createClass/index.php"></iframe>
                 </div>';
             } ?>
 

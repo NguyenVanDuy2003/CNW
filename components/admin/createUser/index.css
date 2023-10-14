@@ -1,0 +1,44 @@
+.registration-form {
+  margin: 0 auto;
+}
+.registration-form > form {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  width: 50%;
+}
+.form-group > div {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.btn-submit {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-left: 10px;
+}

@@ -1,11 +1,12 @@
 <?php
+include "../../extension/variableSession/index.php";
 function checkFormSignIn($username, $password, $db)
 {
     // check empty
-    $empty = check_empty($username) ? "Username" :
-        (check_empty($password) ? "password" : "");
+    $empty = check_empty($username) ? "Username" : (check_empty($password) ? "password" : "");
     if ($empty != "") {
-        echo showSnack("You are missing a field {$empty}. Please fill in completely", false); return false;
+        echo showSnack("You are missing a field {$empty}. Please fill in completely", false);
+        return false;
     }
 
     // get db has username or email = $username user 
@@ -18,6 +19,8 @@ function checkFormSignIn($username, $password, $db)
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
         $hashed_password = $row['password'];
+        $role = $row['role'];
+
 
         // Sử dụng password_verify để kiểm tra mật khẩu
         if (password_verify($password, $hashed_password)) {
@@ -26,6 +29,11 @@ function checkFormSignIn($username, $password, $db)
             }
             checkAccountAccessToken($username, $db);
             echo showSnack("Logged in successfully", true);
+            if ($role === 'admin') {
+                $_SESSION['user'] = $row;
+                header('Location: ../../page/admin');
+            }
+
             return true;
         }
     } else {
@@ -34,7 +42,8 @@ function checkFormSignIn($username, $password, $db)
     }
 }
 
-function rememberAccount($username, $password) {
+function rememberAccount($username, $password)
+{
     echo "
     <script>
         let existingData;
@@ -63,6 +72,3 @@ function rememberAccount($username, $password) {
     </script>
     ";
 }
-
-
-?>
