@@ -1,75 +1,23 @@
 <?php
 include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
-$course = [
-    'nameCourse' => 'COMP 254 - Phân tích thiết kế thuật toán',
-    'teacher' => [
-        [
-            'name' => 'Nguyen Quoc Chung',
-            'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-        ],
-        [
-            'name' => 'Nguyen Quoc Chung',
-            'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-        ],
-    ],
-    'introCourse' => [
-        [
-            'name' => 'Giới thiệu về môn học',
-            'href' => '',
-        ],
-        [
-            'name' => 'Quy tắc lớp học',
-            'href' => '',
-        ]
-    ],
-    'contents' => [
-        [
-            'nameLesson' => 'Tuần 1: Các khái niệm cơ bản',
-            'detailContent' => [
-                [
-                    'titleLesson' => 'Silde tuần 1 - Các khái niệm cơ bản',
 
-                    'status' => 'false',
-                ],
-                [
-                    'titleLesson' => 'Bài giảng tuần 1 - Các khái niệm cơ bản',
-                    'status' => 'false',
-                ],
-                [
-                    'titleLesson' => 'Bài tập tuần 1',
-                    'status' => 'false',
-                ],
-                [
-                    'titleLesson' => 'Quiz tuần 1',
-                    'status' => 'false',
-                ],
-            ]
-        ],
-        [
-            'nameLesson' => 'Tuần 2: Các kĩ thuật phân tích thuật toán',
-            'detailContent' => [
-                [
-                    'titleLesson' => 'Slide Tuần 2 - Các kỹ thuật phân tích thuật toán',
-                    'status' => 'false',
-                ],
-                [
-                    'titleLesson' => 'Bài giảng Tuần 2 - Các kỹ thuật phân tích thuật toán',
-                    'status' => 'true',
-                ],
-                [
-                    'titleLesson' => 'Bài tập tuần 2',
-                    'status' => 'false',
-                ],
-                [
-                    'titleLesson' => 'Quiz tuần 2',
-                    'status' => 'false',
-                ],
-            ]
-        ]
-    ]
-]
-    ?>
+$userId = checkActiveCookie($db);
+$id = $_GET['id'];
+$sql = "SELECT * FROM course WHERE id = '$id'";
+$result = $db->query($sql);
+$courses = $result->fetch_all(MYSQLI_ASSOC);
+$courses = $courses[0];
+$students = unserialize($courses['student']);
+$teachers = unserialize($courses['teacher']);
+$isTeacher = false;
+if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
+    header("Location: ../error");
+} elseif (in_array($userId, $teachers)) {
+    $isTeacher = true;
+}
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +31,7 @@ $course = [
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../style/index.css">
     <title>
-        <?php echo $course['nameCourse']; ?>
+        <?php echo $courses['nameCourse']; ?>
     </title>
 </head>
 
@@ -95,31 +43,40 @@ $course = [
     <main class="column gap-30 course">
         <div class="d-flex jc-spacebetween ai-center">
             <h1>
-                <?php echo $course['nameCourse']; ?>
+                <?php echo $courses['name']; ?>
             </h1>
             <form method="get" action="../contribute/index.php">
-                <input type="hidden" name="id" value="<?php echo $_GET['id']?>">
+                <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
                 <button class="d-flex ai-center btn-tick pointer gap-10 btn-donation">
                     <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/5432/5432915.png" />
                     Contribute questions
                 </button>
             </form>
         </div>
+        <div class="d-flex gap-20 ai-center">
+            <button class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
+                <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/4074/4074958.png" />
+                Create Lesson</button>
+            <button class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
+                <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/1150/1150592.png" />
+                Detail Course</button>
+        </div>
         <?php
-        foreach ($course['contents'] as $detailCourse) {
+        $data = unserialize($courses['content']);
+        foreach ($data as $index => $detailCourse) {
+            $i = $index + 1;
             echo '
                 <div class="lesson pd-20 column gap-20">
-                <h3>' . $detailCourse['nameLesson'] . '</h3>
+                <h3>' . "Lesson $i: " . $detailCourse['title'] . '</h3>
             ';
-
-            foreach ($detailCourse['detailContent'] as $article) {
+            foreach ($detailCourse['detailLesson'] as $article) {
                 echo '
                     <div class="d-flex gap-10 jc-spacebetween ai-center">
                         <div class="d-flex gap-10 ai-center">
                             <img class="icon-of-lesson" src="https://cdn-icons-png.flaticon.com/512/9800/9800294.png" />
-                            <a><p class="title-of-lesson pointer">' . $article['titleLesson'] . '</p></a>
+                            <a href=' . $article['href'] . '><p class="title-of-lesson pointer">' . $article['title'] . '</p></a>
                         </div>
-                        <button class="btn-tick pointer ' . ($article["status"] == "true" ? "complete" : "") . '">' . ($article["status"] == "true" ? "Hoàn thành" : "Đánh dấu hoàn thành") . '</button>
+                        <button class="btn-tick pointer ' . ($article["status"] ? "complete" : "") . '">' . ($article["status"] ? "Hoàn thành" : "Đánh dấu hoàn thành") . '</button>
                     </div>
                     <hr>
                 ';

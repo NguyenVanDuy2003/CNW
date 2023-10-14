@@ -5,12 +5,18 @@ include "../../config/getTime/index.php";
 include "../../extension/snack/index.php";
 $userId = checkActiveCookie($db);
 session_start();
-if (!isset($_SESSION['type'])) {
+if (($_SESSION['id'] != $_GET['id']) && isset($_GET['id'])) {
+    $_SESSION['id'] = $_GET['id'];
     $_SESSION['type'] = "checkbox";
     $_SESSION['question'] = "";
     $_SESSION['answer'] = "";
     $_SESSION['answerCorrect'] = "";
 }
+$idCourse = $_SESSION['id'];
+$sql = "SELECT name FROM course WHERE id = '$idCourse'";
+$result = $db->query($sql);
+$name = $result->fetch_all(MYSQLI_ASSOC);
+$nameCourse = $name[0]['name'];
 
 function getForm()
 {
@@ -229,8 +235,9 @@ if (isset($_POST['save'])) {
         $question = $_POST['question'];
         $answer = serialize($_SESSION['answer']);
         $answerCorrect = serialize($_SESSION['answerCorrect']);
+        $courseId = $_SESSION['id'];
         $sql = "INSERT INTO question (creator, approved, lesson, courseId, question, answer, answerCorrect, type, createAt, updateAt) 
-        VALUES ('$userId', 0, 1, 1, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
+        VALUES ('$userId', 0, 1, $courseId, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
         echo $sql;
         $result = $db->query($sql);
         echo showSnack("Question added successfully", true);
@@ -260,7 +267,7 @@ if (isset($_POST['save'])) {
     ?>
     <main class="contribute column gap-20">
         <h1 class="title">Contribute Question</h1>
-        <p>Đóng góp câu hỏi cho môn học <b>COMP 254 - Phân tích thiết kế thuật toán</b></p>
+        <p>Đóng góp câu hỏi cho môn học <b><?php echo $nameCourse; ?></b></p>
         <div class="d-flex gap-30 jc-spacebetween">
             <form method="post" action="" class="formAddQuestion column gap-20">
                 <div class="d-flex gap-20 ai-center">
@@ -350,7 +357,8 @@ if (isset($_POST['save'])) {
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT question, type, lesson, createAt, updateAt, approved FROM question ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
+                $courseId = $_SESSION['id'];
+                $sql = "SELECT question, type, lesson, createAt, updateAt, approved FROM question WHERE creator = $userId and courseId = $courseId ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
                 $result = $db->query($sql);
                 if ($result->num_rows > 0) {
                     $i = 0;
