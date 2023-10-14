@@ -10,6 +10,11 @@
     <div class="container">
         <?php
         include "../../../config/connectSQL/index.php";
+        session_start();
+        if (!isset($_SESSION['teacher']) || !isset($_SESSION['AllTeacher'])) {
+            $_SESSION['teacher'] = [];
+            $_SESSION['AllTeacher'] = [];
+        }
         $sql = "SELECT * FROM users WHERE role = 'teacher'";
         $stmt = $db->prepare($sql);
         $stmt->execute();
@@ -18,48 +23,95 @@
         while ($item = $result->fetch_assoc()) {
             $dataTeacher[] = $item;
         }
-        ?>
+        if (sizeof($_SESSION['AllTeacher']) === 0 && sizeof($_SESSION['teacher']) === 0) {
+            $_SESSION['AllTeacher'] = $dataTeacher;
+        }
 
-        <?php
-        // Khởi tạo mảng danh sách người dùng đã chọn (ban đầu rỗng)
-        $selectedUsers = [];
+        if (isset($_POST['add'])) {
+            $newAllTeacher = [];
+            $Teacher = [];
+            foreach ($_SESSION['AllTeacher'] as $item) {
+                if ($item['id'] == $_POST["maGV"]) {
+                    array_push($Teacher, $item['id']);
+                } else {
+                    array_push($newAllTeacher, $item);
+                }
+            }
+            $_SESSION['AllTeacher'] = $newAllTeacher;
+            array_push($_SESSION['teacher'], $Teacher);
+            print_r($_SESSION['teacher']);
+        }
 
-        // Kiểm tra nếu đã nhấn nút "Thêm" và có người dùng được chọn
-        if (isset($_POST['add']) && isset($_POST['maGV'])) {
-            // Lấy danh sách người dùng đã chọn từ form
-            $selectedUserIds = $_POST['maGV'];
-
-            // Lấy thông tin người dùng từ danh sách gốc (dựa vào $dataTeacher)
-            foreach ($selectedUserIds as $selectedUserId) {
-                $selectedUser = null;
-                foreach ($dataTeacher as $key => $item) {
-                    if ($item['id'] == $selectedUserId) {
-                        $selectedUser = $item;
-                        break;
+        if (isset($_POST['remove'])) {
+            $Teacher = [];
+            foreach ($_SESSION['teacher'] as $item) {
+                foreach ($item as $value) {
+                    if ($value != $_POST['selectedUsers']) {
+                        array_push($Teacher, $value);
                     }
                 }
-
-                // Kiểm tra xem người dùng đã được chọn trước đó hay chưa
-                if ($selectedUser && !in_array($selectedUserId, $selectedUsers)) {
-                    // Thêm người dùng vào danh sách đã chọn
-                    $selectedUsers[] = $selectedUserId;
-
-                    // Loại bỏ người dùng đã chọn khỏi danh sách gốc (nếu có)
-                    unset($dataTeacher[$key]);
+            }
+            $_SESSION['teacher'] =  [];
+            array_push($_SESSION['teacher'], $Teacher);
+            foreach ($dataTeacher as $item) {
+                $name = $item['id'];
+                if ($item['id'] == $_POST['selectedUsers']) {
+                    array_push($_SESSION['AllTeacher'], $item);
                 }
             }
         }
+        if (isset($_POST['submit'])) {
+            // print_r($_SESSION['teacher']);
+            $teacher = [];
+            foreach ($_SESSION['teacher'] as $item) {
+                foreach ($item as $value) {
+                    array_push($teacher, $value);
+                }
+            }
+            $teacherString = implode(',', $teacher);
+            $teacherString = rtrim($teacherString, ',');
+            $title = mysqli_real_escape_string($db, $_POST['title']);
+
+            $query = "INSERT INTO course (teacher, title) VALUES (?, ?)";
+
+            $stmt = $db->prepare($query);
+
+            if ($stmt) {
+                $stmt->bind_param('ss', $teacherString, $title);
+
+                if ($stmt->execute()) {
+                    // The data has been successfully inserted into the database
+                    header("Location: index.php");
+                    exit;
+                } else {
+                    // Handle the error if the query fails
+                    echo "Error: " . $stmt->error;
+                }
+
+                $stmt->close();
+            } else {
+                // Handle the error if the prepared statement fails
+                echo "Error: " . $db->error;
+            }
+
+            $_SESSION['teacher'] = [];
+            $_SESSION['AllTeacher'] = $dataTeacher;
+        }
+
+
         ?>
 
+
+
         <h2>Thêm Giảng Viên và Học Sinh</h2>
-        <form action="#" method="post">
-            <label for="name">Title:</label>
-            <input type="text" id="name" name="name" required>
+        <form action="" method="post">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title">
 
             <label for="optionsDropdown">Giảng Viên:</label>
             <select id="optionsDropdown" name="maGV">
                 <?php
-                foreach ($dataTeacher as $item) {
+                foreach ($_SESSION['AllTeacher'] as $item) {
                     $name = $item['name'];
                     $id = $item['id'];
                 ?>
@@ -68,90 +120,28 @@
                 ?>
             </select>
 
-            <input type="button" name="add" value="Add" onclick="addSelectedUsers()">
-            <input type="button" name="remove" value="Remove" onclick="removeSelectedUsers()">
+            <input type="submit" name="add" value="Add">
+            <input type="submit" name="remove" value="Remove" ">
 
-            <select id="selectedUsers" name="selectedUsers[]" multiple>
-                <?php
-                foreach ($selectedUsers as $userId) {
-                    foreach ($dataTeacher as $item) {
-                        if ($item['id'] == $userId) {
-                            echo '<option value="' . $userId . '" selected>' . $item['name'] . '</option>';
-                            break;
+            <select id=" selectedUsers" name="selectedUsers" multiple>
+            <?php
+            foreach ($_SESSION['teacher'] as $item) {
+                foreach ($item as $value) {
+                    foreach ($dataTeacher as $ele) {
+                        $id = $ele['id'];
+                        $name = $ele['name'];
+                        if ($id == $value) {
+                            echo '<option value="' .  $id . '" >' .  $name . '</option>';
                         }
                     }
                 }
-                ?>
+            }
+            ?>
             </select>
 
             <input type="submit" name="submit" value="Thêm">
         </form>
-        <?php
-        if (isset($_POST['submit'])) {
-            // Lấy giá trị từ phần tử select có tên "selectedUsers"
-            // $selectedUserIds = $_POST["selectedUsers"];
 
-            // Hiển thị tất cả giá trị đã chọn
-            // foreach ($selectedUserIds as $userId) {
-            //     echo "Giá trị đã chọn: " . $userId . "<br>";
-            // }
-
-            // header("Location: success.php");
-            // exit;
-        }
-        ?>
-
-        <script>
-            function addSelectedUsers() {
-                let optionsDropdown = document.getElementById("optionsDropdown");
-                let selectedUsers = document.getElementById("selectedUsers");
-
-                // Danh sách tạm thời để lưu các tùy chọn cần xóa
-                let optionsToRemove = [];
-
-                // Lặp qua tất cả các options và kiểm tra xem nó có được chọn không
-                for (let i = 0; i < optionsDropdown.options.length; i++) {
-                    let option = optionsDropdown.options[i];
-                    if (option.selected) {
-                        // Thêm option đã chọn vào danh sách đã chọn
-                        selectedUsers.appendChild(option.cloneNode(true));
-
-                        // Thêm option cần xóa vào danh sách tạm thời
-                        optionsToRemove.push(option);
-                    }
-                }
-
-                // Sau khi thêm, xóa các option đã chọn từ danh sách chọn
-                for (let i = 0; i < optionsToRemove.length; i++) {
-                    optionsDropdown.removeChild(optionsToRemove[i]);
-                }
-            }
-
-            function removeSelectedUsers() {
-                let optionsDropdown = document.getElementById("optionsDropdown");
-                let selectedUsers = document.getElementById("selectedUsers");
-
-                // Danh sách tạm thời để lưu các tùy chọn cần xóa
-                let optionsToRemove = [];
-
-                // Lặp qua tất cả các options trong danh sách đã chọn và kiểm tra xem nó có được chọn không
-                for (let i = 0; i < selectedUsers.options.length; i++) {
-                    let option = selectedUsers.options[i];
-                    if (option.selected) {
-                        // Thêm option đã chọn lại vào danh sách chọn
-                        optionsDropdown.appendChild(option.cloneNode(true));
-
-                        // Thêm option cần xóa vào danh sách tạm thời
-                        optionsToRemove.push(option);
-                    }
-                }
-
-                // Sau khi thêm lại, xóa các option đã chọn từ danh sách đã chọn
-                for (let i = 0; i < optionsToRemove.length; i++) {
-                    selectedUsers.removeChild(optionsToRemove[i]);
-                }
-            }
-        </script>
     </div>
 </body>
 

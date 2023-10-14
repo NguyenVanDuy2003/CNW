@@ -19,6 +19,8 @@
     </div>
     <div class="item">
         <?php
+        // $_SESSION['teacher'] = [];
+        // $_SESSION['AllTeacher'] = [];
         $data = [
             [
                 "title" => "User",

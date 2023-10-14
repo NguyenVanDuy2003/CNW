@@ -54,79 +54,87 @@
         <div id="sideBarLeft">
 
             <?php
+            session_start();
+            $_SESSION['page'] = 'dashboard';
             $sideBarLeft = array(
                 [
                     "icon" => "../../images/admin/dashboard.png",
                     "text" => "Dashboard",
                     "id" => "dashboard",
-                    "utilitys" => []
                 ],
 
                 [
                     "icon" => "../../images/admin/components.png",
-                    "text" => "Components",
-                    "id" => "components",
+                    "text" => "Create class",
+                    "id" => "create class",
 
-                    "utilitys" => [
-                        "Add User To Class", "create class"
-                    ]
+
+                ],
+                [
+                    "icon" => "../../images/admin/components.png",
+                    "text" => "Add User To Class",
+                    "id" => "Add User To Class",
+
+
                 ],
                 [
                     "icon" => "../../images/admin/utilities.png",
                     "text" => "Utilities",
                     "id" => "utilities",
-                    "utilitys" => []
                 ],
                 [
                     "icon" => "../../images/admin/management.png",
                     "text" => "User Manager",
-                    "id" => "user manager",
-                    "utilitys" => []
+                    "id" => "user_manager",
                 ],
             );
+
+
 
             foreach ($sideBarLeft as $item) {
                 $icon = $item["icon"];
                 $text = $item["text"];
-                $utilities = $item["utilitys"];
                 $id = $item['id'];
             ?>
-                <form class="item">
-                    <div name="<?php echo  $text; ?>">
+                <form class="item" action="" method="get">
+                    <a href="index.php?name=<?php echo  $id; ?>">
                         <img src="<?php echo $icon; ?>" class="icon" alt="error">
                         <span class="text_icon"><?php echo $text; ?></span>
-                        <?php if (!empty($utilities)) { ?>
-                            <img src="../../images/admin/chevron_right.png" class="icon" name="icon_show_down" alt="error">
-                        <?php } ?>
-                    </div>
-                    <?php if (!empty($utilities)) { ?>
-                        <ul type="none" class="show_down">
-                            <?php foreach ($utilities as $text_element) { ?>
-                                <li name="<?php echo  $text_element; ?>"><?php echo $text_element; ?></li>
-                            <?php } ?>
-                        </ul>
-                    <?php } ?>
+
+                    </a>
+
                 </form>
             <?php } ?>
         </div>
         <div id="layout">
-            <div id="dashboard">
+            <?php if ($_GET['name'] == "dashboard") {
+
+                echo ' <div id="dashboard">
                 <iframe src="../../components/admin/dashboard/index.php"></iframe>
-            </div>
-            <div id="user manager" style="display:none">
+            </div>';
+            } ?>
+            <?php if ($_GET['name'] === 'user_manager') {
+                echo ' <div id="user manager" >
                 <iframe src="../../components/admin/tableUser/index.php"></iframe>
-            </div>
-            <div id="utilities" style="display:none">
+            </div>';
+            } ?>
+            <?php if ($_GET['name'] === 'utilities') {
+                echo '<div id="utilities">
                 utility
-            </div>
-            <div id="add user to class" style="display:none"> <iframe src="../../components/admin/addUserToClass/index.php"></iframe>
-            </div>
-            <div id="create class" style="display:none"> <iframe src="../../components/admin/createClass/index.php"></iframe>
-            </div>
+            </div>';
+            } ?>
+            <?php if ($_GET['name'] === 'Add User To Class') {
+                echo '<div id="add user to class" > <iframe src="../../components/admin/addUserToClass/index.php"></iframe>
+                </div>';
+            } ?>
+            <?php if ($_GET['name'] === 'create class') {
+                echo '<div id="create class"> <iframe src="../../components/admin/createClass/index.php"></iframe>
+                </div>';
+            } ?>
+
         </div>
         </div>
     </main>
 </body>
-<script src="./index.js"></script>
 
 </html>
