@@ -5,7 +5,7 @@ function checkFormSignIn($username, $password, $db)
     $empty = check_empty($username) ? "Username" :
         (check_empty($password) ? "password" : "");
     if ($empty != "") {
-        return showSnack("You are missing a field {$empty}. Please fill in completely", false);
+        echo showSnack("You are missing a field {$empty}. Please fill in completely", false); return false;
     }
 
     // get db has username or email = $username user 
@@ -25,10 +25,12 @@ function checkFormSignIn($username, $password, $db)
                 rememberAccount($username, $password);
             }
             checkAccountAccessToken($username, $db);
-            return showSnack("Logged in successfully", true);
+            echo showSnack("Logged in successfully", true);
+            return true;
         }
     } else {
-        return showSnack("Account or password is incorrect", false);
+        echo showSnack("Account or password is incorrect", false);
+        return false;
     }
 }
 

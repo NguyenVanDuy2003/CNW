@@ -1,0 +1,58 @@
+.assign .content-contact button {
+    width: 100px;
+}
+
+.assign .content-contact button:hover {
+    box-shadow: 3px 5px 10px 3px #e4e4e4;
+}
+
+.assign .detail-contact>div>p:first-child {
+    padding: 10px;
+    background: #d5d5d54a;
+    border: 0.5px solid #d4d4d48c;
+    font-size: 15px;
+}
+
+.assign .detail-contact>div>p:last-child {
+    padding: 10px;
+    border-bottom: 0.5px solid #d4d4d48c;
+    flex: 1;
+}
+
+.assign .topic img {
+    background: #fcefef;
+    border-radius: 10px;
+}
+
+.assign .topic a {
+    color: #1b1b1b;
+}
+
+.assign .topic a:hover {
+    border-radius: 10px;
+    background: #d2cece2e;
+}
+
+.assign .request {
+    background: #e8db66;
+}
+.assign .request p:first-child {
+    font-size: 20px;
+    font-weight: 500;
+    color: #f9eded;
+    background: #ca1818;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.assign .time-homework p {
+    width: fit-content;
+    padding: 10px;
+    background: #97b295;
+    border-radius: 25px;
+    color: white;
+}
+
+.assign .time-homework p:last-child {
+    background: #9e4444db;
+}

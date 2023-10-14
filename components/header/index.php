@@ -1,3 +1,10 @@
+<?php
+$userId = checkActiveCookie($db);
+$sql = "SELECT name FROM users WHERE id = $userId";
+$result = $db->query($sql);
+$row = $result->fetch_assoc();
+$name = $row['name'];
+?>
 <header class="d-flex ai-center pd-10 jc-spacebetween header w-full">
     <div class="d-flex ai-center gap-30">
         <img class="icon-list" src="https://cdn-icons-png.flaticon.com/512/10613/10613684.png" alt="list" />
@@ -15,7 +22,7 @@
         <hr class="hr-list-icon">
         <div class="contact">
             <div class="d-flex ai-center gap-10" id="contact-menu">
-                <p class="name">Nguyễn Quốc Chung</p>
+                <p class="name"><?php echo $name; ?></p>
                 <div class="d-flex ai-center gap-5">
                     <img class="icon-profile" src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
                         alt="profile" />
@@ -40,7 +47,7 @@
                         <p>Setting</p>
                     </li>
                     <hr class="hr-list-menu">
-                    <li class="d-flex gap-5 ai-center logout">
+                    <li class="d-flex gap-5 ai-center logout" onclick="Logout()">
                         <img class="icon" src="https://cdn-icons-png.flaticon.com/512/9121/9121688.png" alt="Logout" />
                         <p>Logout</p>
                     </li>
@@ -50,3 +57,10 @@
         </div>
     </div>
 </header>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.min.js"></script>
+<script>
+    function Logout() {
+        Cookies.remove('liorion');
+        window.location.reload();
+    }
+</script>

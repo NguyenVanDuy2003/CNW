@@ -12,6 +12,13 @@ main {
     margin-top: 66px;
     padding: var(--padding-header-home);
     position: relative;
+    flex: 1;
+}
+
+body {
+    min-height: 100vh !important;
+    display: flex;
+    flex-direction: column;
 }
 
 a {
@@ -83,8 +90,11 @@ body {
     padding-bottom: 30px;
 }
 
-.w-icon {
+.w-icon-15 {
     width: 15px;
+}
+.w-icon-25 {
+    width: 25px;
 }
 
 .w-auto {
@@ -111,6 +121,9 @@ body {
 
 .w-full {
     width: -webkit-fill-available;
+}
+.w-fit {
+    width: fit-content;
 }
 
 .mgUD-10 {
@@ -166,6 +179,10 @@ body {
 
 .d-flex {
     display: flex;
+}
+
+.flex-1 {
+    flex: 1;
 }
 
 .d-none {
@@ -225,6 +242,14 @@ body {
     font-weight: 500;
 }
 
+.btn-1 {
+    height: fit-content;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 0px #b7b2b273;
+}
+
 .btn:hover {
     opacity: 0.9;
     cursor: pointer;
@@ -233,6 +258,11 @@ body {
 .btn-focus {
     background-color: #e3ebf7;
     color: #285192;
+}
+
+.btn-submit {
+    background-color: #71b772e3;
+    color: #e7ebf1;
 }
 
 .btn-success {
@@ -262,6 +292,10 @@ body {
     height: 1px;
     border: none;
     background: #c5c5c594;
+}
+
+.txt-warning {
+    color: rgb(218, 34, 34);   
 }
 
 .bd-radius-10 {
@@ -322,4 +356,32 @@ body {
     background: #545454;
     right: 0px;
     top: 5px;
+}
+
+.f-sz-12 {
+    font-size: 12px;
+}
+.f-sz-14 {
+    font-size: 14px;
+}
+.f-sz-15 {
+    font-size: 15px;
+}
+.f-sz-16 {
+    font-size: 16px;
+}
+.f-sz-17 {
+    font-size: 18px;
+}
+.f-sz-20 {
+    font-size: 20px;
+}
+.f-sz-23 {
+    font-size: 23px;
+}
+.f-weight-500 {
+    font-weight: 500;
+}
+.f-weight-600 {
+    font-weight: 600;
 }

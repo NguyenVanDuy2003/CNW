@@ -62,3 +62,10 @@
     letter-spacing: 2px;
     text-shadow: 5px 5px 3px #7a2020;
 }
+
+.quiz .content-question {
+    outline: none;
+    border: none;
+    font-size: 16px;
+    flex: 1;
+}

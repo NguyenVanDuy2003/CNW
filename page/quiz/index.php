@@ -1,6 +1,15 @@
 <?php
 include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
+function countdownTimer($minutes, $seconds)
+{
+    $totalSeconds = $minutes * 60 + $seconds;
+    return $totalSeconds;
+}
+
+$minutes = 0;
+$seconds = 5;
+$totalSeconds = countdownTimer($minutes, $seconds);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +36,7 @@ include "../../config/checkCookie/index.php";
             <div class="txt" id="txt">
                 <b>L-</b><b>T</b><b>E</b><b>S</b><b>T</b>
             </div>
-            <form method='post' class='column gap-30'>
+            <form method='post' action='result' id='form' class='column gap-30'>
                 <?php
                 $sql = "SELECT question, answer, type FROM question ORDER BY RAND() LIMIT 10";
                 $result = $db->query($sql);
@@ -63,9 +72,9 @@ include "../../config/checkCookie/index.php";
 
                         echo "
                         <div class='column gap-10 question'>
-                            <div class='d-flex gap-20 ai-center'>
+                            <div class='d-flex gap-20 ai-center d-flex'>
                                 <div class='btn-question-number'><p>Question $i</p></div>
-                                <p>$question</p>
+                                <input class='content-question' value='$question' name='question$i' readonly/>
                             </div>
                             $result_answer
                         </div>
@@ -77,6 +86,32 @@ include "../../config/checkCookie/index.php";
                 <div class="d-flex jc-center"><button class="btn submit">Submit</button></div>
             </form>
         </div>
+        <div id="countdown"></div>
+        <script>
+            var totalSeconds = <?php echo $totalSeconds; ?>;
+            var countdown = document.getElementById('countdown');
+
+            function updateCountdown() {
+                var minutes = Math.floor(totalSeconds / 60);
+                var remainingSeconds = totalSeconds % 60;
+                countdown.innerHTML = minutes + " phút " + remainingSeconds + " giây còn lại";
+
+                if (totalSeconds <= 0) {
+                    countdown.innerHTML = "Hết thời gian!";
+                    submitForm();
+                } else {
+                    totalSeconds--;
+                    setTimeout(updateCountdown, 1000);
+                }
+            }
+
+            function submitForm() {
+                var form = document.getElementById('form');
+                form.submit();
+            }
+            
+            updateCountdown();
+        </script>
     </main>
 
     <?php

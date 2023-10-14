@@ -5,6 +5,10 @@
     --color-login: #000;
 }
 
+.login {
+    margin-top: 0 !important;
+}
+
 .box-login {
     background-color: var(--background-login);
 }
