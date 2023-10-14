@@ -1,125 +1,19 @@
 <?php
-$courses = [
-    [
-        'id' => '1',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ]
-        ],
-    ],
-    [
-        'id' => '2',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-          
-    ],
-    [
-        'id' => '3',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-        ],
-    ],
-    [
-        'id' => '4',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-        ],
-    ],
-    [
-        'id' => '5',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-        ],
-    ],
-    [
-        'id' => '6',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-        ],
-    ],
-    [
-        'id' => '7',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-        ],
-    ],
-    [
-        'id' => '8',
-        'name' => 'Tuần sinh hoạt Công dân-HSSV năm học 2021-2022 cho sinh viên K71',
-        'semester' => 'Học kì I',
-        'imgCover' => 'https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg',
-        'teacher' => [
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-            [
-                'name' => 'Nguyen Quoc Chung',
-                'avt' => 'https://zpsocial-f50-org.zadn.vn/17d9b070ef22017c5833.jpg',
-            ],
-        ],
-    ],
-];
+include "../../config/connectSQL/index.php";
+include "../../config/checkCookie/index.php";
+
+$userId = checkActiveCookie($db);
+$sql = "SELECT id, name, teacher, student, semester, cover FROM course";
+$result = $db->query($sql);
+$courses = $result->fetch_all(MYSQLI_ASSOC);
+foreach ($courses as $index => $course) {
+    $students = unserialize($course['student']);
+    $teachers = unserialize($course['teacher']);
+    if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
+        unset($courses[$index]);
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -141,32 +35,41 @@ $courses = [
     ?>
 
     <main class="d-flex">
-        <div class="d-flex jc-spacebetween">
+        <div class="d-flex jc-spacebetween w-full">
             <div class="courses-detail">
                 <h3 class="title-main">My courses</h3>
                 <ul class="list-courses-main d-flex gap-20">
                     <?php
-                    foreach ($courses as $index => $course) {
-                        if ($index > 10) {
+                    foreach ($courses as $index => $courseM) {
+                        if ($index > 9) {
                             echo '<buton class="btn btn-seemore">All Courses</buton>';
                             break;
                         } else {
-                            echo '<li>
-                            <div class="subtitle-course d-flex jc-spacebetween" style="background-image: url(' . $course['imgCover'] . ');">
+                            $students = unserialize($courseM['student']);
+                            $teachers = unserialize($courseM['teacher']);
+                            $teacher_ids = implode(",", $teachers);
+
+                            $query = "SELECT * FROM users WHERE id IN ($teacher_ids)";
+                            $res = $db->query($query);
+
+                            if (in_array($userId, $students) || in_array($userId, $teachers)) {
+                                echo '<li class="column jc-spacebetween">
+                            <div class="subtitle-course d-flex jc-spacebetween" style="background-image: url(' . $courseM['cover'] . ');">
                                 <div class="d-flex">';
-                            foreach ($course['teacher'] as $teacher) {
-                                echo '<div>
-                                                        <img class="pointer" src="' . $teacher["avt"] . '" alt="' . $teacher["name"] . '"/>
-                                                        <p>' . $teacher["name"] . '</p>
-                                                    </div>';
-                            }
-                            echo '</div>
-                                <button class="pointer">' . $course['semester'] . '</button>
+                                while ($teacher = $res->fetch_assoc()) {
+                                    echo '<div>
+                                        <img class="pointer" src="' . ($teacher["avt"] ? $teacher["avt"] : "https://cst.hnue.edu.vn/theme/image.php/space/core/1664163203/u/f3") . '" alt="' . $teacher["name"] . '"/>
+                                        <p>' . $teacher["name"] . '</p>
+                                    </div>';
+                                }
+
+                                echo '</div>
+                                <button class="pointer">' . $courseM['semester'] . '</button>
                             </div>
-                            <div class="contact-course column gap-20">
-                                <h3>' . $course['name'] . '</h3>
+                            <div class="contact-course column gap-20 flex-1 jc-spacebetween">
+                                <h3>' . $courseM['name'] . '</h3>
                                 <form method="get" action="../course/index.php">
-                                    <input type="hidden" name="id" value="'. $course["id"] .'">
+                                    <input type="hidden" name="id" value="' . $courseM["id"] . '">
                                     <button class="go-to-course d-flex gap-10 jc-center ai-center">
                                         <img src="https://cdn-icons-png.flaticon.com/512/2436/2436805.png" alt="Go to Course" />
                                         <p>Into Course</p>
@@ -174,7 +77,9 @@ $courses = [
                                 </form> 
                             </div>
                         </li>';
+                            }
                         }
+                        $index++;
                     }
                     ?>
                 </ul>
@@ -197,7 +102,7 @@ $courses = [
                             <p>' . $course['name'] . '</p>
                         </li>
                     ';
-                            if ($index == count($courses) - 1) {
+                            if ($index == count($courses)) {
                                 echo '<span>Your entire education</span>';
                             }
                         }

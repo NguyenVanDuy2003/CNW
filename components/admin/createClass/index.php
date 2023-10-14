@@ -1,3 +1,17 @@
+<?php
+session_start();
+if (!$_SESSION['teacher']) {
+    $_SESSION['teacher'] = [];
+}
+if (isset($_POST['add'])) {
+    array_push($_SESSION['teacher'], $_POST['maGV']);
+    print_r($_SESSION['teacher']);
+}
+// if (isset($_POST['remove'])) {
+//     $_SESSION['teacher'], $_POST['maGV'];
+//     print_r($_SESSION['teacher']);
+// }
+?>
 <!DOCTYPE html>
 <html>
 
@@ -141,7 +155,6 @@
 
             <input type="submit" name="submit" value="Thêm">
         </form>
-
     </div>
 </body>
 

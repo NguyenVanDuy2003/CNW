@@ -1,5 +1,6 @@
 <?php
 include "../../config/connectSQL/index.php";
+include "../../config/checkCookie/index.php";
 include "../../config/getTime/index.php";
 include "../../config/signup/index.php";
 include "../../config/signin/index.php";
@@ -7,11 +8,23 @@ include "../../config/checkform/index.php";
 include "../../config/accessToken/index.php";
 
 if (isset($_GET['btnLogin'])) {
-    echo checkFormSignIn($_GET['username_login'], $_GET['password_login'], $db);
+    if (checkFormSignIn($_GET['username_login'], $_GET['password_login'], $db) ) {
+        echo "<script>
+            setTimeout(() => {
+                window.location.href = '../home';
+            }, 500);
+        </script>";  
+    }
 }
 
 if (isset($_POST['btnRegister'])) {
-    echo checkFormSignUp($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['cfpassword'], $_POST['agree'], $db);
+    if(checkFormSignUp($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['cfpassword'], $_POST['agree'], $db)) {
+        echo "<script>
+            setTimeout(() => {
+                window.location.href = './?Login=';
+            }, 500);
+        </script>";
+    }
 }
 
 ?>
@@ -28,7 +41,7 @@ if (isset($_POST['btnRegister'])) {
 </head>
 
 <body>
-    <main class="column ai-center jc-center h-full">
+    <main class="column ai-center jc-center h-full login">
         <div class="box-shadow pd-20 w-30 gap-20 column ai-center pdUD-30 box-login bd-radius-10">
             <div class="w-full d-flex jc-center pdUD-10">
                 <div class="txt-center logo">
