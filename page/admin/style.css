@@ -132,7 +132,7 @@ iframe {
   color: rgba(255, 255, 255, 0.8);
 }
 #sideBarLeft .show_down {
-  display: none;
+  /* display: none; */
   padding: 10px 20px;
   background: #f8f9fc;
   border-radius: 10px;
