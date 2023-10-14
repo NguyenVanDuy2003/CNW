@@ -21,7 +21,6 @@ body {
   grid-area: layout;
   height: 100%;
   background-color: #f8f9fc;
-  padding: 20px;
 }
 #layout > div {
   height: 100%;

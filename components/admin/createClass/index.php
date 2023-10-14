@@ -1,17 +1,3 @@
-<?php
-session_start();
-if (!$_SESSION['teacher']) {
-    $_SESSION['teacher'] = [];
-}
-if (isset($_POST['add'])) {
-    array_push($_SESSION['teacher'], $_POST['maGV']);
-    print_r($_SESSION['teacher']);
-}
-// if (isset($_POST['remove'])) {
-//     $_SESSION['teacher'], $_POST['maGV'];
-//     print_r($_SESSION['teacher']);
-// }
-?>
 <!DOCTYPE html>
 <html>
 
@@ -24,10 +10,13 @@ if (isset($_POST['add'])) {
     <div class="container">
         <?php
         include "../../../config/connectSQL/index.php";
-        session_start();
+        if (session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
         if (!isset($_SESSION['teacher']) || !isset($_SESSION['AllTeacher'])) {
             $_SESSION['teacher'] = [];
             $_SESSION['AllTeacher'] = [];
+            $_SESSION['title'] = '';
         }
         $sql = "SELECT * FROM users WHERE role = 'teacher'";
         $stmt = $db->prepare($sql);
@@ -37,81 +26,89 @@ if (isset($_POST['add'])) {
         while ($item = $result->fetch_assoc()) {
             $dataTeacher[] = $item;
         }
-        if (sizeof($_SESSION['AllTeacher']) === 0 && sizeof($_SESSION['teacher']) === 0) {
+        if (empty($_SESSION['AllTeacher']) && empty($_SESSION['teacher'])) {
             $_SESSION['AllTeacher'] = $dataTeacher;
         }
-
         if (isset($_POST['add'])) {
-            $newAllTeacher = [];
-            $Teacher = [];
-            foreach ($_SESSION['AllTeacher'] as $item) {
-                if ($item['id'] == $_POST["maGV"]) {
-                    array_push($Teacher, $item['id']);
-                } else {
-                    array_push($newAllTeacher, $item);
-                }
-            }
-            $_SESSION['AllTeacher'] = $newAllTeacher;
-            array_push($_SESSION['teacher'], $Teacher);
-            print_r($_SESSION['teacher']);
-        }
+            $_SESSION['title'] = $_POST['title'];
 
-        if (isset($_POST['remove'])) {
-            $Teacher = [];
-            foreach ($_SESSION['teacher'] as $item) {
-                foreach ($item as $value) {
-                    if ($value != $_POST['selectedUsers']) {
-                        array_push($Teacher, $value);
+            if ($_POST["maGV"] != '------') {
+                $newAllTeacher = [];
+                $Teacher = [];
+                foreach ($_SESSION['AllTeacher'] as $item) {
+                    if ($item['id'] == $_POST["maGV"]) {
+                        $Teacher = $item['id'];
+                    } else {
+                        array_push($newAllTeacher, $item);
                     }
                 }
+                print_r($_SESSION['teacher']);
+                $_SESSION['AllTeacher'] = $newAllTeacher;
+                array_push($_SESSION['teacher'], $Teacher);
+            } else {
             }
-            $_SESSION['teacher'] =  [];
-            array_push($_SESSION['teacher'], $Teacher);
-            foreach ($dataTeacher as $item) {
-                $name = $item['id'];
-                if ($item['id'] == $_POST['selectedUsers']) {
-                    array_push($_SESSION['AllTeacher'], $item);
+        }
+        if (!empty($_POST['title'])) {
+
+            $_SESSION['title'] = $_POST['title'];
+        }
+        if (isset($_POST['remove'])) {
+            $_SESSION['title'] = $_POST['title'];
+
+            if (!empty($_POST['selectedUsers'])) {
+                $Teacher = [];
+                $newAllTeacher = [];
+                foreach ($_SESSION['teacher'] as $item) {
+                    if ($item != $_POST['selectedUsers']) {
+                        array_push($Teacher, $item);
+                    }
                 }
+                foreach ($dataTeacher as $item) {
+                    $name = $item['id'];
+                    if ($item['id'] == $_POST['selectedUsers']) {
+                        $newAllTeacher =  $item;
+                    }
+                }
+                $_SESSION['teacher'] =  $Teacher;
+                array_push($_SESSION['AllTeacher'], $newAllTeacher);
+            } else {
             }
         }
         if (isset($_POST['submit'])) {
-            // print_r($_SESSION['teacher']);
-            $teacher = [];
-            foreach ($_SESSION['teacher'] as $item) {
-                foreach ($item as $value) {
-                    array_push($teacher, $value);
+            $_SESSION['title'] = $_POST['title'];
+
+            if (!empty($_SESSION['teacher']) && !empty($_SESSION['title'])) {
+
+                $teacher = [];
+                foreach ($_SESSION['teacher'] as $item) {
+                    echo $item;
+                    array_push($teacher, $item);
                 }
-            }
-            $teacherString = implode(',', $teacher);
-            $teacherString = rtrim($teacherString, ',');
-            $title = mysqli_real_escape_string($db, $_POST['title']);
+                $teacherString = implode(',', $teacher);
+                $teacherString = rtrim($teacherString, ',');
+                $title = mysqli_real_escape_string($db, $_SESSION['title']);
 
-            $query = "INSERT INTO course (teacher, title) VALUES (?, ?)";
-
-            $stmt = $db->prepare($query);
-
-            if ($stmt) {
-                $stmt->bind_param('ss', $teacherString, $title);
-
-                if ($stmt->execute()) {
-                    // The data has been successfully inserted into the database
-                    header("Location: index.php");
-                    exit;
+                $query = "INSERT INTO course (teacher, title) VALUES (?, ?)";
+                $stmt = $db->prepare($query);
+                if ($stmt) {
+                    $stmt->bind_param('ss', $teacherString, $title);
+                    if ($stmt->execute()) {
+                        // header("Location: index.php");
+                        exit;
+                    } else {
+                        echo "Error: " . $stmt->error;
+                    }
+                    $stmt->close();
                 } else {
-                    // Handle the error if the query fails
-                    echo "Error: " . $stmt->error;
+                    echo "Error: " . $db->error;
                 }
-
-                $stmt->close();
+                $_SESSION['teacher'] = [];
+                $_SESSION['AllTeacher'] = $dataTeacher;
             } else {
-                // Handle the error if the prepared statement fails
-                echo "Error: " . $db->error;
+                $_SESSION['teacher'] = [];
+                $_SESSION['AllTeacher'] = $dataTeacher;
             }
-
-            $_SESSION['teacher'] = [];
-            $_SESSION['AllTeacher'] = $dataTeacher;
         }
-
 
         ?>
 
@@ -120,10 +117,12 @@ if (isset($_POST['add'])) {
         <h2>Thêm Giảng Viên và Học Sinh</h2>
         <form action="" method="post">
             <label for="title">Title:</label>
-            <input type="text" id="title" name="title">
+            <input type="text" id="title" value="<?php echo $_SESSION['title']; ?>" name="title">
 
             <label for="optionsDropdown">Giảng Viên:</label>
             <select id="optionsDropdown" name="maGV">
+                <option value="------">------</option>
+
                 <?php
                 foreach ($_SESSION['AllTeacher'] as $item) {
                     $name = $item['name'];
@@ -140,13 +139,12 @@ if (isset($_POST['add'])) {
             <select id=" selectedUsers" name="selectedUsers" multiple>
             <?php
             foreach ($_SESSION['teacher'] as $item) {
-                foreach ($item as $value) {
-                    foreach ($dataTeacher as $ele) {
-                        $id = $ele['id'];
-                        $name = $ele['name'];
-                        if ($id == $value) {
-                            echo '<option value="' .  $id . '" >' .  $name . '</option>';
-                        }
+                echo $item;
+                foreach ($dataTeacher as $ele) {
+                    $id = $ele['id'];
+                    $name = $ele['name'];
+                    if ($id == $item) {
+                        echo '<option value="' .  $id . '" >' .  $name . '</option>';
                     }
                 }
             }
