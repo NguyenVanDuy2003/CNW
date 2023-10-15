@@ -56,9 +56,6 @@ a {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.7);
 }
-.open {
-  display: block;
-}
 
 .popup-content {
   background-color: #fff;
@@ -76,4 +73,31 @@ a {
   cursor: pointer;
   font-size: 20px;
   color: red;
+}
+.popupDelete-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+.open {
+  display: block;
+}
+.popupDelete-content {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.popupDelete-content > form {
+  display: flex;
+  justify-content: center;
+}
+.popupDelete-content input {
+  padding: 10px;
+  margin: 10px;
 }

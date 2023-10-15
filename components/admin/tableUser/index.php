@@ -26,6 +26,8 @@ for ($i = 0; $i < $totalDataPoints; $i++) {
 $dataForPage = array_slice($data, $offset, $dataPerPage);
 session_start();
 $_SESSION['popup'] = 'close';
+$_SESSION['popupDelete'] = 'close-';
+
 $_SESSION['id'] = '';
 
 
@@ -33,6 +35,18 @@ if (isset($_GET['id'])) {
     $_SESSION['popup'] = 'open';
     $_SESSION['id'] = $_GET['id'];
 }
+
+if (isset($_GET['popup']) || isset($_POST['save']) || isset($_POST['popupsave'])) {
+    $_SESSION['popup'] = "close";
+}
+
+if (isset($_POST['edit'])) {
+    $_SESSION['id'] = $_POST['id'];
+    $_SESSION['popup'] = 'open';
+}
+
+echo $_SESSION['id'];
+
 
 ?>
 
@@ -48,7 +62,6 @@ if (isset($_GET['id'])) {
 
 <body>
     <h1>Danh sách người dùng</h1>
-
     <table>
         <thead>
             <tr>
@@ -68,27 +81,26 @@ if (isset($_GET['id'])) {
         <tbody>
             <?php foreach ($dataForPage as $item) { ?>
                 <tr>
+                    <form action="" method="post">
 
-                    <td><?php echo $item["id"]; ?></td>
-                    <td><?php echo $item["name"]; ?></td>
-                    <td><?php echo $item["username"]; ?></td>
-                    <td><?php echo $item["email"]; ?></td>
-                    <td><?php echo $item["address"]; ?></td>
-                    <td>
-                        <select>
-                            <option value="active" <?php if ($item["status"] === "active") echo "selected"; ?>>Active</option>
-                            <option value="inactive" <?php if ($item["status"] === "inactive") echo "selected"; ?>>Inactive</option>
-                        </select>
-                    </td>
-                    <td><?php echo $item["role"]; ?></td>
-                    <td><?php echo $item["createAt"]; ?></td>
-                    <td><?php echo $item["updateAt"]; ?></td>
-                    <td>
-                        <a href="./?id=<?php echo $item["id"]; ?>">
-                            Edit
-                        </a>
-                    </td>
+                        <td>
+                            <input value="<?php echo $item["id"]; ?>" name='id' type='number' />
+                        </td>
+                        <td><?php echo $item["name"]; ?></td>
+                        <td><?php echo $item["username"]; ?></td>
+                        <td><?php echo $item["email"]; ?></td>
+                        <td><?php echo $item["address"]; ?></td>
+                        <td>
+                            <?php echo $item["status"]; ?>
+                        </td>
+                        <td><?php echo $item["role"]; ?></td>
+                        <td><?php echo $item["createAt"]; ?></td>
+                        <td><?php echo $item["updateAt"]; ?></td>
+                        <td>
+                            <button type="submit" name="edit">Edit</button>
+                        </td>
 
+                    </form>
 
                 </tr>
             <?php } ?>
@@ -110,12 +122,12 @@ if (isset($_GET['id'])) {
     <div class="popup-container <?php echo $_SESSION['popup']; ?>">
         <div class="popup-content">
             <a href="./?popup=close" class="close-popup">&times;</a>
-            <form action="" method="post">
+            <form action="#" method="POST">
 
                 <?php
                 $user = [];
                 foreach ($dataForPage as $item) {
-                    if ($item['id'] == $_GET['id']) {
+                    if ($item['id'] ==  $_SESSION['id']) {
                         $user  = $item;
                     }
                 }
@@ -136,6 +148,7 @@ if (isset($_GET['id'])) {
 
 
 
+
                 $edit = [
                     ['label' => 'Name', 'type' => 'text', 'value' => $user['name'], 'name' => 'name'],
                     ['label' => 'Email', 'type' => 'email', 'value' => $user['email'], 'name' => 'email'],
@@ -143,6 +156,7 @@ if (isset($_GET['id'])) {
                     ['label' => 'Status', 'type' => 'select', 'value' => $user['status'], 'option' => $status, 'name' => 'status'],
                     ['label' => 'Role', 'type' => 'select', 'value' => $user['role'], 'option' =>  $role, 'name' => 'role']
                 ];
+
 
                 foreach ($edit as $item) {
 
@@ -177,39 +191,66 @@ if (isset($_GET['id'])) {
                         </div>
 
                 <?php
-
-
                     }
                 }
                 ?>
-                <input type="submit" class="btn-submit" name="save" value="Save">
 
+                <input type="submit" class="btn-submit" name="save" value="Save">
+                <!-- <a href="./?popupDelete=open">Delete</a> -->
+
+                <input type="submit" class="btn-submit" name="delete" value="Delete">
+
+            </form>
+
+            <?php
+
+            if (isset($_POST['save'])) {
+
+                $query = "UPDATE users SET 
+                  name = '$_POST[name]',
+                  address = '$_POST[address]',
+                  email = '$_POST[email]',
+                  status = '$_POST[status]',
+                  role = '$_POST[role]'
+                  WHERE id = '$_SESSION[id]'";
+                $stmt = $db->prepare($query);
+                if ($stmt->execute()) {
+
+                    exit();
+                } else {
+                    echo "Error: " . $stmt->error;
+                }
+            }
+            if (isset($_POST['delete'])) {
+                $_SESSION['popupDelete'] = "open";
+            }
+
+            if (isset($_POST['popupsave'])) {
+                $_SESSION['popupDelete'] = "close";
+
+                echo "sss";
+                $query = "DELETE FROM users WHERE id = '$_SESSION[id]'";
+                $stmt = $db->prepare($query);
+                if ($stmt->execute()) {
+                    exit();
+                } else {
+                    echo "Error: " . $stmt->error;
+                }
+            }
+            if (isset($_POST['popupCancel'])) {
+                $_SESSION['popupDelete'] = "close";
+            }
+            ?>
+        </div>
+    </div>
+    <div class="popupDelete-container <?php echo $_SESSION['popupDelete']; ?>">
+        <div class="popupDelete-content ">
+            <form action="" method="post">
+                <input type="submit" name='popupsave' value="save">
+                <input type="submit" name='popupCancel' value="cancel">
             </form>
         </div>
     </div>
-    <?php
-    if (isset($_GET['popup'])) {
-        $_SESSION['popup'] = "close";
-    }
-    if (isset($_POST['save'])) {
-        $query = "UPDATE users SET 
-              name = '$_POST[name]',
-              address = '$_POST[address]',
-              email = '$_POST[email]',
-              status = '$_POST[status]',
-              role = '$_POST[role]'
-              WHERE id = '$_SESSION[id]'";
-        $stmt = $db->prepare($query);
-        if ($stmt->execute()) {
-            $_SESSION['popup'] = "close";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-        $stmt->close();
-    }
-
-
-    ?>
 
 </body>
 
