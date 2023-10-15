@@ -205,7 +205,6 @@ echo $_SESSION['id'];
             <?php
 
             if (isset($_POST['save'])) {
-
                 $query = "UPDATE users SET 
                   name = '$_POST[name]',
                   address = '$_POST[address]',
