@@ -53,3 +53,67 @@
     font-weight: 600;
     color: #e07631;
 }
+
+.course .cover>div>img:first-child, .course .cover>div>div {
+    height: 125px;
+    width: 125px;
+    object-fit: cover;
+    padding: 5px;
+    background: #80808026;
+    border-radius: 10px;
+    box-shadow: 0 0 3px 2px #e4e4e4;
+    transition: all 0.3s;
+}
+
+.course .cover>div>div:hover, .course .cover>div>img:first-child:hover {
+    opacity: 0.8;
+    transform: scale(1.05);
+}
+
+.course label {
+    color: #414141;
+    font-weight: 550;
+    font-size: 17px;
+}
+
+.course form>div>button {
+    width: 150px;
+    font-size: 17px;
+}
+
+.course form>div>button:hover {
+    box-shadow: 6px 6px 6px 1px #ababab;
+    font-weight: 600;
+    text-shadow: 3px 3px #797979e8;
+}
+
+.course .ele-list ul {
+    box-shadow: 0 6px 5px 2px #e2e2e2;
+    border-radius: 0px 0px 5px 5px;
+    height: 100px;
+    overflow: auto;
+}
+
+.course .ele-list li input {
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.course .ele-list li:hover {
+    background: #e0e0e099;
+}
+
+.course .session {
+    width: 50px;
+}
+
+.course .create-peo {
+    transform: rotate(0deg);
+    transition: all 0.3s;
+}
+
+.course .create-peo:hover {
+    scale: 1.2;
+    transform: rotate(135deg);
+}

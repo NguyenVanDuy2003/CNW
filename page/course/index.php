@@ -54,12 +54,154 @@ if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
             </form>
         </div>
         <div class="d-flex gap-20 ai-center">
-            <button class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
+            <button id="btn-createCourse"
+                class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
                 <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/4074/4074958.png" />
                 Create Lesson</button>
-            <button class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
+            <button id="btn-detailCourse"
+                class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
                 <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/1150/1150592.png" />
                 Detail Course</button>
+            <?php
+            include "../../extension/modal/index.php";
+            Modal('btn-createCourse', '
+                <h2>Create new lesson</h2>
+                <hr>
+                <h3>Lesson information</h3>
+                <form>
+                    <div>
+                        <label>Title</label>
+                        <input name="title" type="text"/>
+                    </div>
+                    <div>
+                        <label>Title</label>
+                        <input name="title" type="text"/>
+                    </div>
+                    <div>
+                        <label>Title</label>
+                        <input name="title" type="text"/>
+                    </div>
+                    <div>
+                        <label>Title</label>
+                        <input name="title" type="text"/>
+                    </div>
+                </form>
+            ');
+            $name_course = $courses['name'];
+            $teacher_ids = implode(",", $teachers);
+            $student_ids = implode(",", $students);
+            $query = "SELECT id, name FROM users WHERE id IN ($teacher_ids)";
+            $result = $db->query($query);
+            $teacherElement = "";
+            $i = 0;
+            while ($row = $result->fetch_assoc()) {
+                $i++;
+                $nameTeacher = $row['name'];
+                $teacherElement .= "
+                <li class='d-flex gap-10 ai-center pd-10'>
+                    <img class='w-icon-15' src='https://cdn-icons-png.flaticon.com/512/847/847969.png'/>
+                    <input type='text' name='student$i' value='$nameTeacher' readonly/>
+                </li>
+                ";
+            }
+            $query = "SELECT id, name FROM users WHERE id IN ($student_ids)";
+            $result = $db->query($query);
+            $studentElement = "";
+
+            $i = 0;
+            while ($row = $result->fetch_assoc()) {
+                $i++;
+                $nameStudent = $row['name'];
+                $studentElement .= "
+                <li class='d-flex gap-10 ai-center pd-10'>
+                    <img class='w-icon-15' src='https://cdn-icons-png.flaticon.com/512/847/847969.png'/>
+                    <input type='text' name='student$i' value='$nameStudent' readonly/>
+                </li>
+                ";
+            }
+            $session = $courses['session'];
+            $semester = $courses['semester'];
+            Modal('btn-detailCourse', "
+                <div class='column gap-20'>
+                    <h1>$name_course</h1>
+                    <hr>
+                    <h3>Course information</h3>
+                    <form class='column gap-20'>
+                        <div class='d-flex ai-center gap-20'>
+                            <label>Title</label>
+                            <input class='input w-full' name='title' type='text' placeholder='Course title' value='$name_course'/>
+                        </div>
+                        <div class='d-flex gap-30 ai-center jc-spacebetween'>
+                            <div class='d-flex ai-center gap-20'>
+                                <label>Sessions</label>
+                                <input class='session input' name='session' type='number' placeholder='Number of sessions' value='$session'/>
+                            </div class='d-flex ai-center gap-20'>
+                            <div>
+                                <label>Semester</label>
+                                <input class='input' name='semester' type='text' placeholder='Semester' value='$semester'/>
+                            </div>
+                        </div>
+                        <div class='d-flex jc-spacebetween ele-list'>
+                            <div class='column gap-10'>
+                                <div class='d-flex gap-10 ai-center'>
+                                    <label>Teacher</label>
+                                    <img class='create-peo w-icon-15 pointer' src='https://cdn-icons-png.flaticon.com/128/4074/4074958.png'/>
+                                </div>
+                                <input class='input' type='search'  placeholder='Look for information'/>
+                                <ul class='column'>
+                                $teacherElement
+                                </ul>
+                            </div>
+                            <div class='column gap-10'>
+                                <div class='d-flex gap-10 ai-center'>
+                                    <label>Student</label>
+                                    <img class='create-peo w-icon-15 pointer' src='https://cdn-icons-png.flaticon.com/128/4074/4074958.png'/>
+                                </div>
+                                <input class='input' type='search' placeholder='Look for information'/>
+                                <ul class='column'>
+                                $studentElement
+                                </ul>
+                            </div>
+                        </div>
+                        <div class='cover'>
+                            <label>Cover</label>
+                            <div class='d-flex gap-20 pointer'>
+                                <img id='cover' src='https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg' alt='Cover Image'>
+                                <div class='d-flex ai-center jc-center pointer' id='upload-trigger'>
+                                    <img class='w-icon-25' src='https://cdn-icons-png.flaticon.com/128/5817/5817702.png'/>
+                                    <input type='file' id='file-upload-input' class='d-none' accept='image/*'>
+                                </div>
+                            </div>
+
+                            <script>
+                            document.addEventListener('DOMContentLoaded', function () {
+                                var uploadTrigger = document.getElementById('upload-trigger');
+                                var fileInput = document.getElementById('file-upload-input');
+                                var coverImage = document.getElementById('cover');
+
+                                uploadTrigger.addEventListener('click', function () {
+                                    fileInput.click();
+                                });
+
+                                fileInput.addEventListener('change', function () {
+                                    var selectedFile = fileInput.files[0];
+                                    if (selectedFile) {
+                                        var objectURL = URL.createObjectURL(selectedFile);
+                                        coverImage.src = objectURL;
+                                    }
+                                });
+                            });
+                            </script>
+
+                        </div>
+                        <hr class='w-full mgUD-20'>
+                        <div class='d-flex jc-center w-full'>
+                            <button class='btn btn-submit pd-15 w-fit'>Save</button>
+                        </div>
+                    </form>
+                </div>
+            ");
+            ?>
         </div>
         <?php
         $data = unserialize($courses['content']);
