@@ -2,33 +2,31 @@
 function Popover($id, $element)
 {
     echo "
-    <div class='popover d-none'>
+    <div class='popover d-none' id='popover-$id'>
         $element
     </div>
     ";
 
-    echo '
+    echo "
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var Element = document.getElementById("' . $id . '");
-        var popover = document.querySelector(".popover");
+    document.addEventListener('DOMContentLoaded', function () {
+        let Element = document.getElementById('$id');
+        let popover = document.getElementById('popover-$id');
 
-        // Xử lý sự kiện click vào #contact-menu
-        Element.addEventListener("click", function (event) {
+        Element.addEventListener('click', function (event) {
             event.stopPropagation(); // Ngăn chặn sự kiện click truyền lên header
 
             // Toggle class d-none trên popover để hiển thị/ẩn nó
-            popover.classList.toggle("d-none");
+            popover.classList.toggle('d-none');
         });
 
-        // Xử lý sự kiện click bên ngoài popover để ẩn nó
-        document.addEventListener("click", function (event) {
+        document.addEventListener('click', function (event) {
             if (!popover.contains(event.target) && event.target !== Element) {
-                popover.classList.add("d-none");
+                popover.classList.add('d-none');
             }
         });
     });
     </script>
-    ';
+    ";
 }
 ?>
