@@ -19,6 +19,7 @@ if (isset($_GET['btnLogin'])) {
 
 if (isset($_POST['btnRegister'])) {
     if (checkFormSignUp($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['cfpassword'], $_POST['agree'], 'student', $db)) {
+        
         echo "<script>
             setTimeout(() => {
                 window.location.href = './?Login=';
