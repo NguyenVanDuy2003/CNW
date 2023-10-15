@@ -24,7 +24,7 @@
         $result = $stmt->get_result();
         $dataTeacher = [];
         while ($item = $result->fetch_assoc()) {
-            $dataTeacher[] = $item;
+            array_push($dataTeacher, $item);
         }
         if (empty($_SESSION['AllTeacher']) && empty($_SESSION['teacher'])) {
             $_SESSION['AllTeacher'] = $dataTeacher;
@@ -93,8 +93,6 @@
                 if ($stmt) {
                     $stmt->bind_param('ss', $teacherString, $title);
                     if ($stmt->execute()) {
-                        // header("Location: index.php");
-                        exit;
                     } else {
                         echo "Error: " . $stmt->error;
                     }
@@ -103,9 +101,7 @@
                     echo "Error: " . $db->error;
                 }
                 $_SESSION['teacher'] = [];
-                $_SESSION['AllTeacher'] = $dataTeacher;
-            } else {
-                $_SESSION['teacher'] = [];
+                $_SESSION['title'] = '';
                 $_SESSION['AllTeacher'] = $dataTeacher;
             }
         }
@@ -114,7 +110,7 @@
 
 
 
-        <h2>Thêm Giảng Viên và Học Sinh</h2>
+        <h2>Create Class</h2>
         <form action="" method="post">
             <label for="title">Title:</label>
             <input type="text" id="title" value="<?php echo $_SESSION['title']; ?>" name="title">

@@ -3,13 +3,13 @@ include '../../../config/signup/index.php';
 include "../../../config/connectSQL/index.php";
 
 if (isset($_POST['create'])) {
-    $fullname = $_POST['fullname'];
+    $name = $_POST['fullname'];
     $email = $_POST['email'];
     $username = $_POST['username'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $role = $_POST['role'];
-    checkFormSignUp($name, $email, $username, $password, $confirm_password, true, $role, $db);
+    checkFormSignUp($name, $email, $username, $password, $confirm_password, 'on', $role, $db);
 }
 ?>
 <!DOCTYPE html>
@@ -20,6 +20,7 @@ if (isset($_POST['create'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="../../../extension/snack/index.css">
 </head>
 
 <body>
@@ -77,7 +78,7 @@ if (isset($_POST['create'])) {
                 </div>
             </div>
 
-
+            <input type="checkbox" name="agree" />
 
             <input type="submit" class="btn-submit" name="create" value="Create">
         </form>
