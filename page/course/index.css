@@ -104,6 +104,13 @@
     background: #e0e0e099;
 }
 
+.course .ele-list li>img {
+    visibility: hidden;
+}
+.course .ele-list li:hover>img {
+    visibility: inherit;
+}
+
 .course .session {
     width: 50px;
 }
