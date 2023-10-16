@@ -4,19 +4,23 @@
 <head>
     <title>Form Thêm Giảng Viên và Học Sinh</title>
     <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="../../../extension/snack/index.css">
+    <link rel="stylesheet" href="../../../style/index.css">
 </head>
 
 <body>
     <div class="container">
         <?php
         include "../../../config/connectSQL/index.php";
+        include '../../../extension/snack/index.php';
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+
         if (!isset($_SESSION['teacher']) || !isset($_SESSION['AllTeacher'])) {
             $_SESSION['teacher'] = [];
-            $_SESSION['AllTeacher'] = [];
             $_SESSION['title'] = '';
+            $_SESSION['AllTeacher'] = [];
         }
         $sql = "SELECT * FROM users WHERE role = 'teacher'";
         $stmt = $db->prepare($sql);
@@ -46,6 +50,7 @@
                 $_SESSION['AllTeacher'] = $newAllTeacher;
                 array_push($_SESSION['teacher'], $Teacher);
             } else {
+                echo showSnack("You selected is't teacher ", false);
             }
         }
         if (!empty($_POST['title'])) {
@@ -93,7 +98,12 @@
                 if ($stmt) {
                     $stmt->bind_param('ss', $teacherString, $title);
                     if ($stmt->execute()) {
-                        // header("Location: index.php");
+                        $_SESSION['teacher'] = [];
+                        $_SESSION['title'] = '';
+                        $_SESSION['AllTeacher'] = [];
+                        echo showSnack("Create class success. ", true);
+
+                        header("Location: index.php");
                         exit;
                     } else {
                         echo "Error: " . $stmt->error;
@@ -102,9 +112,6 @@
                 } else {
                     echo "Error: " . $db->error;
                 }
-                $_SESSION['teacher'] = [];
-                $_SESSION['title'] = '';
-                $_SESSION['AllTeacher'] = $dataTeacher;
             }
         }
 

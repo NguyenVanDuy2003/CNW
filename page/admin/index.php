@@ -1,6 +1,6 @@
 <?php include "../../extension/variableSession/index.php";
-include "../../config/connectSQL/index.php";
-include "../../config/checkCookie/index.php";
+// include "../../config/connectSQL/index.php";
+// include "../../config/checkCookie/index.php";
 $user = $_SESSION['user'];
 ?>
 <!DOCTYPE html>
