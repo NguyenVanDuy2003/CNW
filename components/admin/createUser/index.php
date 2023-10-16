@@ -23,7 +23,10 @@ if (isset($_POST['create'])) {
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="../../../extension/snack/index.css">
+<<<<<<< HEAD
     <link rel="stylesheet" href="../../../style/index.css">
+=======
+>>>>>>> 1e1cf01311bee461facbcdd3b6b5362dc5d0251f
 </head>
 
 <body>
@@ -81,7 +84,7 @@ if (isset($_POST['create'])) {
                 </div>
             </div>
 
-
+            <input type="checkbox" name="agree" />
 
             <input type="submit" class="btn-submit" name="create" value="Create">
         </form>

@@ -1,7 +1,7 @@
 <?php
 include "../../../config/connectSQL/index.php";
 
-$sql = "SELECT * FROM users WHERE 1";
+$sql = "SELECT * FROM users";
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -28,15 +28,13 @@ session_start();
 $_SESSION['popup'] = 'close';
 $_SESSION['popupDelete'] = 'close-';
 
-$_SESSION['id'] = '';
-
 
 if (isset($_GET['id'])) {
     $_SESSION['popup'] = 'open';
     $_SESSION['id'] = $_GET['id'];
 }
 
-if (isset($_GET['popup']) || isset($_POST['save']) || isset($_POST['popupsave'])) {
+if (isset($_GET['popup']) || isset($_POST['popupsave'])) {
     $_SESSION['popup'] = "close";
 }
 
@@ -45,8 +43,39 @@ if (isset($_POST['edit'])) {
     $_SESSION['popup'] = 'open';
 }
 
-echo $_SESSION['id'];
+if (isset($_POST['save'])) {
+    $query = "UPDATE users SET 
+      name = '$_POST[name]',
+      address = '$_POST[address]',
+      email = '$_POST[email]',
+      status = '$_POST[status]',
+      role = '$_POST[role]'
+      WHERE id = '$_SESSION[id]'";
+    $stmt = $db->prepare($query);
+    if ($stmt->execute()) {
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+}
 
+if (isset($_POST['delete'])) {
+    $_SESSION['popupDelete'] = "open";
+}
+
+if (isset($_POST['popupsave'])) {
+    $_SESSION['popupDelete'] = "close";
+
+    echo "sss";
+    $query = "DELETE FROM users WHERE id = '$_SESSION[id]'";
+    $stmt = $db->prepare($query);
+    if ($stmt->execute()) {
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+}
+if (isset($_POST['popupCancel'])) {
+    $_SESSION['popupDelete'] = "close";
+}
 
 ?>
 
@@ -122,7 +151,8 @@ echo $_SESSION['id'];
     <div class="popup-container <?php echo $_SESSION['popup']; ?>">
         <div class="popup-content">
             <a href="./?popup=close" class="close-popup">&times;</a>
-            <form action="#" method="POST">
+
+            <form action="" method="POST">
 
                 <?php
                 $user = [];
@@ -196,12 +226,11 @@ echo $_SESSION['id'];
                 ?>
 
                 <input type="submit" class="btn-submit" name="save" value="Save">
-                <!-- <a href="./?popupDelete=open">Delete</a> -->
-
                 <input type="submit" class="btn-submit" name="delete" value="Delete">
 
             </form>
 
+<<<<<<< HEAD
             <?php
 
             if (isset($_POST['save'])) {
@@ -240,6 +269,9 @@ echo $_SESSION['id'];
                 $_SESSION['popupDelete'] = "close";
             }
             ?>
+=======
+
+>>>>>>> 1e1cf01311bee461facbcdd3b6b5362dc5d0251f
         </div>
     </div>
     <div class="popupDelete-container <?php echo $_SESSION['popupDelete']; ?>">
