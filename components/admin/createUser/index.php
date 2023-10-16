@@ -1,6 +1,8 @@
 <?php
-include '../../../config/signup/index.php';
+include "../../../config/checkform/index.php";
 include "../../../config/connectSQL/index.php";
+include '../../../extension/snack/index.php';
+include '../../../config/signup/index.php';
 
 if (isset($_POST['create'])) {
     $name = $_POST['fullname'];
@@ -21,6 +23,10 @@ if (isset($_POST['create'])) {
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="../../../extension/snack/index.css">
+<<<<<<< HEAD
+    <link rel="stylesheet" href="../../../style/index.css">
+=======
+>>>>>>> 1e1cf01311bee461facbcdd3b6b5362dc5d0251f
 </head>
 
 <body>

@@ -93,6 +93,8 @@
                 if ($stmt) {
                     $stmt->bind_param('ss', $teacherString, $title);
                     if ($stmt->execute()) {
+                        // header("Location: index.php");
+                        exit;
                     } else {
                         echo "Error: " . $stmt->error;
                     }
