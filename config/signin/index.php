@@ -1,5 +1,5 @@
 <?php
-include "../../extension/variableSession/index.php";
+
 function checkFormSignIn($username, $password, $db)
 {
     // check empty
@@ -24,13 +24,12 @@ function checkFormSignIn($username, $password, $db)
 
         // Sử dụng password_verify để kiểm tra mật khẩu
         if (password_verify($password, $hashed_password)) {
-            if ($_GET['remember']) {
+            if (isset($_GET['remember'])) {
                 rememberAccount($username, $password);
             }
             checkAccountAccessToken($username, $db);
             echo showSnack("Logged in successfully", true);
             if ($role === 'admin') {
-                $_SESSION['user'] = $row;
                 header('Location: ../../page/admin');
             }
 

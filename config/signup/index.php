@@ -1,8 +1,6 @@
 <?php
-include "../../extension/snack/index.php";
 
-
-function checkFormSignUp($name, $email, $username, $password, $cfpassword, $agree, $role, $db)
+function checkFormSignUp($name, $email, $address, $username, $password, $cfpassword, $agree, $role, $db)
 {
     // check empty
     $empty = check_empty($agree) ? "Agree to the request" : (check_empty($name) ? "name" : (check_empty($username) ? "username" : (check_empty($email) ? "email" : (check_empty($password) ? "password" : (check_empty($cfpassword) ? "confirm password" : "")))));
@@ -66,7 +64,7 @@ function checkFormSignUp($name, $email, $username, $password, $cfpassword, $agre
 
     date_default_timezone_set('Asia/Ho_Chi_Minh');
     $currentDateTime = date("d/m/Y H:i");
-    $sql = "INSERT INTO users (name, username, password, email, address, createAt, updateAt, role, status) VALUES ('$name', '$username', '$password', '$email', '', '$currentDateTime', '$currentDateTime',  '$role', 'Active')";
+    $sql = "INSERT INTO users (name, username, password, email, address, createAt, updateAt, role, status) VALUES ('$name', '$username', '$password', '$email', '$address', '$currentDateTime', '$currentDateTime',  '$role', 'Active')";
     $result = $db->query($sql);
 
     echo showSnack("Successfully registered account", true);

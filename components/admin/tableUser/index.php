@@ -71,7 +71,7 @@ if (isset($_POST['popupsave'])) {
     $stmt = $db->prepare($query);
     $stmt->bind_param("i", $_SESSION['id']);
     if ($stmt->execute()) {
-        // Delete successful
+        header("Location: index.php");
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -116,7 +116,7 @@ if (isset($_POST['popupCancel'])) {
                     <form action="" method="post">
 
                         <td>
-                            <input value="<?php echo $item["id"]; ?>" name='id' type='number' readonly  />
+                            <input value="<?php echo $item["id"]; ?>" name='id' type='number' readonly />
                         </td>
                         <td><?php echo $item["name"]; ?></td>
                         <td><?php echo $item["username"]; ?></td>
@@ -144,7 +144,7 @@ if (isset($_POST['popupCancel'])) {
             <a href='index.php?page=<?php echo $currentPage - 1; ?>' class='number'>Previous</a>
         <?php } ?>
         <?php for ($page = 1; $page <= $totalPages; $page++) {
-            if ($totalPages != 0) {
+            if ($totalPages != 1) {
 
         ?>
 
