@@ -1,7 +1,5 @@
 <?php
 include "../../extension/snack/index.php";
-// include "../../config/signup/index.php";
-
 
 function checkFormSignUp($name, $email, $username, $password, $cfpassword, $agree, $role, $db)
 {
