@@ -2,6 +2,9 @@ body {
   padding: 0;
   margin: 0;
 }
+main {
+  margin-top: 0 !important;
+}
 #container {
   display: grid;
   grid-template-areas:

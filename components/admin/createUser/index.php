@@ -11,8 +11,14 @@ if (isset($_POST['create'])) {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $role = $_POST['role'];
-    checkFormSignUp($name, $email, $username, $password, $confirm_password, 'on', $role, $db);
+    $address = "";
+
+    checkFormSignUp($name, $email, $address, $username, $password, $confirm_password, 'on', $role, $db);
 }
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +90,7 @@ if (isset($_POST['create'])) {
 
             <input type="submit" class="btn-submit" name="create" value="Create">
         </form>
+
 
     </div>
 </body>
