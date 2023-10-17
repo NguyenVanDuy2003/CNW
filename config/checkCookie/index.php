@@ -1,5 +1,4 @@
 <?php
-include "../connectSQL/index.php";
 function getCookie()
 {
     if (isset($_COOKIE['liorion'])) {
@@ -30,5 +29,3 @@ if (checkActiveCookie($db) != 0 && strpos($_SERVER['REQUEST_URI'], "login")) {
 } elseif (checkActiveCookie($db) == 0 && !strpos($_SERVER['REQUEST_URI'], "login")) {
     header('location: ../login');
 }
-
-?>

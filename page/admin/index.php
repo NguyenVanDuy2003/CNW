@@ -1,7 +1,12 @@
-<?php include "../../extension/variableSession/index.php";
+<?php
 include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
-$user = $_SESSION['user'];
+$userId = checkActiveCookie($db);
+$sql = "SELECT * FROM users WHERE id='$userId'";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
 ?>
 <!DOCTYPE html>
 <html lang="en">

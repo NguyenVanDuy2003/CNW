@@ -1,9 +1,11 @@
 body {
   padding: 20px;
 }
-
+h2 {
+  text-align: center;
+}
 .container {
-  max-width: 400px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
@@ -16,6 +18,7 @@ label {
 }
 
 input[type="text"],
+input[type="number"],
 select {
   width: 100%;
   padding: 8px;
@@ -35,4 +38,38 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #0056b3;
+}
+form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.form {
+  display: flex;
+  width: 100%;
+}
+.form div:nth-child(1) {
+  padding-right: 10px;
+}
+.form div:nth-child(2) {
+  padding-left: 10px;
+}
+form div:nth-child(4) {
+  display: flex;
+  width: 100%;
+  margin-bottom: 10px;
+}
+form div:nth-child(4) div {
+  height: 100%;
+  display: flex;
+  padding-left: 10px;
+}
+form div:nth-child(4) div input {
+  margin-bottom: 0px;
+}
+form div:nth-child(4) select {
+  height: 100%;
+  display: flex;
+  padding-right: 10px;
+  width: 100px;
 }
