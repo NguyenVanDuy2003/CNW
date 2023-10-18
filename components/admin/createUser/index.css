@@ -16,6 +16,7 @@
   display: flex;
   padding: 10px;
   flex-direction: column;
+  /* justify-content: center; */
 }
 
 label {
@@ -32,8 +33,12 @@ select {
   border: 1px solid #ccc;
   border-radius: 3px;
 }
-
 .btn-submit {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fc !important;
+}
+.btn-submit > div > input {
   background-color: #3498db;
   color: #fff;
   padding: 10px 20px;

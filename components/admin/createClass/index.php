@@ -14,7 +14,7 @@
         include "../../../config/connectSQL/index.php";
         include '../../../extension/snack/index.php';
         include '../../../config/getTime/index.php';
-
+        include '../../../extension/session/index.php';
 
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
@@ -23,7 +23,7 @@
         if (!isset($_SESSION['teacher']) || !isset($_SESSION['AllTeacher']) || !isset($_SESSION['student']) || !isset($_SESSION['AllStudent'])) {
             $_SESSION['teacher'] = [];
             $_SESSION['title'] = '';
-            $_SESSION['semester'] = '';
+            $_SESSION['semester'] = 'Học kì I';
             $_SESSION['session'] = 1;
             $_SESSION['AllTeacher'] = [];
             $_SESSION['student'] = [];
@@ -44,7 +44,8 @@
                 array_push($dataStudent, $item);
             }
         }
-        if (empty($_SESSION['AllTeacher']) && empty($_SESSION['teacher']) && empty($_SESSION['AllStudent']) && empty($_SESSION['student'])) {
+        if (empty($_SESSION['AllTeacher']) && empty($_SESSION['teacher']) && empty($_SESSION['AllStudent']) && empty($_SESSION['student']) ||  $_SESSION['load'] === true) {
+            $_SESSION['load'] === false;
             $_SESSION['AllTeacher'] = $dataTeacher;
             $_SESSION['AllStudent'] = $dataStudent;
         }

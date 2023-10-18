@@ -36,8 +36,7 @@ iframe {
 #nawBar {
   grid-area: nawBar;
   max-height: 300px;
-  border-bottom: 1px solid red;
-  border-left: 1px solid red;
+  z-index: 10;
   display: grid;
   grid-template-areas: "item_left item_right";
   padding: 10px 20px;
@@ -87,12 +86,35 @@ iframe {
 
 #nawBar > #item_right > div:last-child {
   padding-right: 20px;
-  border-left: 1px solid red;
+  /* border-left: 1px solid red; */
 }
 #nawBar > #item_right > div:last-child > label {
   padding-right: 5px;
 }
 
+#nawBar .dropdown {
+  position: relative;
+  /* display: inline-block !important; */
+}
+
+#nawBar .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 100px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  padding: 12px 16px;
+  z-index: 1;
+  top: 35px;
+  right: 35px;
+}
+.dropdown-content a {
+  display: flex;
+  justify-content: center;
+}
+#nawBar .dropdown:hover .dropdown-content {
+  display: block;
+}
 /* side bar left */
 #logo {
   grid-area: logo;
@@ -103,7 +125,7 @@ iframe {
   grid-area: sideBarLeft;
   height: 100%;
   background-color: #4e73df;
-  border-right: 1px solid red;
+  /* border-right: 1px solid red; */
 }
 #sideBarLeft .item {
   display: flex;
@@ -143,4 +165,8 @@ iframe {
 
 li {
   padding: 10px 0;
+}
+a {
+  display: flex;
+  align-items: center;
 }
