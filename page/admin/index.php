@@ -1,12 +1,17 @@
 <?php
 include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
+include "../../extension/session/index.php";
 $userId = checkActiveCookie($db);
 $sql = "SELECT * FROM users WHERE id='$userId'";
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result();
 $user = $result->fetch_assoc();
+if ($user['role'] !== "admin") {
+    header("Location: ../home/index.php");
+};
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +41,13 @@ $user = $result->fetch_assoc();
                 if (!$_GET['name']) {
                     header('Location: index.php?name=dashboard');
                 }
+
+                if (isset($_GET['status'])) {
+                    // setcookie('liorion', '', time() - 1000);
+                    // setcookie('liorion', '', time() - 1000, '/');
+                    // header('Location: index.php');
+                }
+
                 $icon = [
                     "../../images/admin/notification.png",
                     "../../images/admin/email.png",
@@ -51,9 +63,14 @@ $user = $result->fetch_assoc();
 
                 ?>
 
-                <div>
+                <div class="dropdown">
                     <label for="avata"><?php echo $user['name']; ?></label>
                     <img src="../../images/admin/avatar.png" class="icon" name="avatar" alt="error">
+                    <div class="dropdown-content">
+                        <div>
+                            <a href="./?status=logout">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,8 +108,13 @@ $user = $result->fetch_assoc();
                 ],
                 [
                     "icon" => "../../images/admin/utilities.png",
-                    "text" => "Utilities",
-                    "id" => "utilities",
+                    "text" => "Course Manager",
+                    "id" => "course_manager",
+                ],
+                [
+                    "icon" => "../../images/admin/utilities.png",
+                    "text" => "Quizz Manager",
+                    "id" => "quizz_manager",
                 ],
                 [
                     "icon" => "../../images/admin/management.png",
@@ -127,12 +149,17 @@ $user = $result->fetch_assoc();
             } ?>
             <?php if ($_GET['name'] === 'user_manager') {
                 echo ' <div id="user manager" >
-                <iframe src="../../components/admin/tableUser/index.php"></iframe>
+                <iframe src="../../components/admin/userManager/index.php"></iframe>
             </div>';
             } ?>
-            <?php if ($_GET['name'] === 'utilities') {
-                echo '<div id="utilities">
-                utility
+            <?php if ($_GET['name'] === 'quizz_manager') {
+                echo '<div id="quizz_manager">
+                <iframe src="../../components/admin/quizzManager/index.php"></iframe>
+            </div>';
+            } ?>
+            <?php if ($_GET['name'] === 'course_manager') {
+                echo '<div id="course_manager">
+                <iframe src="../../components/admin/courseManager/index.php"></iframe>
             </div>';
             } ?>
             <?php if ($_GET['name'] === 'create_user') {

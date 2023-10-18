@@ -61,6 +61,13 @@ if (isset($_POST['create'])) {
 
             <div class="form-group">
                 <div>
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
 
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
@@ -86,9 +93,11 @@ if (isset($_POST['create'])) {
                     </select>
                 </div>
             </div>
-
-
-            <input type="submit" class="btn-submit" name="create" value="Create">
+            <div class="btn-submit">
+                <div>
+                    <input type="submit" name="create" value="Create">
+                </div>
+            </div>
         </form>
 
 

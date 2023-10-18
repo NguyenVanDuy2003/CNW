@@ -1,7 +1,8 @@
 <?php
 include "../../../config/connectSQL/index.php";
+include "../../../extension/session/index.php";
 
-$sql = "SELECT * FROM users";
+$sql = "SELECT * FROM course";
 $stmt = $db->prepare($sql);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -23,7 +24,29 @@ for ($i = 0; $i < $totalDataPoints; $i++) {
     array_push($data, $row);
 }
 $dataForPage = array_slice($data, $offset, $dataPerPage);
-session_start();
+
+
+$sql = "SELECT * FROM users";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$result = $stmt->get_result();
+$dataStudent = [];
+$dataTeacher = [];
+
+
+for ($i = 0; $row = $result->fetch_assoc(); $i++) {
+    if (!$row) {
+        break;
+    }
+
+    if ($row['role'] == 'student') {
+        array_push($dataStudent, $row);
+    }
+    if ($row['role'] == 'teacher') {
+        array_push($dataTeacher, $row);
+    }
+}
+
 $_SESSION['popup'] = 'close';
 $_SESSION['popupDelete'] = 'close-';
 
@@ -53,6 +76,9 @@ if (isset($_POST['save'])) {
     $stmt = $db->prepare($query);
     $stmt->bind_param("sssssi", $_POST['name'], $_POST['address'], $_POST['email'], $_POST['status'], $_POST['role'], $_SESSION['id']);
     if ($stmt->execute()) {
+
+        $_SESSION['load'] = true;
+
         header("Location: index.php");
         exit;
     } else {
@@ -99,11 +125,13 @@ if (isset($_POST['popupCancel'])) {
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Status</th>
-                <th>Role</th>
+                <th>Teacher</th>
+                <th>Student</th>
+                <th>Semester</th>
+                <th>Cover</th>
+                <th>Session</th>
+                <th>content</th>
+
                 <th>Created At</th>
                 <th>Update At</th>
                 <th> </th>
@@ -119,13 +147,50 @@ if (isset($_POST['popupCancel'])) {
                             <input value="<?php echo $item["id"]; ?>" name='id' type='number' readonly />
                         </td>
                         <td><?php echo $item["name"]; ?></td>
-                        <td><?php echo $item["username"]; ?></td>
-                        <td><?php echo $item["email"]; ?></td>
-                        <td><?php echo $item["address"]; ?></td>
                         <td>
-                            <?php echo $item["status"]; ?>
+                            <?php $teacher = unserialize($item["teacher"]);
+                            $str = '';
+                            foreach ($teacher as $id) {
+                                foreach ($dataTeacher as $teacher) {
+                                    if ($teacher['id'] == $id) {
+                                        $str .= $teacher['name'] . ',';
+                                    }
+                                }
+                            }
+
+                            echo $str;
+
+                            ?></td>
+                        <td> <?php $student = unserialize($item["student"]);
+                                $str = '';
+                                foreach ($student as $id) {
+                                    foreach ($dataStudent as $student) {
+                                        if ($student['id'] == $id) {
+                                            $str .= $student['name'] . ',';
+                                        }
+                                    }
+                                }
+
+                                echo $str;
+
+                                ?></td>
                         </td>
-                        <td><?php echo $item["role"]; ?></td>
+                        <td><?php echo $item["semester"]; ?></td>
+                        <td>
+                            <?php echo $item["cover"]; ?>
+                        </td>
+                        <td><?php echo $item["session"]; ?></td>
+                        <td>
+
+                            <?php $content = unserialize($item["content"]);
+                            $str = '';
+                            print_r($content);
+
+
+                            echo $str;
+
+                            ?></< /td>
+
                         <td><?php echo $item["createAt"]; ?></td>
                         <td><?php echo $item["updateAt"]; ?></td>
                         <td>
