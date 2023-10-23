@@ -43,9 +43,9 @@ if ($user['role'] !== "admin") {
                 }
 
                 if (isset($_GET['status'])) {
-                    // setcookie('liorion', '', time() - 1000);
-                    // setcookie('liorion', '', time() - 1000, '/');
-                    // header('Location: index.php');
+                    setcookie('liorion', '', time() - 1000);
+                    setcookie('liorion', '', time() - 1000, '/');
+                    header('Location: index.php');
                 }
 
                 $icon = [
