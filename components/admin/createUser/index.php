@@ -107,7 +107,7 @@ if (isset($_POST['create'])) {
         <?php
         session_start();
         if (isset($_POST["uploadFile"])) {
-            $targetFile = basename($_FILES["fileToUpload"]["name"]); // Đường dẫn tới tệp đã tải lên
+            $targetFile = basename($_FILES["fileToUpload"]["name"]);
             $filename = $_FILES['fileToUpload']['name'];
             if (!empty($_FILES["fileToUpload"]["name"])) {
                 $fileExtension = pathinfo($targetFile, PATHINFO_EXTENSION);
@@ -116,32 +116,45 @@ if (isset($_POST['create'])) {
                     if (file_exists($filename)) {
                         $zip = new ZipArchive;
                         if ($zip->open($filename) === true) {
-                            // Tìm và đọc tệp "xl/sharedStrings.xml" để lấy dữ liệu chuỗi chung
                             $sharedStringsData = $zip->getFromName('xl/sharedStrings.xml');
                             $sharedStrings = simplexml_load_string($sharedStringsData);
-
-                            // Tìm và đọc tệp "xl/worksheets/sheet1.xml" (hoặc tệp trang tính khác) để lấy dữ liệu của bảng tính
                             $worksheetData = $zip->getFromName('xl/worksheets/sheet1.xml');
                             $worksheet = simplexml_load_string($worksheetData);
 
-                            // Lấy dữ liệu từ bảng tính
+
+                            $skipFirstRow = true; // Biến để bỏ qua hàng đầu tiên
+
                             foreach ($worksheet->sheetData->row as $row) {
+                                if ($skipFirstRow) {
+                                    $skipFirstRow = false;
+                                    continue; // Bỏ qua hàng đầu tiên
+                                }
+
+                                $rowData = array(); // Mảng lưu trữ dữ liệu của mỗi hàng
                                 foreach ($row->c as $cell) {
                                     $attr = $cell->attributes();
                                     if ((string)$attr['t'] == 's') {
-                                        // Nếu kiểu dữ liệu là chuỗi
                                         $stringIndex = (int)$cell->v;
                                         $cellValue = (string)$sharedStrings->si[$stringIndex]->t;
                                     } else {
-                                        // Ngược lại, là kiểu dữ liệu số
-                                        $cellValue = (string)$cell->v;
+                                        $cellValue = (int)$cell->v;
                                     }
-                                    echo $cellValue . "\t";
+                                    $rowData[] = $cellValue; // Thêm dữ liệu ô vào mảng hàng
                                 }
-                                echo "<br/>"; // Xuống dòng sau khi kết thúc một hàng
+
+                                $name = $rowData[0];
+                                $email = $rowData[2];
+                                $username = $rowData[5];
+                                $password = $rowData[6];
+                                $confirm_password = $rowData[6];
+                                $role = $rowData[4];
+                                $address = $rowData[3];
+                                checkFormSignUp($name, $email, $address, $username, $password, $confirm_password, 'on', $role, $db);
                             }
 
                             $zip->close();
+
+                            print_r($excelData);
                         } else {
                             echo "Không thể mở tệp Excel.";
                         }
@@ -149,16 +162,15 @@ if (isset($_POST['create'])) {
                         echo "Tệp Excel không tồn tại.";
                     }
                 } else {
-                    echo "Hãy chọn file moi";
+                    echo "Hãy chọn file mới";
                 }
             } else {
-                echo "Vui lòng chọn một tệp excel để tải lên.";
+                echo "Vui lòng chọn một tệp Excel để tải lên.";
             }
         }
-
-
-
         ?>
+
+
 
 
 
