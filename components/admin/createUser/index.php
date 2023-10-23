@@ -99,6 +99,67 @@ if (isset($_POST['create'])) {
                 </div>
             </div>
         </form>
+        <form method="post" enctype="multipart/form-data">
+            Select image to upload:
+            <input type="file" name="fileToUpload" id="fileToUpload">
+            <input type="submit" value="Upload File" name="uploadFile">
+        </form>
+        <?php
+        session_start();
+        if (isset($_POST["uploadFile"])) {
+            $targetFile = basename($_FILES["fileToUpload"]["name"]); // Đường dẫn tới tệp đã tải lên
+            $filename = $_FILES['fileToUpload']['name'];
+            if (!empty($_FILES["fileToUpload"]["name"])) {
+                $fileExtension = pathinfo($targetFile, PATHINFO_EXTENSION);
+                move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile);
+                if ($fileExtension == "xlsx") {
+                    if (file_exists($filename)) {
+                        $zip = new ZipArchive;
+                        if ($zip->open($filename) === true) {
+                            // Tìm và đọc tệp "xl/sharedStrings.xml" để lấy dữ liệu chuỗi chung
+                            $sharedStringsData = $zip->getFromName('xl/sharedStrings.xml');
+                            $sharedStrings = simplexml_load_string($sharedStringsData);
+
+                            // Tìm và đọc tệp "xl/worksheets/sheet1.xml" (hoặc tệp trang tính khác) để lấy dữ liệu của bảng tính
+                            $worksheetData = $zip->getFromName('xl/worksheets/sheet1.xml');
+                            $worksheet = simplexml_load_string($worksheetData);
+
+                            // Lấy dữ liệu từ bảng tính
+                            foreach ($worksheet->sheetData->row as $row) {
+                                foreach ($row->c as $cell) {
+                                    $attr = $cell->attributes();
+                                    if ((string)$attr['t'] == 's') {
+                                        // Nếu kiểu dữ liệu là chuỗi
+                                        $stringIndex = (int)$cell->v;
+                                        $cellValue = (string)$sharedStrings->si[$stringIndex]->t;
+                                    } else {
+                                        // Ngược lại, là kiểu dữ liệu số
+                                        $cellValue = (string)$cell->v;
+                                    }
+                                    echo $cellValue . "\t";
+                                }
+                                echo "<br/>"; // Xuống dòng sau khi kết thúc một hàng
+                            }
+
+                            $zip->close();
+                        } else {
+                            echo "Không thể mở tệp Excel.";
+                        }
+                    } else {
+                        echo "Tệp Excel không tồn tại.";
+                    }
+                } else {
+                    echo "Hãy chọn file moi";
+                }
+            } else {
+                echo "Vui lòng chọn một tệp excel để tải lên.";
+            }
+        }
+
+
+
+        ?>
+
 
 
     </div>
