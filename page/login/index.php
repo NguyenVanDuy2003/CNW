@@ -6,6 +6,7 @@ include "../../config/signup/index.php";
 include "../../config/signin/index.php";
 include "../../config/checkform/index.php";
 include "../../config/accessToken/index.php";
+include "../../extension/snack/index.php";
 
 if (isset($_GET['btnLogin'])) {
     if (checkFormSignIn($_GET['username_login'], $_GET['password_login'], $db)) {
@@ -19,7 +20,7 @@ if (isset($_GET['btnLogin'])) {
 
 if (isset($_POST['btnRegister'])) {
     if (checkFormSignUp($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['cfpassword'], $_POST['agree'], 'student', $db)) {
-        
+
         echo "<script>
             setTimeout(() => {
                 window.location.href = './?Login=';

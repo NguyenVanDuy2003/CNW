@@ -11,8 +11,14 @@ if (isset($_POST['create'])) {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $role = $_POST['role'];
-    checkFormSignUp($name, $email, $username, $password, $confirm_password, 'on', $role, $db);
+    $address = "";
+
+    checkFormSignUp($name, $email, $address, $username, $password, $confirm_password, 'on', $role, $db);
 }
+
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,10 +29,7 @@ if (isset($_POST['create'])) {
     <title>Document</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="../../../extension/snack/index.css">
-<<<<<<< HEAD
     <link rel="stylesheet" href="../../../style/index.css">
-=======
->>>>>>> 1e1cf01311bee461facbcdd3b6b5362dc5d0251f
 </head>
 
 <body>
@@ -58,6 +61,13 @@ if (isset($_POST['create'])) {
 
             <div class="form-group">
                 <div>
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
 
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
@@ -83,11 +93,13 @@ if (isset($_POST['create'])) {
                     </select>
                 </div>
             </div>
-
-            <input type="checkbox" name="agree" />
-
-            <input type="submit" class="btn-submit" name="create" value="Create">
+            <div class="btn-submit">
+                <div>
+                    <input type="submit" name="create" value="Create">
+                </div>
+            </div>
         </form>
+
 
     </div>
 </body>

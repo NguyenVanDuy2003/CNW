@@ -3,6 +3,14 @@ include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
 
 $userId = checkActiveCookie($db);
+$sql = "SELECT * FROM users WHERE id = '$userId'";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+if ($user['role'] === 'admin') {
+    header('location: ../admin');
+}
 $sql = "SELECT id, name, teacher, student, semester, cover FROM course";
 $result = $db->query($sql);
 $courses = $result->fetch_all(MYSQLI_ASSOC);
@@ -46,6 +54,7 @@ foreach ($courses as $index => $course) {
                             break;
                         } else {
                             $students = unserialize($courseM['student']);
+
                             $teachers = unserialize($courseM['teacher']);
                             $teacher_ids = implode(",", $teachers);
 
@@ -58,7 +67,7 @@ foreach ($courses as $index => $course) {
                                 <div class="d-flex">';
                                 while ($teacher = $res->fetch_assoc()) {
                                     echo '<div>
-                                        <img class="pointer" src="' . ($teacher["avt"] ? $teacher["avt"] : "https://cst.hnue.edu.vn/theme/image.php/space/core/1664163203/u/f3") . '" alt="' . $teacher["name"] . '"/>
+                                        <img class="pointer" src="' . (isset($teacher["avt"]) ? $teacher["avt"] : "https://cst.hnue.edu.vn/theme/image.php/space/core/1664163203/u/f3") . '" alt="' . $teacher["name"] . '"/>
                                         <p>' . $teacher["name"] . '</p>
                                     </div>';
                                 }

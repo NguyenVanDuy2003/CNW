@@ -1,5 +1,7 @@
 <?php
 include "../../../config/connectSQL/index.php";
+include "../../../extension/session/index.php";
+include "../../../config/getTime/index.php";
 
 $sql = "SELECT * FROM users";
 $stmt = $db->prepare($sql);
@@ -20,11 +22,9 @@ for ($i = 0; $i < $totalDataPoints; $i++) {
     if (!$row) {
         break;
     }
-    $data[] = $row;
+    array_push($data, $row);
 }
-
 $dataForPage = array_slice($data, $offset, $dataPerPage);
-session_start();
 $_SESSION['popup'] = 'close';
 $_SESSION['popupDelete'] = 'close-';
 
@@ -44,15 +44,23 @@ if (isset($_POST['edit'])) {
 }
 
 if (isset($_POST['save'])) {
+
     $query = "UPDATE users SET 
-      name = '$_POST[name]',
-      address = '$_POST[address]',
-      email = '$_POST[email]',
-      status = '$_POST[status]',
-      role = '$_POST[role]'
-      WHERE id = '$_SESSION[id]'";
+      name = ?,
+      address = ?,
+      email = ?,
+      status = ?,
+      role = ?,
+      updateAt = ?
+      WHERE id = ?";
     $stmt = $db->prepare($query);
+    $stmt->bind_param("ssssssi", $_POST['name'], $_POST['address'], $_POST['email'], $_POST['status'], $_POST['role'], getCurrentTimeInVietnam(), $_SESSION['id']);
     if ($stmt->execute()) {
+
+        $_SESSION['load'] = true;
+
+        header("Location: index.php");
+        exit;
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -65,10 +73,11 @@ if (isset($_POST['delete'])) {
 if (isset($_POST['popupsave'])) {
     $_SESSION['popupDelete'] = "close";
 
-    echo "sss";
-    $query = "DELETE FROM users WHERE id = '$_SESSION[id]'";
+    $query = "DELETE FROM users WHERE id = ?";
     $stmt = $db->prepare($query);
+    $stmt->bind_param("i", $_SESSION['id']);
     if ($stmt->execute()) {
+        header("Location: index.php");
     } else {
         echo "Error: " . $stmt->error;
     }
@@ -113,7 +122,7 @@ if (isset($_POST['popupCancel'])) {
                     <form action="" method="post">
 
                         <td>
-                            <input value="<?php echo $item["id"]; ?>" name='id' type='number' />
+                            <input value="<?php echo $item["id"]; ?>" name='id' type='number' readonly />
                         </td>
                         <td><?php echo $item["name"]; ?></td>
                         <td><?php echo $item["username"]; ?></td>
@@ -140,9 +149,14 @@ if (isset($_POST['popupCancel'])) {
         <?php if ($currentPage > 1) { ?>
             <a href='index.php?page=<?php echo $currentPage - 1; ?>' class='number'>Previous</a>
         <?php } ?>
-        <?php for ($page = 1; $page <= $totalPages; $page++) { ?>
-            <a href='index.php?page=<?php echo $page; ?>' class='number <?php echo ($currentPage == $page) ? 'current' : ''; ?>'><?php echo $page; ?></a>
-        <?php } ?>
+        <?php for ($page = 1; $page <= $totalPages; $page++) {
+            if ($totalPages != 1) {
+
+        ?>
+
+                <a href='index.php?page=<?php echo $page; ?>' class='number <?php echo ($currentPage == $page) ? 'current' : ''; ?>'><?php echo $page; ?></a>
+        <?php  }
+        } ?>
         <?php if ($currentPage < $totalPages) { ?>
             <a href='index.php?page=<?php echo $currentPage + 1; ?>' class='number'>Next</a>
         <?php } ?>
@@ -230,48 +244,6 @@ if (isset($_POST['popupCancel'])) {
 
             </form>
 
-<<<<<<< HEAD
-            <?php
-
-            if (isset($_POST['save'])) {
-                $query = "UPDATE users SET 
-                  name = '$_POST[name]',
-                  address = '$_POST[address]',
-                  email = '$_POST[email]',
-                  status = '$_POST[status]',
-                  role = '$_POST[role]'
-                  WHERE id = '$_SESSION[id]'";
-                $stmt = $db->prepare($query);
-                if ($stmt->execute()) {
-
-                    exit();
-                } else {
-                    echo "Error: " . $stmt->error;
-                }
-            }
-            if (isset($_POST['delete'])) {
-                $_SESSION['popupDelete'] = "open";
-            }
-
-            if (isset($_POST['popupsave'])) {
-                $_SESSION['popupDelete'] = "close";
-
-                echo "sss";
-                $query = "DELETE FROM users WHERE id = '$_SESSION[id]'";
-                $stmt = $db->prepare($query);
-                if ($stmt->execute()) {
-                    exit();
-                } else {
-                    echo "Error: " . $stmt->error;
-                }
-            }
-            if (isset($_POST['popupCancel'])) {
-                $_SESSION['popupDelete'] = "close";
-            }
-            ?>
-=======
-
->>>>>>> 1e1cf01311bee461facbcdd3b6b5362dc5d0251f
         </div>
     </div>
     <div class="popupDelete-container <?php echo $_SESSION['popupDelete']; ?>">
