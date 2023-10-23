@@ -14,6 +14,10 @@ function saveCookie($accessToken) {
     setcookie('liorion', $accessToken, time() + (86400 * 30), "/"); 
 }
 
+function deleteCookie() {
+    setcookie('liorion', $_COOKIE['liorion'], time() - (86400 * 30), "/");
+}
+
 
 function checkAccountAccessToken($username, $db)
 {

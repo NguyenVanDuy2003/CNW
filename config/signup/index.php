@@ -1,5 +1,4 @@
 <?php
-
 function checkFormSignUp($name, $email, $address, $username, $password, $cfpassword, $agree, $role, $db)
 {
     // check empty

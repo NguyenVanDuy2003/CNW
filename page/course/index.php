@@ -1,4 +1,21 @@
 <?php
+if (isset($_POST['updateCourse'])) {
+    $targetDirectory = "../../images/manager"; // Thư mục đích
+    $tmp_file = $_FILES['uploadCover']['tmp_name']; // Đường dẫn tạm thời của tệp tải lên
+
+    // Xác định đường dẫn đầy đủ cho tệp đích
+    $targetPath = $targetDirectory . '/' . basename($_FILES['uploadCover']['name']);
+
+    // Di chuyển tệp tải lên từ đường dẫn tạm thời đến thư mục đích
+    if (move_uploaded_file($tmp_file, $targetPath)) {
+        echo "Tệp đã được lưu vào thư mục images.";
+    } else {
+        echo "Lỗi khi di chuyển tệp tải lên.";
+    }
+}
+?>
+
+<?php
 include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
 
@@ -97,9 +114,12 @@ if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
                 $i++;
                 $nameTeacher = $row['name'];
                 $teacherElement .= "
-                <li class='d-flex gap-10 ai-center pd-10'>
-                    <img class='w-icon-15' src='https://cdn-icons-png.flaticon.com/512/847/847969.png'/>
-                    <input type='text' name='student$i' value='$nameTeacher' readonly/>
+                <li class='d-flex jc-spacebetween ai-center pd-10'>
+                    <div class='d-flex gap-10 ai-center'>
+                        <img class='w-icon-15' src='https://cdn-icons-png.flaticon.com/512/847/847969.png'/>
+                        <input type='text' name='teacher$i' value='$nameTeacher' readonly/>
+                    </div>
+                    <img class='w-icon-15 pointer' src='https://cdn-icons-png.flaticon.com/128/1632/1632708.png'/>
                 </li>
                 ";
             }
@@ -112,9 +132,12 @@ if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
                 $i++;
                 $nameStudent = $row['name'];
                 $studentElement .= "
-                <li class='d-flex gap-10 ai-center pd-10'>
-                    <img class='w-icon-15' src='https://cdn-icons-png.flaticon.com/512/847/847969.png'/>
-                    <input type='text' name='student$i' value='$nameStudent' readonly/>
+                <li class='d-flex jc-spacebetween ai-center pd-10'>
+                    <div class='d-flex gap-10 ai-center'>
+                        <img class='w-icon-15' src='https://cdn-icons-png.flaticon.com/512/847/847969.png'/>
+                        <input type='text' name='student$i' value='$nameStudent' readonly/>
+                    </div>
+                    <img class='w-icon-15 pointer' src='https://cdn-icons-png.flaticon.com/128/1632/1632708.png'/>
                 </li>
                 ";
             }
@@ -125,7 +148,7 @@ if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
                     <h1>$name_course</h1>
                     <hr>
                     <h3>Course information</h3>
-                    <form class='column gap-20'>
+                    <form class='column gap-20' method='post' enctype='multipart/form-data'>
                         <div class='d-flex ai-center gap-20'>
                             <label>Title</label>
                             <input class='input w-full' name='title' type='text' placeholder='Course title' value='$name_course'/>
@@ -168,7 +191,7 @@ if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
                                 <img id='cover' src='https://cst.hnue.edu.vn/theme/space/pix/default_course.jpg' alt='Cover Image'>
                                 <div class='d-flex ai-center jc-center pointer' id='upload-trigger'>
                                     <img class='w-icon-25' src='https://cdn-icons-png.flaticon.com/128/5817/5817702.png'/>
-                                    <input type='file' id='file-upload-input' class='d-none' accept='image/*'>
+                                    <input type='file' name='uploadCover' id='file-upload-input' class='d-none' accept='image/*'>
                                 </div>
                             </div>
 
@@ -195,7 +218,7 @@ if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
                         </div>
                         <hr class='w-full mgUD-20'>
                         <div class='d-flex jc-center w-full'>
-                            <button class='btn btn-submit pd-15 w-fit'>Save</button>
+                            <button class='btn btn-submit pd-15 w-fit' name='updateCourse'>Save</button>
                         </div>
                     </form>
                 </div>
