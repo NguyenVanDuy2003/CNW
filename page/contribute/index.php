@@ -238,7 +238,6 @@ if (isset($_POST['save'])) {
         $courseId = $_SESSION['id'];
         $sql = "INSERT INTO question (creator, approved, lesson, courseId, question, answer, answerCorrect, type, createAt, updateAt) 
         VALUES ('$userId', 0, 1, $courseId, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
-        echo $sql;
         $result = $db->query($sql);
         echo showSnack("Question added successfully", true);
     }
