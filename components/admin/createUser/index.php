@@ -153,8 +153,6 @@ if (isset($_POST['create'])) {
                             }
 
                             $zip->close();
-
-                            print_r($excelData);
                         } else {
                             echo "Không thể mở tệp Excel.";
                         }

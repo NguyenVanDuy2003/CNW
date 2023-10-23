@@ -1,6 +1,7 @@
 <?php
 include "../../../config/connectSQL/index.php";
 include "../../../extension/session/index.php";
+include "../../../config/getTime/index.php";
 
 $sql = "SELECT * FROM question";
 $stmt = $db->prepare($sql);
@@ -251,6 +252,85 @@ if (isset($_POST['popupCancel'])) {
             </form>
         </div>
     </div>
+
+    <form method="post" enctype="multipart/form-data">
+        Select image to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload File" name="uploadFile">
+    </form>
+    <?php
+    if (isset($_POST["uploadFile"])) {
+        $targetFile = basename($_FILES["fileToUpload"]["name"]);
+        $filename = $_FILES['fileToUpload']['name'];
+        if (!empty($_FILES["fileToUpload"]["name"])) {
+            $fileExtension = pathinfo($targetFile, PATHINFO_EXTENSION);
+            move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile);
+            if ($fileExtension == "xlsx") {
+                if (file_exists($filename)) {
+                    $zip = new ZipArchive;
+                    if ($zip->open($filename) === true) {
+                        $sharedStringsData = $zip->getFromName('xl/sharedStrings.xml');
+                        $sharedStrings = simplexml_load_string($sharedStringsData);
+                        $worksheetData = $zip->getFromName('xl/worksheets/sheet1.xml');
+                        $worksheet = simplexml_load_string($worksheetData);
+
+
+                        $skipFirstRow = true; // Biến để bỏ qua hàng đầu tiên
+
+                        foreach ($worksheet->sheetData->row as $row) {
+                            if ($skipFirstRow) {
+                                $skipFirstRow = false;
+                                continue; // Bỏ qua hàng đầu tiên
+                            }
+
+                            $rowData = array(); // Mảng lưu trữ dữ liệu của mỗi hàng
+                            foreach ($row->c as $cell) {
+                                $attr = $cell->attributes();
+                                if ((string)$attr['t'] == 's') {
+                                    $stringIndex = (int)$cell->v;
+                                    $cellValue = (string)$sharedStrings->si[$stringIndex]->t;
+                                } else {
+                                    $cellValue = (int)$cell->v;
+                                }
+                                $rowData[] = $cellValue; // Thêm dữ liệu ô vào mảng hàng
+                            }
+                            $creator = $rowData[0];
+                            $lesson = $rowData[1];
+                            $question = $rowData[2];
+                            $answer = serialize(explode("|", $rowData[3]));
+                            $answerCorrect = serialize(explode("|", $rowData[5]));
+                            echo $answerCorrect;
+                            $approved = $rowData[4];
+                            $type = $rowData[6];
+                            $courseId = $rowData[7];
+                            $time = getCurrentTimeInVietnam();
+                            if ($db) {
+                                $sql = "INSERT INTO question (creator, approved, lesson, courseId, question, answer, answerCorrect, type, createAt, updateAt) 
+                                VALUES ('$creator', '$approved', '$lesson', $courseId, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
+                                try {
+                                    $result = $db->query($sql);
+                                    echo showSnack("Question added successfully", true);
+                                } catch (Throwable $th) {
+                                    echo $th;
+                                }
+                            }
+                        }
+
+                        $zip->close();
+                    } else {
+                        echo "Không thể mở tệp Excel.";
+                    }
+                } else {
+                    echo "Tệp Excel không tồn tại.";
+                }
+            } else {
+                echo "Hãy chọn file mới";
+            }
+        } else {
+            echo "Vui lòng chọn một tệp Excel để tải lên.";
+        }
+    }
+    ?>
 
 </body>
 
