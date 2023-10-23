@@ -124,3 +124,21 @@
     scale: 1.2;
     transform: rotate(135deg);
 }
+
+.course .approval {
+    position: relative;
+}
+.course .approval::before {
+    content: attr(data-count);
+    position: absolute;
+    top: -0.75em;
+    right: -0.75em;
+    width: 1.5em;
+    height: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+}

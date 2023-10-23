@@ -1,12 +1,6 @@
 <?php
-<<<<<<< HEAD
-include "../../extension/snack/index.php";
-
-function checkFormSignUp($name, $email, $username, $password, $cfpassword, $agree, $role, $db)
-=======
 
 function checkFormSignUp($name, $email, $address, $username, $password, $cfpassword, $agree, $role, $db)
->>>>>>> 5b895f339c1f4f135c52456ce24131bf4508151f
 {
     // check empty
     $empty = check_empty($agree) ? "Agree to the request" : (check_empty($name) ? "name" : (check_empty($username) ? "username" : (check_empty($email) ? "email" : (check_empty($password) ? "password" : (check_empty($cfpassword) ? "confirm password" : "")))));

@@ -25,7 +25,14 @@ function checkActiveCookie($db)
 }
 
 if (checkActiveCookie($db) != 0 && strpos($_SERVER['REQUEST_URI'], "login")) {
-    header('location: ../home');
+    $id = checkActiveCookie($db);
+    $sql="SELECT * FROM users WHERE id = $id";
+    $result = $db->query($sql);
+    $row = $result->fetch_assoc();
+    if ($row['role'] == 'teacher') {
+        header('location: ../home');
+    }
+    else header('location: ../admin');
 } elseif (checkActiveCookie($db) == 0 && !strpos($_SERVER['REQUEST_URI'], "login")) {
     header('location: ../login');
 }

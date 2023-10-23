@@ -1,3 +1,7 @@
+<?php
+include "../../config/connectSQL/index.php";
+include "../../config/checkCookie/index.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,12 +14,12 @@
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../extension/snack/index.css">
     <link rel="stylesheet" href="../../style/index.css">
-    <title>Quiz</title>
+    <title>Assign</title>
 </head>
 
 <body>
     <?php
-    include "../../components/header/index.php";
+        include '../../components/header/index.php';
     ?>
 
     <main class="assign column gap-20">
@@ -69,7 +73,6 @@
             </div>
             <div class="w-full d-flex jc-center mgUD-10">
                 <button id="submit" class='btn btn-submit pd-15 pointer f-sz-16'>Submit</button>
-                
             </div>
         </div>
 
