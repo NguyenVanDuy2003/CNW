@@ -3,6 +3,14 @@ include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
 
 $userId = checkActiveCookie($db);
+$sql = "SELECT * FROM users WHERE id = '$userId'";
+$stmt = $db->prepare($sql);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+if ($user['role'] === 'admin') {
+    header('location: ../admin');
+}
 $sql = "SELECT id, name, teacher, student, semester, cover FROM course";
 $result = $db->query($sql);
 $courses = $result->fetch_all(MYSQLI_ASSOC);

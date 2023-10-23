@@ -1,6 +1,7 @@
 <?php
 include "../../../config/connectSQL/index.php";
 include "../../../extension/session/index.php";
+include "../../../config/getTime/index.php";
 
 $sql = "SELECT * FROM users";
 $stmt = $db->prepare($sql);
@@ -43,15 +44,17 @@ if (isset($_POST['edit'])) {
 }
 
 if (isset($_POST['save'])) {
+
     $query = "UPDATE users SET 
       name = ?,
       address = ?,
       email = ?,
       status = ?,
-      role = ?
+      role = ?,
+      updateAt = ?
       WHERE id = ?";
     $stmt = $db->prepare($query);
-    $stmt->bind_param("sssssi", $_POST['name'], $_POST['address'], $_POST['email'], $_POST['status'], $_POST['role'], $_SESSION['id']);
+    $stmt->bind_param("ssssssi", $_POST['name'], $_POST['address'], $_POST['email'], $_POST['status'], $_POST['role'], getCurrentTimeInVietnam(), $_SESSION['id']);
     if ($stmt->execute()) {
 
         $_SESSION['load'] = true;
@@ -241,44 +244,6 @@ if (isset($_POST['popupCancel'])) {
 
             </form>
 
-            <?php
-
-            if (isset($_POST['save'])) {
-                $query = "UPDATE users SET 
-                  name = '$_POST[name]',
-                  address = '$_POST[address]',
-                  email = '$_POST[email]',
-                  status = '$_POST[status]',
-                  role = '$_POST[role]'
-                  WHERE id = '$_SESSION[id]'";
-                $stmt = $db->prepare($query);
-                if ($stmt->execute()) {
-
-                    exit();
-                } else {
-                    echo "Error: " . $stmt->error;
-                }
-            }
-            if (isset($_POST['delete'])) {
-                $_SESSION['popupDelete'] = "open";
-            }
-
-            if (isset($_POST['popupsave'])) {
-                $_SESSION['popupDelete'] = "close";
-
-                echo "sss";
-                $query = "DELETE FROM users WHERE id = '$_SESSION[id]'";
-                $stmt = $db->prepare($query);
-                if ($stmt->execute()) {
-                    exit();
-                } else {
-                    echo "Error: " . $stmt->error;
-                }
-            }
-            if (isset($_POST['popupCancel'])) {
-                $_SESSION['popupDelete'] = "close";
-            }
-            ?>
         </div>
     </div>
     <div class="popupDelete-container <?php echo $_SESSION['popupDelete']; ?>">

@@ -41,6 +41,33 @@
         }
 
 
+        $sql = "SELECT * FROM question";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $quizz = [];
+        for ($i = 0; $row = $result->fetch_assoc(); $i++) {;
+            if (!$row) {
+                break;
+            }
+            $quizz[] = $row;
+        }
+
+
+
+        $sql = "SELECT * FROM course";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $course = [];
+        for ($i = 0; $row = $result->fetch_assoc(); $i++) {;
+            if (!$row) {
+                break;
+            }
+            $course[] = $row;
+        }
+
+
 
         // $_SESSION['teacher'] = [];
         // $_SESSION['AllTeacher'] = [];
@@ -56,11 +83,11 @@
             ],
             [
                 "title" => "Class",
-                "value" => sizeof($student),
+                "value" => sizeof($course),
                 "icon" => "../../../images/admin/user.png"
             ], [
                 "title" => "Quizz",
-                "value" => sizeof($teacher),
+                "value" => sizeof($quizz),
                 "icon" => "../../../images/admin/class.png"
             ],
         ];
