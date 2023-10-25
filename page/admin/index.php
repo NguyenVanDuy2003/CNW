@@ -98,6 +98,12 @@ if ($user['role'] !== "admin") {
                     "id" => "create_class",
 
 
+                ], [
+                    "icon" => "../../images/admin/components.png",
+                    "text" => "Create Quizz",
+                    "id" => "create_quizz",
+
+
                 ],
                 [
                     "icon" => "../../images/admin/components.png",
@@ -168,6 +174,10 @@ if ($user['role'] !== "admin") {
             } ?>
             <?php if ($_GET['name'] === 'create_class') {
                 echo '<div id="create_class"> <iframe src="../../components/admin/createClass/index.php"></iframe>
+                </div>';
+            } ?>
+            <?php if ($_GET['name'] === 'create_quizz') {
+                echo '<div id="create_quizz"> <iframe src="../../components/admin/createQuizz/index.php"></iframe>
                 </div>';
             } ?>
 
