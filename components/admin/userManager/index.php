@@ -26,7 +26,7 @@ for ($i = 0; $i < $totalDataPoints; $i++) {
 }
 $dataForPage = array_slice($data, $offset, $dataPerPage);
 $_SESSION['popup'] = 'close';
-$_SESSION['popupDelete'] = 'close-';
+$_SESSION['popupDelete'] = 'close';
 
 
 if (isset($_GET['id'])) {
