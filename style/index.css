@@ -220,6 +220,9 @@ body {
 .jc-start {
     justify-content: start;
 }
+.jc-end {
+    justify-content: end;
+}
 
 .ai-center {
     align-items: center;

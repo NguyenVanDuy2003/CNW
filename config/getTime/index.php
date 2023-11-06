@@ -5,3 +5,4 @@ function getCurrentTimeInVietnam()
     $currentDateTime = date('d/m/Y H:i');
     return $currentDateTime;
 }
+?>

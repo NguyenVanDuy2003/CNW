@@ -132,7 +132,7 @@ if (isset($_POST['checkFile'])) {
             if (!empty($filename)) {
                 $fileExtension = pathinfo($targetFile, PATHINFO_EXTENSION);
                 if ($fileExtension == "xlsx") {
-                    if (file_exists($filename)) {
+                    if (($filename)) {
                         $zip = new ZipArchive;
                         if ($zip->open($filename) === true) {
                             $sharedStringsData = $zip->getFromName('xl/sharedStrings.xml');
