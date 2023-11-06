@@ -60,18 +60,20 @@ form div:nth-child(4) {
   display: flex;
   width: 100%;
   margin-bottom: 10px;
+  align-items: center;
 }
 form div:nth-child(4) div {
   height: 100%;
   display: flex;
   padding-left: 10px;
+  align-items: center;
 }
 form div:nth-child(4) div input {
   margin-bottom: 0px;
 }
 form div:nth-child(4) select {
-  height: 100%;
   display: flex;
   padding-right: 10px;
   width: 100px;
+  margin-bottom: 0px;
 }

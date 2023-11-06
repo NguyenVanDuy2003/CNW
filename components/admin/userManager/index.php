@@ -198,7 +198,7 @@ if (isset($_POST['popupCancel'])) {
                     ['label' => 'Email', 'type' => 'email', 'value' => $user['email'], 'name' => 'email'],
                     ['label' => 'Address', 'type' => 'text', 'value' => $user['address'], 'name' => 'address'],
                     ['label' => 'Status', 'type' => 'select', 'value' => $user['status'], 'option' => $status, 'name' => 'status'],
-                    ['label' => 'Role', 'type' => 'select', 'value' => $user['role'], 'option' =>  $role, 'name' => 'role']
+                    // ['label' => 'Role', 'type' => 'select', 'value' => $user['role'], 'option' =>  $role, 'name' => 'role']
                 ];
 
 
@@ -209,8 +209,10 @@ if (isset($_POST['popupCancel'])) {
 
                 ?>
                         <div class="form-group">
-                            <div>
-                                <label for="<?php echo $item['name']; ?>"><?php echo $item['label']; ?></label>
+                            <div style="margin-top: 10px">
+                                <div>
+                                    <label for="<?php echo $item['name']; ?>"><?php echo $item['label']; ?></label>
+                                </div>
                                 <input type="<?php echo $item['type']; ?>" id="<?php echo $item['name']; ?>" name="<?php echo $item['name']; ?>" value="<?php echo $item['value']; ?>">
                             </div>
                         </div>
@@ -218,7 +220,7 @@ if (isset($_POST['popupCancel'])) {
                     } else {
                     ?>
                         <div class="form-group">
-                            <div>
+                            <div style="margin-top: 10px">
 
                                 <label for="<?php echo $item['name']; ?>"><?php echo $item['label']; ?></label>
                                 <select id="<?php echo $item['name']; ?>" name="<?php echo $item['name']; ?>">
@@ -238,9 +240,11 @@ if (isset($_POST['popupCancel'])) {
                     }
                 }
                 ?>
-
-                <input type="submit" class="btn-submit" name="save" value="Save">
-                <input type="submit" class="btn-submit" name="delete" value="Delete">
+                <div style="margin-top: 10px;display: flex;
+    justify-content: space-around;">
+                    <input type="submit" class="btn-submit" name="save" value="Save">
+                    <input type="submit" class="btn-submit" name="delete" value="Delete">
+                </div>
 
             </form>
 

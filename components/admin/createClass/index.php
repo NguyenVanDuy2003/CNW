@@ -286,10 +286,9 @@
                     $semester = ['Học kì I', 'Học kì II', 'Học kì III'];
                     $semesterIndex = array_search($_SESSION['semester'], $semester);
 
-                    if ($roleIndex !== false) {
-                        unset($semester[$semesterIndex]);
-                        array_unshift($semester, $_SESSION['semester']);
-                    }
+                    unset($semester[$semesterIndex]);
+                    array_unshift($semester, $_SESSION['semester']);
+
                     foreach ($semester as $item) {
                     ?>
                         <option value="<?php echo $item; ?>"><?php echo $item; ?></option>
