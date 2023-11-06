@@ -253,7 +253,7 @@ body {
     box-shadow: 0 0 3px 0px #b7b2b273;
 }
 
-.btn:hover {
+.btn:hover, .btn-1:hover {
     opacity: 0.9;
     cursor: pointer;
 }

@@ -146,8 +146,14 @@ function question()
     ;
     return "
     <div class='question column gap-10'>
+        <div class='d-flex gap-10 ai-center'>
             <p>Enter Question</p>
-            <textarea type='text' rows='4' name='question' class='inptxt' placeholder='Fill in the question content'>$question</textarea>
+            <div class='btn-1 d-flex gap-5 ai-center'>Upload image
+                <img src='https://cdn-icons-png.flaticon.com/128/12571/12571666.png' class='w-icon-15'/>
+                <input type='file' id='upload' name='fileToUpload' hidden> 
+            </div>
+        </div>
+        <textarea type='text' rows='4' name='question' class='inptxt' placeholder='Fill in the question content'>$question</textarea>
     </div>
     ";
 }
@@ -266,7 +272,9 @@ if (isset($_POST['save'])) {
     ?>
     <main class="contribute column gap-20">
         <h1 class="title">Contribute Question</h1>
-        <p>Đóng góp câu hỏi cho môn học <b><?php echo $nameCourse; ?></b></p>
+        <p>Đóng góp câu hỏi cho môn học <b>
+                <?php echo $nameCourse; ?>
+            </b></p>
         <div class="d-flex gap-30 jc-spacebetween">
             <form method="post" action="" class="formAddQuestion column gap-20">
                 <div class="d-flex gap-20 ai-center">
@@ -386,7 +394,8 @@ if (isset($_POST['save'])) {
                 ?>
             </tbody>
         </table>
-        <p class="note">Please contact your class instructor or admin to make the approval process faster. Thank you!</p>
+        <p class="note">Please contact your class instructor or admin to make the approval process faster. Thank you!
+        </p>
 
     </main>
     <?php
