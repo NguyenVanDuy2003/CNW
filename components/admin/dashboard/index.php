@@ -19,16 +19,75 @@
     </div>
     <div class="item">
         <?php
+        include "../../../config/connectSQL/index.php";
+
+        $sql = "SELECT * FROM users";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $student = [];
+        $teacher = [];
+
+        for ($i = 0; $row = $result->fetch_assoc(); $i++) {;
+            if (!$row) {
+                break;
+            }
+            if ($row['role'] == 'student') {
+                array_push($student, $row);
+            }
+            if ($row['role'] == 'teacher') {
+                array_push($teacher, $row);
+            }
+        }
+
+
+        $sql = "SELECT * FROM question";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $quizz = [];
+        for ($i = 0; $row = $result->fetch_assoc(); $i++) {;
+            if (!$row) {
+                break;
+            }
+            $quizz[] = $row;
+        }
+
+
+
+        $sql = "SELECT * FROM course";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $course = [];
+        for ($i = 0; $row = $result->fetch_assoc(); $i++) {;
+            if (!$row) {
+                break;
+            }
+            $course[] = $row;
+        }
+
+
+
         // $_SESSION['teacher'] = [];
         // $_SESSION['AllTeacher'] = [];
         $data = [
             [
                 "title" => "User",
-                "value" => "22222",
+                "value" => sizeof($student),
                 "icon" => "../../../images/admin/user.png"
             ], [
+                "title" => "Teacher",
+                "value" => sizeof($teacher),
+                "icon" => "../../../images/admin/class.png"
+            ],
+            [
                 "title" => "Class",
-                "value" => "22222",
+                "value" => sizeof($course),
+                "icon" => "../../../images/admin/user.png"
+            ], [
+                "title" => "Quizz",
+                "value" => sizeof($quizz),
                 "icon" => "../../../images/admin/class.png"
             ],
         ];

@@ -61,6 +61,13 @@ if (isset($_POST['create'])) {
 
             <div class="form-group">
                 <div>
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div>
 
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" required>
@@ -86,10 +93,85 @@ if (isset($_POST['create'])) {
                     </select>
                 </div>
             </div>
-
-
-            <input type="submit" class="btn-submit" name="create" value="Create">
+            <div class="btn-submit">
+                <div>
+                    <input type="submit" name="create" value="Create">
+                </div>
+            </div>
         </form>
+        <form method="post" enctype="multipart/form-data">
+            Select image to upload:
+            <input type="file" name="fileToUpload" id="fileToUpload">
+            <input type="submit" value="Upload File" name="uploadFile">
+        </form>
+        <?php
+        session_start();
+        if (isset($_POST["uploadFile"])) {
+            $targetFile = basename($_FILES["fileToUpload"]["name"]);
+            $filename = $_FILES['fileToUpload']['name'];
+            if (!empty($_FILES["fileToUpload"]["name"])) {
+                $fileExtension = pathinfo($targetFile, PATHINFO_EXTENSION);
+                move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile);
+                if ($fileExtension == "xlsx") {
+                    if (($filename)) {
+                        $zip = new ZipArchive;
+                        if ($zip->open($filename) === true) {
+                            $sharedStringsData = $zip->getFromName('xl/sharedStrings.xml');
+                            $sharedStrings = simplexml_load_string($sharedStringsData);
+                            $worksheetData = $zip->getFromName('xl/worksheets/sheet1.xml');
+                            $worksheet = simplexml_load_string($worksheetData);
+
+
+                            $skipFirstRow = true; // Biến để bỏ qua hàng đầu tiên
+
+                            foreach ($worksheet->sheetData->row as $row) {
+                                if ($skipFirstRow) {
+                                    $skipFirstRow = false;
+                                    continue; // Bỏ qua hàng đầu tiên
+                                }
+
+                                $rowData = array(); // Mảng lưu trữ dữ liệu của mỗi hàng
+                                foreach ($row->c as $cell) {
+                                    $attr = $cell->attributes();
+                                    if ((string)$attr['t'] == 's') {
+                                        $stringIndex = (int)$cell->v;
+                                        $cellValue = (string)$sharedStrings->si[$stringIndex]->t;
+                                    } else {
+                                        $cellValue = (int)$cell->v;
+                                    }
+                                    $rowData[] = $cellValue; // Thêm dữ liệu ô vào mảng hàng
+                                }
+
+                                $name = $rowData[0];
+                                $email = $rowData[2];
+                                $username = $rowData[5];
+                                $password = $rowData[6];
+                                $confirm_password = $rowData[6];
+                                $role = $rowData[4];
+                                $address = $rowData[3];
+                                checkFormSignUp($name, $email, $address, $username, $password, $confirm_password, 'on', $role, $db);
+                            }
+
+                            $zip->close();
+
+                            print_r($excelData);
+                        } else {
+                            echo "Không thể mở tệp Excel.";
+                        }
+                    } else {
+                        echo "Tệp Excel không tồn tại.";
+                    }
+                } else {
+                    echo "Hãy chọn file mới";
+                }
+            } else {
+                echo "Vui lòng chọn một tệp Excel để tải lên.";
+            }
+        }
+        ?>
+
+
+
 
 
     </div>

@@ -116,11 +116,12 @@ if (isset($_POST['updateCourse'])) {
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../style/index.css">
     <title>
-        <?php echo $courses['nameCourse']; ?>
+        <?php echo isset($courses['nameCourse']); ?>
     </title>
 </head>
 
 <body>
+
     <?php
     include "../../components/header/index.php";
     ?>
@@ -151,12 +152,10 @@ if (isset($_POST['updateCourse'])) {
             </div>
         </div>
         <div class="d-flex gap-20 ai-center">
-            <button id="btn-createCourse"
-                class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
+            <button id="btn-createCourse" class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
                 <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/4074/4074958.png" />
                 Create Lesson</button>
-            <button id="btn-detailCourse"
-                class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
+            <button id="btn-detailCourse" class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
                 <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/1150/1150592.png" />
                 Detail Course</button>
             <?php
