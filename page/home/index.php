@@ -50,7 +50,7 @@ foreach ($courses as $index => $course) {
                     <?php
                     foreach ($courses as $index => $courseM) {
                         if ($index > 9) {
-                            echo '<buton class="btn btn-seemore">All Courses</buton>';
+                            echo '<li style="box-shadow: none"><buton class="btn btn-seemore">All Courses</buton></li>';
                             break;
                         } else {
                             $students = unserialize($courseM['student']);

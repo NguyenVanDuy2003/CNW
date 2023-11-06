@@ -1,5 +1,10 @@
 .registration-form {
   margin: 0 auto;
+  max-width: 800px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 30px;
 }
 .registration-form > form {
   width: 100%;
@@ -42,7 +47,6 @@ label {
   font-family: sans-serif;
   border-radius: 0.3rem;
   cursor: pointer;
-  margin-top: 1rem;
   font-weight: bold;
 }
 input[type="text"],
@@ -58,6 +62,7 @@ select {
   display: flex;
   align-items: center;
   background-color: #f8f9fc !important;
+  width: 100%;
 }
 .btn-submit > div > input {
   background-color: #3498db;

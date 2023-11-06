@@ -10,7 +10,6 @@ th {
   background-color: #f2f2f2;
   text-align: left;
   padding: 10px;
-  
 }
 
 tr:nth-child(even) {
@@ -29,6 +28,11 @@ td input {
   background: none;
   width: 30px;
   outline: none;
+}
+input[type="text"],
+input[type="email"],
+input[type="select"] {
+  width: 100%;
 }
 
 select {
