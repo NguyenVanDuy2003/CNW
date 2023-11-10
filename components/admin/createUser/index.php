@@ -11,7 +11,7 @@ if (isset($_POST['create'])) {
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
     $role = $_POST['role'];
-    $address = "";
+    $address = $_POST['address'];
 
     checkFormSignUp($name, $email, $address, $username, $password, $confirm_password, 'on', $role, $db);
 }
@@ -128,7 +128,6 @@ if (isset($_POST['checkFile'])) {
         if (isset($_POST["apply"])) {
             $targetFile = basename($_SESSION['filename']);
             $filename = $_SESSION['filename'];
-            echo $_SESSION['filename'];
             if (!empty($filename)) {
                 $fileExtension = pathinfo($targetFile, PATHINFO_EXTENSION);
                 if ($fileExtension == "xlsx") {
@@ -160,7 +159,6 @@ if (isset($_POST['checkFile'])) {
                                     }
                                     $rowData[] = $cellValue; // Thêm dữ liệu ô vào mảng hàng
                                 }
-
                                 $name = $rowData[0];
                                 $email = $rowData[2];
                                 $username = $rowData[5];

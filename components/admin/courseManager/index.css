@@ -10,7 +10,6 @@ th {
   background-color: #f2f2f2;
   text-align: left;
   padding: 10px;
-  
 }
 
 tr:nth-child(even) {
@@ -44,11 +43,32 @@ select option {
   color: #333; /* Màu chữ */
   background-color: #f2f2f2; /* Màu nền */
 }
-.number {
-  padding: 10px;
+.pagination {
+  margin-top: 20px;
+  text-align: center;
 }
+
+.button,
+.number {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 2px;
+  border: 1px solid #ccc;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+  background-color: #fff;
+  transition: background-color 0.3s;
+}
+
+.button:hover,
+.number:hover {
+  background-color: #f2f2f2;
+}
+
 .current {
-  color: red;
+  background-color: #4caf50;
+  color: #fff;
 }
 a {
   text-decoration-line: none;

@@ -146,21 +146,31 @@ if (isset($_POST['popupCancel'])) {
     </table>
 
     <div class="pagination">
-        <?php if ($currentPage > 1) { ?>
-            <a href='index.php?page=<?php echo $currentPage - 1; ?>' class='number'>Previous</a>
-        <?php } ?>
-        <?php for ($page = 1; $page <= $totalPages; $page++) {
-            if ($totalPages != 1) {
+    <?php
+    $visiblePages = 5;
 
-        ?>
+    if ($currentPage > 1) { ?>
+        <a href='index.php?page=<?php echo $currentPage - 1; ?>' class='button'>Previous</a>
+    <?php } ?>
 
-                <a href='index.php?page=<?php echo $page; ?>' class='number <?php echo ($currentPage == $page) ? 'current' : ''; ?>'><?php echo $page; ?></a>
-        <?php  }
-        } ?>
-        <?php if ($currentPage < $totalPages) { ?>
-            <a href='index.php?page=<?php echo $currentPage + 1; ?>' class='number'>Next</a>
-        <?php } ?>
-    </div>
+    <?php
+    $startPage = max(1, $currentPage - floor($visiblePages / 2));
+    $endPage = min($totalPages, $startPage + $visiblePages - 1);
+
+    for ($page = $startPage; $page <= $endPage; $page++) {
+        if ($totalPages != 1) {
+    ?>
+            <a href='index.php?page=<?php echo $page; ?>' class='number <?php echo ($currentPage == $page) ? 'current' : ''; ?>'><?php echo $page; ?></a>
+    <?php
+        }
+    }
+    ?>
+
+    <?php if ($currentPage < $totalPages) { ?>
+        <a href='index.php?page=<?php echo $currentPage + 1; ?>' class='button'>Next</a>
+    <?php } ?>
+</div>
+
 
     <div class="popup-container <?php echo $_SESSION['popup']; ?>">
         <div class="popup-content">
