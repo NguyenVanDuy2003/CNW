@@ -63,9 +63,10 @@ $name = $row['name'];
 </header>
 
 <?php
-    include '../../config/accessToken/index.php';
+    // include '../../config/accessToken/index.php';
     if (isset($_GET['logout'])) {
-        deleteCookie();
-        header("location: ../login");
+        setcookie('liorion', '', time() - 1000);
+        // setcookie('liorion', '', time() - 1000, '/');
+        header("location: index.php");
     }
 ?>
