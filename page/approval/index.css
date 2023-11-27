@@ -1,0 +1,48 @@
+.approval table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.approval th, td {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+
+.approval thead {
+    background: #b5b5b582;
+}
+
+.approval>h3 {
+    text-align: center;
+    margin: 40px 0 0 0;
+    font-weight: 600;
+    font-size: 25px;
+    color: #d17185;
+    text-shadow: 3px 4px 5px #9E9E9E;
+}
+
+.approval .note {
+    color: #6d4f4fab;
+    text-align: center;
+}
+
+.approval .w-15percent {
+    width: 15%;
+}
+
+.approval .w-4percent {
+    width: 4%;
+}
+
+.approval .w-10percent {
+    width: 10%;
+}
+
+.approval .w-2percent {
+    width: 2%;
+}
+
+.approval .icon-add {
+    width: 18px;
+}

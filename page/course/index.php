@@ -63,13 +63,25 @@ if (!(in_array($userId, $students) || in_array($userId, $teachers))) {
             <h1>
                 <?php echo $courses['name']; ?>
             </h1>
-            <form method="get" action="../contribute/index.php">
-                <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
-                <button class="d-flex ai-center btn-tick pointer gap-10 btn-donation">
-                    <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/5432/5432915.png" />
-                    Contribute questions
-                </button>
-            </form>
+            <div class='column gap-10 mgUD-10'>
+                <form method="get" action="../approval/index.php">
+                    <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+                    <button class="d-flex ai-center btn-tick pointer gap-10 btn-donation approval"
+                        data-count="<?php $id=$_GET['id']; $sql = "SELECT * FROM question WHERE approved = 0 and courseId = $id";
+                        $result = $db->query($sql);
+                        echo $result->num_rows ?>">
+                        <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/5442/5442020.png" />
+                        Approval questions
+                    </button>
+                </form>
+                <form method="get" action="../contribute/index.php">
+                    <input type="hidden" name="id" value="<?php echo $_GET['id'] ?>">
+                    <button class="d-flex ai-center btn-tick pointer gap-10 btn-donation">
+                        <img class="icon-donation" src="https://cdn-icons-png.flaticon.com/128/5432/5432915.png" />
+                        Contribute questions
+                    </button>
+                </form>
+            </div>
         </div>
         <div class="d-flex gap-20 ai-center">
             <button id="btn-createCourse" class="gap-10 ai-center btn-tick pointer w-fit <?php echo ($isTeacher ? 'd-flex' : 'd-none') ?>">
