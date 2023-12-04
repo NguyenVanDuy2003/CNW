@@ -77,7 +77,7 @@ if (isset($_POST['updateCourse'])) {
         print_r($_FILES['uploadCover']);
         if ($_FILES['uploadCover']['error'] == 0) {
             $cover = uploadFileSystem($_FILES['uploadCover']);
-            $fileToDelete = '../../images/upload/' . $courses['cover'];
+            $fileToDelete = '../../../images/upload/' . $courses['cover'];
             deleteFileSystem($fileToDelete);
         }
 
@@ -229,7 +229,7 @@ if (isset($_POST['updateCourse'])) {
 
             $cover = path();
             $cover = strpos($courses['cover'], "https://") === 0 ? $courses['cover'] : (
-                $cover . '/images/upload/' . $courses['cover']
+                $cover . '../images/upload/' . $courses['cover']
             );
 
             Modal('btn-detailCourse', "

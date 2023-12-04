@@ -31,7 +31,7 @@ if (isset($_POST["delete"])) {
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="../../components/footer/index.css">
     <link rel="stylesheet" href="../../extension/snack/index.css">
-    <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="../../../style/index.css">
     <title>Approval questions</title>
 </head>
 

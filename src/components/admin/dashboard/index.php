@@ -75,20 +75,20 @@
             [
                 "title" => "User",
                 "value" => sizeof($student),
-                "icon" => "../../../images/admin/user.png"
+                "icon" => "../../../../images/admin/user.png"
             ], [
                 "title" => "Teacher",
                 "value" => sizeof($teacher),
-                "icon" => "../../../images/admin/class.png"
+                "icon" => "../../../../images/admin/class.png"
             ],
             [
                 "title" => "Class",
                 "value" => sizeof($course),
-                "icon" => "../../../images/admin/user.png"
+                "icon" => "../../../../images/admin/user.png"
             ], [
                 "title" => "Quizz",
                 "value" => sizeof($quizz),
-                "icon" => "../../../images/admin/class.png"
+                "icon" => "../../../../images/admin/class.png"
             ],
         ];
         foreach ($data as $item) {

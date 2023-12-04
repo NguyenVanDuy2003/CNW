@@ -22,7 +22,7 @@ $totalSeconds = countdownTimer($minutes, $seconds);
     <link rel="stylesheet" href="../../components/footer/index.css">
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../extension/snack/index.css">
-    <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="../../../style/index.css">
     <title>Quiz</title>
 </head>
 

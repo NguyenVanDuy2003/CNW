@@ -21,7 +21,7 @@ if ($user['role'] !== "admin") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
     <link rel="stylesheet" href="./style.css" />
-    <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="../../../style/index.css">
 
 </head>
 
@@ -32,7 +32,7 @@ if ($user['role'] !== "admin") {
                 <div>
                     <input type="text" placeholder="Search for...">
                     <div>
-                        <img src="../../images/admin/search.png" class="icon" alt="error">
+                        <img src="../../../images/admin/search.png" class="icon" alt="error">
                     </div>
                 </div>
             </div>
@@ -49,8 +49,8 @@ if ($user['role'] !== "admin") {
                 }
 
                 $icon = [
-                    "../../images/admin/notification.png",
-                    "../../images/admin/email.png",
+                    "../../../images/admin/notification.png",
+                    "../../../images/admin/email.png",
                 ];
 
                 foreach ($icon as $item) {
@@ -65,7 +65,7 @@ if ($user['role'] !== "admin") {
 
                 <div class="dropdown">
                     <label for="avata"><?php echo $user['name']; ?></label>
-                    <img src="../../images/admin/avatar.png" class="icon" name="avatar" alt="error">
+                    <img src="../../../images/admin/avatar.png" class="icon" name="avatar" alt="error">
                     <div class="dropdown-content">
                         <div>
                             <a href="./?status=logout">Logout</a>
@@ -87,43 +87,43 @@ if ($user['role'] !== "admin") {
             $_SESSION['page'] = 'dashboard';
             $sideBarLeft = array(
                 [
-                    "icon" => "../../images/admin/dashboard.png",
+                    "icon" => "../../../images/admin/dashboard.png",
                     "text" => "Dashboard",
                     "id" => "dashboard",
                 ],
 
                 [
-                    "icon" => "../../images/admin/components.png",
+                    "icon" => "../../../images/admin/components.png",
                     "text" => "Create class",
                     "id" => "create_class",
 
 
                 ], [
-                    "icon" => "../../images/admin/components.png",
+                    "icon" => "../../../images/admin/components.png",
                     "text" => "Create Quizz",
                     "id" => "create_quizz",
 
 
                 ],
                 [
-                    "icon" => "../../images/admin/components.png",
+                    "icon" => "../../../images/admin/components.png",
                     "text" => "Create user",
                     "id" => "create_user",
 
 
                 ],
                 [
-                    "icon" => "../../images/admin/utilities.png",
+                    "icon" => "../../../images/admin/utilities.png",
                     "text" => "Course Manager",
                     "id" => "course_manager",
                 ],
                 [
-                    "icon" => "../../images/admin/utilities.png",
+                    "icon" => "../../../images/admin/utilities.png",
                     "text" => "Quizz Manager",
                     "id" => "quizz_manager",
                 ],
                 [
-                    "icon" => "../../images/admin/management.png",
+                    "icon" => "../../../images/admin/management.png",
                     "text" => "User Manager",
                     "id" => "user_manager",
                 ],

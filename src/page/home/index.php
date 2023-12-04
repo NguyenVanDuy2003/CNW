@@ -33,7 +33,7 @@ foreach ($courses as $index => $course) {
     <link rel="stylesheet" href="../../components/header/index.css">
     <link rel="stylesheet" href="../../components/footer/index.css">
     <link rel="stylesheet" href="../../extension/pagination/index.css">
-    <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="../../../style/index.css">
     <title>Online learning management system</title>
 </head>
 

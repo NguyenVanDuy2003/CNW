@@ -5,7 +5,7 @@
     <title>Form Thêm Giảng Viên</title>
     <link rel="stylesheet" href="./index.css">
     <link rel="stylesheet" href="../../../extension/snack/index.css">
-    <link rel="stylesheet" href="../../../style/index.css">
+    <link rel="stylesheet" href="../../../../style/index.css">
 </head>
 
 <body>

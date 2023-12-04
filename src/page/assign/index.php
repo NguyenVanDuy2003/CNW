@@ -13,7 +13,7 @@ include "../../config/checkCookie/index.php";
     <link rel="stylesheet" href="../../components/footer/index.css">
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../extension/snack/index.css">
-    <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="../../../style/index.css">
     <title>Assign</title>
 </head>
 

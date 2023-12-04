@@ -37,7 +37,7 @@ if (isset($_POST['btnRegister'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="../../style/index.css">
+    <link rel="stylesheet" href="../../../style/index.css">
     <link rel="stylesheet" href="../../extension/snack/index.css">
     <title>Login</title>
 </head>
@@ -64,7 +64,7 @@ if (isset($_POST['btnRegister'])) {
             </div>
             <div class="pst-relative w-full">
                 <hr class="w-full hr mgUD-10">
-                <img src="../../images/login/loading-animation.gif" class="pst-absolute title-hr pd-30 pdUD-5" />
+                <img src="../../../images/login/loading-animation.gif" class="pst-absolute title-hr pd-30 pdUD-5" />
             </div>
             <?php
             if (!isset($_GET['Register'])) {
