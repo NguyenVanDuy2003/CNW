@@ -3,18 +3,24 @@ include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
 include "../../config/getTime/index.php";
 include "../../extension/snack/index.php";
+include '../../config/uploadFile/index.php';
 $userId = checkActiveCookie($db);
 session_start();
+if (isset($_GET['id']) && isset($_SESSION['id']) && $_GET['id'] != $_SESSION['id']) {
+    $_SESSION['id'] = $_GET['id'];
+}
 if (!isset($_SESSION['type'])) {
     $_SESSION['type'] = "checkbox";
     $_SESSION['question'] = "";
     $_SESSION['answer'] = "";
     $_SESSION['answerCorrect'] = "";
+    $_SESSION['fileToUpload'] = "";
 }
 
 function getForm()
 {
     $_SESSION['question'] = $_POST['question'];
+    $_SESSION['fileToUpload'] = $_FILES['fileToUpload'];
     switch ($_SESSION['type']) {
         case 'text':
             $answer = [];
@@ -45,6 +51,7 @@ function getForm()
             $_SESSION['type'] = 'checkbox';
             break;
     }
+    $_SESSION['fileToUpload'] = $_FILES['fileToUpload'];
     $_SESSION['question'] = $_POST['question'];
     $_SESSION['answer'] = $answer;
     $_SESSION['answerCorrect'] = $answerCorrect;
@@ -138,10 +145,39 @@ function question()
         }
     }
     ;
+    $image = isset($_SESSION['fileToUpload']) ? $_SESSION['fileToUpload'] : '';
     return "
     <div class='question column gap-10'>
+        <div class='d-flex gap-10 ai-center'>
             <p>Enter Question</p>
-            <textarea type='text' rows='4' name='question' class='inptxt' placeholder='Fill in the question content'>$question</textarea>
+            <div class='btn-1 d-flex gap-5 ai-center' id='box-fileInput'>Upload image
+                <img src='https://cdn-icons-png.flaticon.com/128/12571/12571666.png' class='w-icon-15'/>
+                <input type='file' id='fileInput' name='fileToUpload' accept='image/*' hidden value='$image'> 
+            </div>
+            <img id='previewImg' src=''>
+            <script>
+            // Lấy các element
+            const btnUpload = document.querySelector('#box-fileInput');
+            const fileInput = document.querySelector('#fileInput');
+            const previewImg = document.querySelector('#previewImg');
+
+            // Xử lý khi click vào nút Upload
+            btnUpload.addEventListener('click', () => {
+                // Mở file chooser
+                fileInput.click();
+            });
+
+            // Xử lý khi chọn file xong
+            fileInput.addEventListener('change', function () {
+                var selectedFile = fileInput.files[0];
+                if (selectedFile) {
+                    var objectURL = URL.createObjectURL(selectedFile);
+                    previewImg.src = objectURL;
+                }
+            });
+            </script>
+        </div>
+        <textarea type='text' rows='4' name='question' class='inptxt' placeholder='Fill in the question content'>$question</textarea>
     </div>
     ";
 }
@@ -150,6 +186,7 @@ function chooseAnswer($type)
 {
     $counter = isset($_POST['counter']) ? $_POST['counter'] : 1;
     if (isset($_POST['incrementAnswer'])) {
+        $_SESSION['fileToUpload'] = $_FILES['fileToUpload'];
         if ($counter < 6) {
             $counter++;
         } elseif (!($counter < 6)) {
@@ -157,13 +194,13 @@ function chooseAnswer($type)
         }
     }
     if (isset($_POST['decrementAnswer'])) {
+        $_SESSION['fileToUpload'] = $_FILES['fileToUpload'];
         if ($counter > 1) {
             $counter--;
         } else {
             echo showSnack("Cannot delete all answers", false);
         }
     }
-
     $question = question();
     $html = "
     <div class='column gap-20 manyAnswers'>
@@ -223,15 +260,18 @@ if (isset($_POST['preview'])) {
 }
 
 if (isset($_POST['save'])) {
+    if ($_FILES['fileToUpload']['error'] == 0) {
+        $cover = uploadFileSystem($_FILES['fileToUpload']);
+    }
     if (validation($db)) {
+        $id = $_SESSION['id'];
         $type = $_SESSION['type'];
         $time = getCurrentTimeInVietnam();
         $question = $_POST['question'];
         $answer = serialize($_SESSION['answer']);
         $answerCorrect = serialize($_SESSION['answerCorrect']);
-        $sql = "INSERT INTO question (creator, approved, lesson, courseId, question, answer, answerCorrect, type, createAt, updateAt) 
-        VALUES ('$userId', 0, 1, 1, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
-        echo $sql;
+        $sql = "INSERT INTO question (creator, approved, lesson, courseId, question, answer, answerCorrect, type, createAt, updateAt, image) 
+        VALUES ('$userId', 0, 1, $id, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time', '$cover')";
         $result = $db->query($sql);
         echo showSnack("Question added successfully", true);
     }
@@ -262,7 +302,7 @@ if (isset($_POST['save'])) {
         <h1 class="title">Contribute Question</h1>
         <p>Đóng góp câu hỏi cho môn học <b>COMP 254 - Phân tích thiết kế thuật toán</b></p>
         <div class="d-flex gap-30 jc-spacebetween">
-            <form method="post" action="" class="formAddQuestion column gap-20">
+            <form method="post" action="" class="formAddQuestion column gap-20" enctype='multipart/form-data'>
                 <div class="d-flex gap-20 ai-center">
                     <label>Choose Type Question</label>
                     <a href="?manyAnswer"
@@ -340,6 +380,7 @@ if (isset($_POST['save'])) {
                 <tr>
                     <th class="w-4percent">STT</th>
                     <th>Question</th>
+                    <th class='w-10percent'>Image</th>
                     <th class='w-10percent'>Type</th>
                     <th>Lesson</th>
                     <th class='w-15percent'>CreateAt</th>
@@ -350,7 +391,8 @@ if (isset($_POST['save'])) {
             </thead>
             <tbody>
                 <?php
-                $sql = "SELECT question, type, lesson, createAt, updateAt, approved FROM question ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
+                $id = $_SESSION['id'];
+                $sql = "SELECT question, type, lesson, createAt, updateAt, approved, image FROM question WHERE creator=$userId AND courseId=$id  ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
                 $result = $db->query($sql);
                 if ($result->num_rows > 0) {
                     $i = 0;
@@ -361,11 +403,13 @@ if (isset($_POST['save'])) {
                         $lesson = $row['lesson'];
                         $createAt = $row['createAt'];
                         $updateAt = $row['updateAt'];
+                        $image = $row['image'];
                         $status = ($row['approved'] != 0) ? "Approved" : "Not approved";
                         echo "
                         <tr>
                             <td class='txt-center w-4percent'>$i</td>
                             <td>$question</td>
+                            <td><img class='" . ($image ? 'image' : 'd-none') . "' src='../../../images/upload/$image'/></td>
                             <td class='w-10percent'>$type</td>
                             <td class='w-10percent'>Lesson $lesson</td>
                             <td class='w-15percent'>$createAt</td>
@@ -379,7 +423,8 @@ if (isset($_POST['save'])) {
                 ?>
             </tbody>
         </table>
-        <p class="note">Please contact your class instructor or admin to make the approval process faster. Thank you!</p>
+        <p class="note">Please contact your class instructor or admin to make the approval process faster. Thank you!
+        </p>
 
     </main>
     <?php

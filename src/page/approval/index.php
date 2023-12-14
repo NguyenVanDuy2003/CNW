@@ -49,6 +49,7 @@ if (isset($_POST["delete"])) {
                         <th class="w-4percent">STT</th>
                         <th class='w-15percent'>Request Creator</th>
                         <th>Question</th>
+                        <th class='w-10percent'>Image</th>
                         <th class='w-10percent'>Type</th>
                         <th class='w-10percent'>Lesson</th>
                         <th class='w-10percent'>CreateAt</th>
@@ -60,7 +61,7 @@ if (isset($_POST["delete"])) {
                 <tbody>
                     <?php
                     $courseId = $_GET['id'];
-                    $sql = "SELECT id, creator, type, lesson, createAt, updateAt, question FROM question WHERE approved = 0 and courseId = $courseId ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
+                    $sql = "SELECT id, creator, type, lesson, createAt, updateAt, question, image FROM question WHERE approved = 0 and courseId = $courseId ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
                     $result = $db->query($sql);
                     if ($result->num_rows > 0) {
                         $i = 0;
@@ -72,6 +73,7 @@ if (isset($_POST["delete"])) {
                             $type = ($row['type'] == "radio") ? "An answer" : (($row['type'] == "checkbox") ? "Many answer" : ("Fill in the answer"));
                             $lesson = $row['lesson'];
                             $createAt = $row['createAt'];
+                            $image = $row['image'];
                             $updateAt = $row['updateAt'];
                             $status = ($row['approved'] != 0) ? "Approved" : "Not approved";
                             $sql = "SELECT name FROM users WHERE id = '$creator'";
@@ -82,6 +84,7 @@ if (isset($_POST["delete"])) {
                             <td class='txt-center w-4percent'>$i</td>
                             <td class='w-15percent'>$name</td>
                             <td>$question</td>
+                            <td><img class='" . ($image ? 'image' : 'd-none') . "' src='../../../images/upload/$image'/></td>
                             <td class='w-10percent'>$type</td>
                             <td class='w-10percent'>Lesson $lesson</td>
                             <td class='w-10percent'>$createAt</td>
