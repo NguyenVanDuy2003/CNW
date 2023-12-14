@@ -3,21 +3,14 @@ include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
 include "../../config/getTime/index.php";
 include "../../extension/snack/index.php";
-
 $userId = checkActiveCookie($db);
 session_start();
-if ((isset($_SESSION['id']) != isset($_GET['id'])) && isset($_GET['id'])) {
-    $_SESSION['id'] = $_GET['id'];
+if (!isset($_SESSION['type'])) {
     $_SESSION['type'] = "checkbox";
     $_SESSION['question'] = "";
     $_SESSION['answer'] = "";
     $_SESSION['answerCorrect'] = "";
 }
-$idCourse = $_SESSION['id'];
-$sql = "SELECT name FROM course WHERE id = '$idCourse'";
-$result = $db->query($sql);
-$name = $result->fetch_all(MYSQLI_ASSOC);
-$nameCourse = $name[0]['name'];
 
 function getForm()
 {
@@ -31,7 +24,7 @@ function getForm()
         case 'radio':
             $i = 1;
             $answer = [];
-            while (isset($_POST["answer$i"] )) {
+            while ($_POST["answer$i"]) {
                 array_push($answer, $_POST["answer$i"]);
                 $i++;
             }
@@ -74,7 +67,7 @@ function validation($db)
         echo showSnack("You must fill out your question completely and cannot leave it blank", false);
         return false;
     }
-    if ((count($answer) < isset($_POST['counter'])) && (isset($_SESSION['type']) != 'text')) {
+    if ((count($answer) < $_POST['counter']) && ($_SESSION['type'] != 'text')) {
         echo showSnack("You must fill out your answer completely and cannot leave it blank", false);
         return false;
     }
@@ -120,7 +113,7 @@ function answer($name, $namecb, $type)
             $checked = 'checked';
         }
     }
-    $inputValue = (isset($_POST['completed'])) ? '' : isset($_POST[$name]);
+    $inputValue = (isset($_POST['completed'])) ? '' : $_POST[$name];
     $isChecked = (isset($_POST['answer']) && in_array($inputValue, $_POST['answer'])) ? 'checked' : '';
 
     $tick = ($type == "checkbox") ? (
@@ -137,21 +130,6 @@ function answer($name, $namecb, $type)
     ";
 }
 
-// $cover = '';
-// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-//     // Handle image upload
-
-//     print_r(isset($_FILES['fileToUpload']['error']));
-//     if (isset($_FILES['fileToUpload']['error']) == 0) {
-//         $cover = uploadFileSystem($_FILES['fileToUpload']);
-//         $fileToDelete = '../../../images/upload/';
-//         deleteFileSystem($fileToDelete);
-//     }
-// }
-
-
-
-
 function question()
 {
     if (!isset($_POST['completed'])) {
@@ -160,48 +138,10 @@ function question()
         }
     }
     ;
-    $cover = isset($_POST['cover']) ? $_POST['cover'] : '';
-    $coverCheck = isset($_POST['cover']) ? 'd-block' : '';
-
-
     return "
     <div class='question column gap-10'>
-        <div class='d-flex gap-10 ai-center'>
             <p>Enter Question</p>
-
-            <div class='cover'>
-                            <div class='d-flex gap-20 pointer'>
-                            <div class='btn-1 d-flex gap-5 ai-center' id='upload-trigger'>
-                            <label for='file-upload-input'>Upload image</label>
-                            <input type='file' name='fileToUpload' id='file-upload-input' class='d-none' accept='image/*'>
-                            <img src='https://cdn-icons-png.flaticon.com/128/12571/12571666.png' class='w-icon-15'/>
-                            </div>
-                                <img id='cover' class='$coverCheck' src='$cover' width='50px' height='50px' >
-                            </div>
-
-                            <script>
-                            document.addEventListener('DOMContentLoaded', function () {
-                                var uploadTrigger = document.getElementById('upload-trigger');
-                                var fileInput = document.getElementById('file-upload-input');
-                                var coverImage = document.getElementById('cover');
-
-                                uploadTrigger.addEventListener('click', function () {
-                                    fileInput.click();
-                                });
-
-                                fileInput.addEventListener('change', function () {
-                                    var selectedFile = fileInput.files[0];
-                                    if (selectedFile) {
-                                        var objectURL = URL.createObjectURL(selectedFile);
-                                        coverImage.src = objectURL;
-                                    }
-                                });
-                            });
-                            </script>
-
-                        </div>
-            </div>
-        <textarea type='text' rows='4' name='question' class='inptxt' placeholder='Fill in the question content'></textarea>
+            <textarea type='text' rows='4' name='question' class='inptxt' placeholder='Fill in the question content'>$question</textarea>
     </div>
     ";
 }
@@ -259,24 +199,16 @@ function textAnswer()
 {
     if (!isset($_POST['completed'])) {
         if (isset($_POST['answer'])) {
-            $answer = $_POST['answer'] ? $_POST['answer'] :'';
+            $answer = $_POST['answer'];
         }
     }
     ;
     $question = question();
-    if(isset($answer)){
-        echo "
-            $question
-            <p>Fill to Answer</p>
-            <input type='text' name='answer' class='inptxt' placeholder='Fill in the answers' value='$answer'/>
-        ";
-    }else{
-        echo "
+    echo "
         $question
         <p>Fill to Answer</p>
-        <input type='text' name='answer' class='inptxt' placeholder='Fill in the answers' value=''/>
+        <input type='text' name='answer' class='inptxt' placeholder='Fill in the answers' value='$answer'/>
     ";
-    }
 }
 
 function resetDataForm()
@@ -297,9 +229,9 @@ if (isset($_POST['save'])) {
         $question = $_POST['question'];
         $answer = serialize($_SESSION['answer']);
         $answerCorrect = serialize($_SESSION['answerCorrect']);
-        $courseId = $_SESSION['id'];
         $sql = "INSERT INTO question (creator, approved, lesson, courseId, question, answer, answerCorrect, type, createAt, updateAt) 
-        VALUES ('$userId', 0, 1, $courseId, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
+        VALUES ('$userId', 0, 1, 1, '$question', '$answer', '$answerCorrect', '$type', '$time', '$time')";
+        echo $sql;
         $result = $db->query($sql);
         echo showSnack("Question added successfully", true);
     }
@@ -328,11 +260,9 @@ if (isset($_POST['save'])) {
     ?>
     <main class="contribute column gap-20">
         <h1 class="title">Contribute Question</h1>
-        <p>Đóng góp câu hỏi cho môn học <b>
-                <?php echo $nameCourse; ?>
-            </b></p>
+        <p>Đóng góp câu hỏi cho môn học <b>COMP 254 - Phân tích thiết kế thuật toán</b></p>
         <div class="d-flex gap-30 jc-spacebetween">
-            <form method="post" action="" class="formAddQuestion column gap-20" enctype="multipart/form-data">
+            <form method="post" action="" class="formAddQuestion column gap-20">
                 <div class="d-flex gap-20 ai-center">
                     <label>Choose Type Question</label>
                     <a href="?manyAnswer"
@@ -375,9 +305,9 @@ if (isset($_POST['save'])) {
                     </p>
                 </div>
                 <?php
-                switch (isset($_SESSION['type'])) {
+                switch ($_SESSION['type']) {
                     case 'text':
-                        $result = isset($_SESSION['answerCorrect'][0]);
+                        $result = $_SESSION['answerCorrect'][0];
                         echo "
                         <input type='text' name='answer_preview' placeholder='Fill in the answer' class='inptxt' readonly/>
                         <p class='answer-text-preview'>Answer Correct: <b>$result</b></p>
@@ -420,8 +350,7 @@ if (isset($_POST['save'])) {
             </thead>
             <tbody>
                 <?php
-                $courseId = $_SESSION['id'];
-                $sql = "SELECT question, type, lesson, createAt, updateAt, approved FROM question WHERE creator = $userId and courseId = $courseId ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
+                $sql = "SELECT question, type, lesson, createAt, updateAt, approved FROM question ORDER BY STR_TO_DATE(createAt, '%d/%m/%Y %H:%i:%s') DESC";
                 $result = $db->query($sql);
                 if ($result->num_rows > 0) {
                     $i = 0;
@@ -450,8 +379,7 @@ if (isset($_POST['save'])) {
                 ?>
             </tbody>
         </table>
-        <p class="note">Please contact your class instructor or admin to make the approval process faster. Thank you!
-        </p>
+        <p class="note">Please contact your class instructor or admin to make the approval process faster. Thank you!</p>
 
     </main>
     <?php
