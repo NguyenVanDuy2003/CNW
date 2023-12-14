@@ -122,3 +122,12 @@ td {
 .contribute .w-10percent {
   width: 10%;
 }
+
+#previewImg {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.image {
+  width: 100px;
+}

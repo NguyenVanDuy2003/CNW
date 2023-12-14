@@ -32,7 +32,6 @@ function checkFormSignIn($username, $password, $db)
             if ($role === 'admin') {
                 header('Location: ../../page/admin');
             }
-
             return true;
         }
     } else {
