@@ -48,11 +48,13 @@ foreach ($courses as $index => $course) {
                 <h3 class="title-main">My courses</h3>
                 <ul class="list-courses-main d-flex gap-20">
                     <?php
+                    $count = 0;
                     foreach ($courses as $index => $courseM) {
-                        if ($index > 9) {
+                        if ($count > 9) {
                             echo '<li style="box-shadow: none"><buton class="btn btn-seemore">All Courses</buton></li>';
                             break;
                         } else {
+                            $count++;
                             $students = unserialize($courseM['student']);
 
                             $teachers = unserialize($courseM['teacher']);
