@@ -127,6 +127,13 @@ if (isset($_POST['updateCourse'])) {
     ?>
 
     <main class="column gap-30 course">
+        <div style="margin-top:10px">
+            <a href='../home/index.php' style="padding: 5px 10px;
+    background: beige;
+    border-radius: 5px;">
+                Quay lại
+            </a>
+        </div>
         <div class="d-flex jc-spacebetween ai-center">
             <h1>
                 <?php echo $courses['name']; ?>
@@ -327,7 +334,7 @@ if (isset($_POST['updateCourse'])) {
                     <div class="d-flex gap-10 jc-spacebetween ai-center">
                         <div class="d-flex gap-10 ai-center">
                             <img class="icon-of-lesson" src="https://cdn-icons-png.flaticon.com/512/9800/9800294.png" />
-                            <a href=' . $article['href'] . '><p class="title-of-lesson pointer">' . $article['title'] . '</p></a>
+                            <a href=' . $article['href'].'?id='.$_GET['id'] . '><p class="title-of-lesson pointer">' . $article['title'] . '</p></a>
                         </div>
                         <button class="btn-tick pointer ' . ($article["status"] ? "complete" : "") . '">' . ($article["status"] ? "Hoàn thành" : "Đánh dấu hoàn thành") . '</button>
                     </div>
