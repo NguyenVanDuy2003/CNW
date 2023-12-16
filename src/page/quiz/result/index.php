@@ -1,4 +1,11 @@
-<!DOCTYPE html>
+
+<?php 
+include "../../../extension/session/index.php";
+
+
+
+
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -17,6 +24,7 @@
         }
 
         .score-container {
+            width: 500px;
             text-align: center;
             padding: 20px;
             background-color: #fff;
@@ -35,17 +43,15 @@
     </style>
 </head>
 <body>
-<div style="margin-top:10px">
-            <a href='../../course/index.php?id=<?php echo $_GET['id'];?>' style="padding: 5px 10px;
-    background: beige;
-    border-radius: 5px;">
-                Quay lại
-            </a>
-        </div>
+
     <div class="score-container">
         <h1>Điểm Của Bạn</h1>
-        <div class="score"><?php echo $_GET['score']*10; ?></div>
-        <!-- Thêm thông tin khác nếu cần -->
+        <div class="score"><?php echo $_SESSION['score']*10; ?> / 100</div>
+        <div style="margin-top:10px">
+            <a href='../../course/index.php?id=<?php echo $_GET['id'];?>' style="padding: 5px 10px;">
+               Xác nhận
+            </a>
+        </div>
     </div>
 </body>
 </html>
