@@ -1,12 +1,13 @@
 <?php
 include "../../config/connectSQL/index.php";
 include "../../config/checkCookie/index.php";
+include "../../extension/session/index.php";
+
 function countdownTimer($minutes, $seconds)
 {
     $totalSeconds = $minutes * 60 + $seconds;
     return $totalSeconds;
 }
-session_start();
 $minutes = 0;
 $seconds = 200000;
 $totalSeconds = countdownTimer($minutes, $seconds);
@@ -14,9 +15,8 @@ if(!isset($_SESSION['allQuestion'])){
     $_SESSION['allQuestion'] = [];
 }
 
-$score = 0;
 
-
+$_SESSION['score'] = 0;
 if(isset($_POST['submit'])){
     $count = 0;
     $check = [];
@@ -54,13 +54,13 @@ foreach($check as $index => $item){
         if(is_array($_SESSION['allQuestion'][$index]['answerCorrect'])){
             foreach($_SESSION['allQuestion'][$index]['answerCorrect'] as $value){
                 if($value == $item['answers']){
-                    $score++;
+                    $_SESSION['score']++;
                     continue;
                 }
             }
         }else{
             if($_SESSION['allQuestion'][$index]['answerCorrect'] == $item['answers'] && !empty($item['answers'])){
-                $score++;
+                $_SESSION['score']++;
             }
         }
     }else if ($item['type'] == 'checkbox'){
@@ -77,7 +77,7 @@ foreach($check as $index => $item){
             }
         if($i == count($item['answers'] )&& $correct != 0){
                 if($correct == $count ){
-                    $score++;
+                    $_SESSION['score']++;
                 }
         }
         }
@@ -87,22 +87,23 @@ foreach($check as $index => $item){
 
                 foreach($_SESSION['allQuestion'][$index]['answerCorrect'] as $ele){
                     if($ele == $value){
-                        $score++;
+                        $_SESSION['score']++;
                         continue;
                     }
                 }
             }else{
                 if($_SESSION['allQuestion'][$index]['answerCorrect'] == $value){
-                    $score++;
+                    $_SESSION['score']++;
                     continue;
                 }
             }
         }
     }
 }
-
+header("Location: result?id=$_GET[id]");
     
 }
+echo $_SESSION['score'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -129,7 +130,7 @@ foreach($check as $index => $item){
             <div class="txt" id="txt">
                 <b>L-</b><b>T</b><b>E</b><b>S</b><b>T</b>
             </div>
-            <form method='post' action='<?php echo 'result?score='.$score.'&id='.$_GET['id']; ?>' id='form' class='column gap-30'>
+            <form method='post' action='' id='form' class='column gap-30'>
                 <?php
                 $sql = "SELECT question, answer,answerCorrect, type FROM question ORDER BY RAND() LIMIT 10";
                 $result = $db->query($sql);
