@@ -41,6 +41,13 @@ if (isset($_POST["delete"])) {
     ?>
 
     <main class="approval column gap-20">
+    <div style="margin-top:10px">
+            <a href='../course/index.php?id=<?php echo $_GET['id']; ?>' style="padding: 5px 10px;
+    background: beige;
+    border-radius: 5px;">
+                Quay lại
+            </a>
+        </div>
         <h1>Approval questions</h1>
         <form method="post">
             <table>
@@ -75,7 +82,7 @@ if (isset($_POST["delete"])) {
                             $createAt = $row['createAt'];
                             $image = $row['image'];
                             $updateAt = $row['updateAt'];
-                            $status = ($row['approved'] != 0) ? "Approved" : "Not approved";
+                            $status = (isset($row ['approved']) != 0) ? "Approved" : "Not approved";
                             $sql = "SELECT name FROM users WHERE id = '$creator'";
                             $result2 = $db->query($sql);
                             $name = $result2->fetch_assoc()["name"];

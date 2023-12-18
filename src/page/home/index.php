@@ -95,9 +95,9 @@ foreach ($courses as $index => $course) {
                     }
                     ?>
                 </ul>
-                <?php
+                <!-- <?php
                 include "../../extension/pagination/index.php";
-                ?>
+                ?> -->
             </div>
 
             <div class="courses-summed column gap-10">

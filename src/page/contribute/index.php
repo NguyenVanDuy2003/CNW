@@ -36,7 +36,7 @@ function getForm()
         case 'radio':
             $i = 1;
             $answer = [];
-            while ($_POST["answer$i"]) {
+            while (isset($_POST["answer$i"])) {
                 array_push($answer, $_POST["answer$i"]);
                 $i++;
             }
@@ -47,9 +47,9 @@ function getForm()
             $i = 1;
             $answer = [];
             $answerCorrect = [];
-            while ($_POST["answer$i"]) {
+            while (isset($_POST["answer$i"])) {
                 array_push($answer, $_POST["answer$i"]);
-                if ($_POST["cbanswer$i"]) {
+                if (isset($_POST["cbanswer$i"])) {
                     array_push($answerCorrect, $_POST["answer$i"]);
                 }
                 $i++;
@@ -80,7 +80,7 @@ function validation($db)
         echo showSnack("You must fill out your question completely and cannot leave it blank", false);
         return false;
     }
-    if ((count($answer) < $_POST['counter']) && ($_SESSION['type'] != 'text')) {
+    if ((count($answer) < isset($_POST['counter'])) && ($_SESSION['type'] != 'text')) {
         echo showSnack("You must fill out your answer completely and cannot leave it blank", false);
         return false;
     }
@@ -126,7 +126,7 @@ function answer($name, $namecb, $type)
             $checked = 'checked';
         }
     }
-    $inputValue = (isset($_POST['completed'])) ? '' : $_POST[$name];
+    $inputValue = (isset($_POST['completed'])) ? '' : (isset($_POST[$name] ) ? $_POST[$name] : '');
     $isChecked = (isset($_POST['answer']) && in_array($inputValue, $_POST['answer'])) ? 'checked' : '';
 
     $tick = ($type == "checkbox") ? (
@@ -145,6 +145,7 @@ function answer($name, $namecb, $type)
 
 function question()
 {
+    $question = '';
     if (!isset($_POST['completed'])) {
         if (isset($_POST['question'])) {
             $question = $_POST['question'];
@@ -158,7 +159,7 @@ function question()
             <p>Enter Question</p>
             <div class='btn-1 d-flex gap-5 ai-center' id='box-fileInput'>Upload image
                 <img src='https://cdn-icons-png.flaticon.com/128/12571/12571666.png' class='w-icon-15'/>
-                <input type='file' id='fileInput' name='fileToUpload' accept='image/*' hidden value='$image'> 
+                <input type='file' id='fileInput' name='fileToUpload' accept='image/*' hidden value=''> 
             </div>
             <img id='previewImg' src=''>
             <script>
@@ -239,7 +240,7 @@ function chooseAnswer($type)
 }
 
 function textAnswer()
-{
+{$answer = '';
     if (!isset($_POST['completed'])) {
         if (isset($_POST['answer'])) {
             $answer = $_POST['answer'];
@@ -266,6 +267,7 @@ if (isset($_POST['preview'])) {
 }
 
 if (isset($_POST['save'])) {
+    $cover = '';
     if ($_FILES['fileToUpload']['error'] == 0) {
         $cover = uploadFileSystem($_FILES['fileToUpload']);
     }
@@ -306,6 +308,13 @@ if (isset($_POST['save'])) {
     include "../../components/header/index.php";
     ?>
     <main class="contribute column gap-20">
+    <div style="margin-top:10px">
+            <a href='../course/index.php?id=<?php  echo $_SESSION['id'];?>' style="padding: 5px 10px;
+    background: beige;
+    border-radius: 5px;">
+                Quay lại
+            </a>
+        </div>
         <h1 class="title">Contribute Question</h1>
         <p>Đóng góp câu hỏi cho môn học <b>COMP 254 - Phân tích thiết kế thuật toán</b></p>
         <div class="d-flex gap-30 jc-spacebetween">

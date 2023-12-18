@@ -16,7 +16,9 @@ if (isset($_POST['logout'])) {
     <div class="d-flex ai-center gap-30">
         <img class="icon-list" src="https://cdn-icons-png.flaticon.com/512/10613/10613684.png" alt="list" />
         <div class="logo">
-            <h3>Liorion</h3>
+            <a href='../home'>
+                <h3>Liorion</h3>
+            </a>
         </div>
     </div>
     <div class="d-flex  ai-center gap-10">
