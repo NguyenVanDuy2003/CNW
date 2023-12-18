@@ -11,94 +11,94 @@ function countdownTimer($minutes, $seconds)
 $minutes = 0;
 $seconds = 200000;
 $totalSeconds = countdownTimer($minutes, $seconds);
-if(!isset($_SESSION['allQuestion'])){
+if (!isset($_SESSION['allQuestion'])) {
     $_SESSION['allQuestion'] = [];
 }
 
 
 $_SESSION['score'] = 0;
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
     $count = 0;
     $check = [];
-foreach($_SESSION['allQuestion'] as $item){
-    $count++;
-    if ($item['type'] == "text" ) {
-        if(isset($_POST["answer$count"])){
-            array_push($check,['STT'=> $count,'type' => $item['type'], 'answers'=> $_POST["answer$count"]]);
-        }
-    }elseif ($item['type'] == "checkbox") {
-        $answers = [];
-        foreach ($item['answer'] as $index => $answer) {
+    foreach ($_SESSION['allQuestion'] as $item) {
+        $count++;
+        if ($item['type'] == "text") {
+            if (isset($_POST["answer$count"])) {
+                array_push($check, ['STT' => $count, 'type' => $item['type'], 'answers' => $_POST["answer$count"]]);
+            }
+        } elseif ($item['type'] == "checkbox") {
+            $answers = [];
+            foreach ($item['answer'] as $index => $answer) {
 
-            $answerAll = $count.'_'.$index;
-            $checkBoolean = empty(isset($_POST["answer$answerAll"])) ? 0 : $_POST["answer$answerAll"];
-            $answers += array($index+1 => $checkBoolean);
+                $answerAll = $count . '_' . $index;
+                $checkBoolean = empty(isset($_POST["answer$answerAll"])) ? 0 : $_POST["answer$answerAll"];
+                $answers += array($index + 1 => $checkBoolean);
+            }
+            array_push($check, ['STT' => $count, 'type' => $item['type'], 'answers' => $answers]);
+        } else {
+            $answers = [];
+            foreach ($item['answer'] as $index => $answer) {
+                $answerAll = $count . '_' . $index;
+                $checkBoolean = empty(isset($_POST["answer$answerAll"])) ? 0 : $_POST["answer$answerAll"];
+                $answers += array($index => $checkBoolean);
+            }
+            array_push($check, ['STT' => $count, 'type' => $item['type'], 'answers' => $answers]);
         }
-        array_push($check, ['STT'=> $count,'type' => $item['type'], 'answers'=> $answers]);
-    } else {
-        $answers = [];
-        foreach ($item['answer'] as $index => $answer) {
-            $answerAll = $count.'_'.$index;
-            $checkBoolean = empty(isset($_POST["answer$answerAll"])) ? 0 : $_POST["answer$answerAll"];
-            $answers += array($index => $checkBoolean);
-        }
-        array_push($check, ['STT'=> $count,'type' => $item['type'], 'answers'=> $answers]);
     }
-}
 
-foreach($check as $index => $item){
+    foreach ($check as $index => $item) {
 
-    if($item['type'] == 'text'){
-        if(is_array($_SESSION['allQuestion'][$index]['answerCorrect'])){
-            foreach($_SESSION['allQuestion'][$index]['answerCorrect'] as $value){
-                if($value == $item['answers']){
-                    $_SESSION['score']++;
-                    continue;
-                }
-            }
-        }else{
-            if($_SESSION['allQuestion'][$index]['answerCorrect'] == $item['answers'] && !empty($item['answers'])){
-                $_SESSION['score']++;
-            }
-        }
-    }else if ($item['type'] == 'checkbox'){
-        $count = 0;
-        $correct = 0;
-        foreach($item['answers'] as $i =>  $value){
-            if($value!= 0){
-                $count++;
-                foreach($_SESSION['allQuestion'][$index]['answerCorrect'] as $answer){
-                   if($answer == $value){
-                    $correct ++;
-                   }
-                }
-            }
-        if($i == count($item['answers'] )&& $correct != 0){
-                if($correct == $count ){
-                    $_SESSION['score']++;
-                }
-        }
-        }
-    }else{
-        foreach($item['answers'] as $i =>  $value){
-            if(is_array($_SESSION['allQuestion'][$index]['answerCorrect'])){
-
-                foreach($_SESSION['allQuestion'][$index]['answerCorrect'] as $ele){
-                    if($ele == $value){
+        if ($item['type'] == 'text') {
+            if (is_array($_SESSION['allQuestion'][$index]['answerCorrect'])) {
+                foreach ($_SESSION['allQuestion'][$index]['answerCorrect'] as $value) {
+                    if ($value == $item['answers']) {
                         $_SESSION['score']++;
                         continue;
                     }
                 }
-            }else{
-                if($_SESSION['allQuestion'][$index]['answerCorrect'] == $value){
+            } else {
+                if ($_SESSION['allQuestion'][$index]['answerCorrect'] == $item['answers'] && !empty($item['answers'])) {
                     $_SESSION['score']++;
-                    continue;
+                }
+            }
+        } else if ($item['type'] == 'checkbox') {
+            $count = 0;
+            $correct = 0;
+            foreach ($item['answers'] as $i => $value) {
+                if ($value != 0) {
+                    $count++;
+                    foreach ($_SESSION['allQuestion'][$index]['answerCorrect'] as $answer) {
+                        if ($answer == $value) {
+                            $correct++;
+                        }
+                    }
+                }
+                if ($i == count($item['answers']) && $correct != 0) {
+                    if ($correct == $count) {
+                        $_SESSION['score']++;
+                    }
+                }
+            }
+        } else {
+            foreach ($item['answers'] as $i => $value) {
+                if (is_array($_SESSION['allQuestion'][$index]['answerCorrect'])) {
+
+                    foreach ($_SESSION['allQuestion'][$index]['answerCorrect'] as $ele) {
+                        if ($ele == $value) {
+                            $_SESSION['score']++;
+                            continue;
+                        }
+                    }
+                } else {
+                    if ($_SESSION['allQuestion'][$index]['answerCorrect'] == $value) {
+                        $_SESSION['score']++;
+                        continue;
+                    }
                 }
             }
         }
     }
-}
-header("Location: result?id=$_GET[id]");
+    header("Location: result?id=$_GET[id]");
 }
 echo $_SESSION['score'];
 ?>
@@ -122,6 +122,15 @@ echo $_SESSION['score'];
     include "../../components/header/index.php";
     ?>
 
+    <div id="countdown">
+        <div id='tiles'></div>
+        <div class="labels">
+            <li>Days</li>
+            <li>Hours</li>
+            <li>Mins</li>
+            <li>Secs</li>
+        </div>
+    </div>
     <main class="quiz d-flex jc-center">
         <div class="column gap-20 form">
             <div class="txt" id="txt">
@@ -140,13 +149,13 @@ echo $_SESSION['score'];
                         $question = $row['question'];
                         $answers = unserialize($row['answer']);
                         $answerCorrect = unserialize($row['answerCorrect']);
-                        array_push($allQuestion,['type' => $row['type'], 'answer' => $answers,'answerCorrect' => $answerCorrect]);
+                        array_push($allQuestion, ['type' => $row['type'], 'answer' => $answers, 'answerCorrect' => $answerCorrect]);
                         $result_answer = "";
                         if ($row['type'] == "text") {
                             $result_answer = "<input type='text' name='answer$i' placeholder='Fill to answer' class='answer'/>";
                         } elseif ($row['type'] == "checkbox") {
                             foreach ($answers as $index => $answer) {
-                                $answerAll = $i.'_'.$index;
+                                $answerAll = $i . '_' . $index;
                                 $result_answer .= "
                                 <div class='d-flex gap-10 answer'>
                                     <input type='checkbox' name='answer$answerAll' value='$answer'/>
@@ -156,7 +165,7 @@ echo $_SESSION['score'];
                             }
                         } else {
                             foreach ($answers as $index => $answer) {
-                                $answerAll = $i.'_'.$index;
+                                $answerAll = $i . '_' . $index;
                                 $result_answer .= "
                                 <div class='d-flex gap-10 answer'>
                                     <input type='radio' name='answer$answerAll' value='$answer'>
@@ -185,35 +194,39 @@ echo $_SESSION['score'];
                     <button class="btn submit" type='submit' name='submit'>Submit</button>
                 </div>
             </form>
-            <?php           
-            
-            ?>
         </div>
-        <div id="countdown"></div>
         <script>
-            var totalSeconds = <?php echo $totalSeconds; ?>;
-            var countdown = document.getElementById('countdown');
+            var target_date = 1000 * 3600 * 48; // set the countdown date
+            var days, hours, minutes, seconds; // variables for time units
 
-            function updateCountdown() {
-                var minutes = Math.floor(totalSeconds / 60);
-                var remainingSeconds = totalSeconds % 60;
-                countdown.innerHTML = minutes + " phút " + remainingSeconds + " giây còn lại";
+            var countdown = document.getElementById("tiles"); // get tag element
 
-                if (totalSeconds <= 0) {
-                    countdown.innerHTML = "Hết thời gian!";
-                    submitForm();
-                } else {
-                    totalSeconds--;
-                    setTimeout(updateCountdown, 1000);
-                }
+            getCountdown();
+
+            setInterval(function () { getCountdown(); }, 1000);
+
+            function getCountdown() {
+
+                // find the amount of "seconds" between now and target
+                var current_date = new Date().getTime();
+                var seconds_left = (target_date - current_date) / 1000;
+
+                days = pad(parseInt(seconds_left / 86400));
+                seconds_left = seconds_left % 86400;
+
+                hours = pad(parseInt(seconds_left / 3600));
+                seconds_left = seconds_left % 3600;
+
+                minutes = pad(parseInt(seconds_left / 60));
+                seconds = pad(parseInt(seconds_left % 60));
+
+                // format countdown string + set tag value
+                countdown.innerHTML = "<span>" + days + "</span><span>" + hours + "</span><span>" + minutes + "</span><span>" + seconds + "</span>";
             }
 
-            function submitForm() {
-                var form = document.getElementById('form');
-                form.submit();
+            function pad(n) {
+                return (n < 10 ? '0' : '') + n;
             }
-            
-            updateCountdown();
         </script>
     </main>
 
