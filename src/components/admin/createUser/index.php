@@ -3,6 +3,7 @@ include "../../../config/checkform/index.php";
 include "../../../config/connectSQL/index.php";
 include '../../../extension/snack/index.php';
 include '../../../config/signup/index.php';
+include '../../../extension/session/index.php';
 
 if (isset($_POST['create'])) {
     $name = $_POST['fullname'];
@@ -14,8 +15,8 @@ if (isset($_POST['create'])) {
     $address = $_POST['address'];
 
     checkFormSignUp($name, $email, $address, $username, $password, $confirm_password, 'on', $role, $db);
+    $_SESSION['load'] = true;
 }
-session_start();
 $_SESSION['popupFileUpload'] = 'close';
 if (!isset($_SESSION['filename'])) {
     $_SESSION['filename'] = '';
