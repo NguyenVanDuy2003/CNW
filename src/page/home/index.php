@@ -34,6 +34,7 @@ foreach ($courses as $index => $course) {
     <link rel="stylesheet" href="../../components/footer/index.css">
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../../style/index.css">
+    <link rel="icon" class='icon-title' href="" type="image/png">    
     <title>Online learning management system</title>
 </head>
 

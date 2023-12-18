@@ -24,9 +24,7 @@ foreach($_SESSION['allQuestion'] as $item){
     $count++;
     if ($item['type'] == "text" ) {
         if(isset($_POST["answer$count"])){
-
             array_push($check,['STT'=> $count,'type' => $item['type'], 'answers'=> $_POST["answer$count"]]);
-        
         }
     }elseif ($item['type'] == "checkbox") {
         $answers = [];
@@ -101,7 +99,6 @@ foreach($check as $index => $item){
     }
 }
 header("Location: result?id=$_GET[id]");
-    
 }
 echo $_SESSION['score'];
 ?>
@@ -132,7 +129,8 @@ echo $_SESSION['score'];
             </div>
             <form method='post' action='' id='form' class='column gap-30'>
                 <?php
-                $sql = "SELECT question, answer,answerCorrect, type FROM question ORDER BY RAND() LIMIT 10";
+                $id = $_GET['id'];
+                $sql = "SELECT question, answer,answerCorrect, type FROM question WHERE courseId=$id ORDER BY RAND() LIMIT 10";
                 $result = $db->query($sql);
                 $allQuestion = [];
                 if ($result->num_rows > 0) {

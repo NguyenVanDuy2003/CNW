@@ -8,6 +8,11 @@ $userId = checkActiveCookie($db);
 session_start();
 if (isset($_GET['id']) && isset($_SESSION['id']) && $_GET['id'] != $_SESSION['id']) {
     $_SESSION['id'] = $_GET['id'];
+    $sql = "SELECT * FROM course WHERE id = '$id'";
+    $result = $db->query($sql);
+    if ($result->num_rows == 0) {
+        header("Location: ../error");
+    }
 }
 if (!isset($_SESSION['type'])) {
     $_SESSION['type'] = "checkbox";
@@ -291,6 +296,7 @@ if (isset($_POST['save'])) {
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../extension/snack/index.css">
     <link rel="stylesheet" href="../../../style/index.css">
+    <link rel="icon" class='icon-title' href="https://cdn-icons-png.flaticon.com/128/5432/5432915.png" type="image/png">    
     <title>Contribute</title>
 </head>
 

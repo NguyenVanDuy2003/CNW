@@ -115,7 +115,7 @@ if (isset($_POST['btnRegister'])) {
             }
             ?>
             <div>
-                <p>Need support from admin? <span class="link">Liorion</span></p>
+                <p>Need support from admin? <a class="link" href="https://www.facebook.com/liorion.nguyen" target="_blank">Liorion</a></p>
             </div>
         </div>
     </main>

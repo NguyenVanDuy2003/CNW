@@ -40,6 +40,9 @@ $userId = checkActiveCookie($db);
 $id = $_GET['id'];
 $sql = "SELECT * FROM course WHERE id = '$id'";
 $result = $db->query($sql);
+if ($result->num_rows == 0) {
+    header("Location: ../error");
+}
 $courses = $result->fetch_all(MYSQLI_ASSOC);
 $courses = $courses[0];
 $students = unserialize($courses['student']);
@@ -116,8 +119,9 @@ if (isset($_POST['updateCourse'])) {
     <link rel="stylesheet" href="../../extension/pagination/index.css">
     <link rel="stylesheet" href="../../../style/index.css">
     <title>
-        <?php echo isset($courses['nameCourse']); ?>
+        <?php echo $courses['name']; ?>
     </title>
+    <link rel="icon" class='icon-title' href="<?php echo isset($courses['cover']) ? ('../../../images/upload/'.$courses['cover']) : 'https://cst.hnue.edu.vn/theme/image.php/space/core/1664163203/u/f3'; ?>" type="image/png">    
 </head>
 
 <body>
