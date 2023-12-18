@@ -6,8 +6,9 @@ include "../../extension/snack/index.php";
 include '../../config/uploadFile/index.php';
 $userId = checkActiveCookie($db);
 session_start();
-if (isset($_GET['id']) && isset($_SESSION['id']) && $_GET['id'] != $_SESSION['id']) {
+if (isset($_GET['id'])) {
     $_SESSION['id'] = $_GET['id'];
+    $id = $_GET['id'];
     $sql = "SELECT * FROM course WHERE id = '$id'";
     $result = $db->query($sql);
     if ($result->num_rows == 0) {

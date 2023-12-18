@@ -121,12 +121,9 @@ echo $_SESSION['score'];
     <?php
     include "../../components/header/index.php";
     ?>
-
     <div id="countdown">
         <div id='tiles'></div>
         <div class="labels">
-            <li>Days</li>
-            <li>Hours</li>
             <li>Mins</li>
             <li>Secs</li>
         </div>
@@ -196,7 +193,7 @@ echo $_SESSION['score'];
             </form>
         </div>
         <script>
-            var target_date = 1000 * 3600 * 48; // set the countdown date
+            var target_date = new Date().getTime() + (1000 * 3600 * 48); // set the countdown date
             var days, hours, minutes, seconds; // variables for time units
 
             var countdown = document.getElementById("tiles"); // get tag element
@@ -206,7 +203,6 @@ echo $_SESSION['score'];
             setInterval(function () { getCountdown(); }, 1000);
 
             function getCountdown() {
-
                 // find the amount of "seconds" between now and target
                 var current_date = new Date().getTime();
                 var seconds_left = (target_date - current_date) / 1000;
@@ -221,7 +217,7 @@ echo $_SESSION['score'];
                 seconds = pad(parseInt(seconds_left % 60));
 
                 // format countdown string + set tag value
-                countdown.innerHTML = "<span>" + days + "</span><span>" + hours + "</span><span>" + minutes + "</span><span>" + seconds + "</span>";
+                countdown.innerHTML = "<span>" + minutes + "</span><span>" + seconds + "</span>";
             }
 
             function pad(n) {
