@@ -119,7 +119,7 @@ if (isset($_POST['popupCancel'])) {
 </head>
 
 <body>
-    <h1>Danh sách người dùng</h1>
+    <h1>Danh sách lớp học</h1>
     <table>
         <thead>
             <tr>

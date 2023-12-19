@@ -363,7 +363,7 @@ if (isset($_POST['save'])) {
                 <?php
                 switch ($_SESSION['type']) {
                     case 'text':
-                        $result = $_SESSION['answerCorrect'][0];
+                        $result = isset($_SESSION['answerCorrect'][0])? $_SESSION['answerCorrect'][0]: '';
                         echo "
                         <input type='text' name='answer_preview' placeholder='Fill in the answer' class='inptxt' readonly/>
                         <p class='answer-text-preview'>Answer Correct: <b>$result</b></p>
@@ -373,15 +373,17 @@ if (isset($_POST['save'])) {
                         $answers = $_SESSION['answer'];
                         $answerCorrect = $_SESSION['answerCorrect'];
                         $type = $_SESSION['type'];
-                        foreach ($answers as $index => $answer) {
-                            $i = $index++;
-                            $checked = (in_array($answer, $answerCorrect)) ? 'checked' : '';
-                            echo "
-                            <div class='d-flex gap-10'>
-                                <input type=$type name='cb_answer_preview$i' $checked/>
-                                <input type='text' name='answer_preview$i' class='inptxt w-full' value='$answer' readonly/>
-                            </div>
-                            ";
+                        if(is_array($answers)){
+                            foreach ($answers as $index => $answer) {
+                                $i = $index++;
+                                $checked = (in_array($answer, $answerCorrect)) ? 'checked' : '';
+                                echo "
+                                <div class='d-flex gap-10'>
+                                    <input type=$type name='cb_answer_preview$i' $checked/>
+                                    <input type='text' name='answer_preview$i' class='inptxt w-full' value='$answer' readonly/>
+                                </div>
+                                ";
+                            }
                         }
                         break;
                 }
