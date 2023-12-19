@@ -179,8 +179,8 @@ echo $_SESSION['score'];
                                 <div class='btn-question-number'><p>Question $i</p></div>
                                 <input class='content-question' value='$question' name='question$i' readonly/>
                             </div>
-                            $result_answer
                             <img class='" . (($row['image'] != "") ? 'imgQuestion' : 'd-none') . "' src='" . (isset($image) ? ('../../../images/upload/' . $image) : '') . "' />
+                            $result_answer
                         </div>                    
                     ";
                     }
