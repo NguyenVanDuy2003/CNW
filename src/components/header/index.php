@@ -8,7 +8,7 @@ if (isset($_POST['logout'])) {
     if (isset($_COOKIE['liorion'])) {
         setcookie('liorion', '', time() - (86400 * 30), "/");
     }
-    header("location: ../login");
+    header("location: ../login/index.php");
 }
 
 ?>
@@ -61,12 +61,12 @@ if (isset($_POST['logout'])) {
                         <hr class="hr-list-menu">
                         <form method="post">
                             <input type="hidden" name="logout" value="true">
-                            <li class="d-flex gap-5 ai-center logout">
-                                <img class="icon" src="https://cdn-icons-png.flaticon.com/512/9121/9121688.png" alt="Logout" />
-                                <button type="submit" style="background: none; border: none; cursor: pointer;">
-                                    <p>Logout</p>
-                                </button>
-                            </li>
+                            <button type="submit" style="border: none; cursor: pointer;"  class="d-flex gap-5 ai-center logout">
+                                <li>
+                                    <img class="icon" src="https://cdn-icons-png.flaticon.com/512/9121/9121688.png" alt="Logout" />
+                                </li>
+                                <p>Logout</p>
+                            </button>
                         </form>
 
                     </ul>
