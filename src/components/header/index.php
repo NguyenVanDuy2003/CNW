@@ -8,7 +8,7 @@ if (isset($_POST['logout'])) {
     if (isset($_COOKIE['liorion'])) {
         setcookie('liorion', '', time() - (86400 * 30), "/");
     }
-    header("location: index.php");
+    header("location: ../login");
 }
 
 ?>
