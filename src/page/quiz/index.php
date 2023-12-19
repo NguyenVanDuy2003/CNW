@@ -136,7 +136,7 @@ echo $_SESSION['score'];
             <form method='post' action='' id='form' class='column gap-30'>
                 <?php
                 $id = $_GET['id'];
-                $sql = "SELECT question, answer,answerCorrect, type FROM question WHERE courseId=$id ORDER BY RAND() LIMIT 10";
+                $sql = "SELECT question, answer,answerCorrect, type, image FROM question WHERE courseId=$id ORDER BY RAND() LIMIT 10";
                 $result = $db->query($sql);
                 $allQuestion = [];
                 if ($result->num_rows > 0) {
@@ -144,6 +144,7 @@ echo $_SESSION['score'];
                     while ($row = $result->fetch_assoc()) {
                         $i++;
                         $question = $row['question'];
+                        $image = $row['image'];
                         $answers = unserialize($row['answer']);
                         $answerCorrect = unserialize(empty($row['answerCorrect'])? $row['answerCorrect'] : '');
                         array_push($allQuestion, ['type' => $row['type'], 'answer' => $answers, 'answerCorrect' => $answerCorrect]);
@@ -172,15 +173,15 @@ echo $_SESSION['score'];
                             }
                         }
 
-
                         echo "
                         <div class='column gap-10 question'>
-                            <div class='d-flex gap-20 ai-center d-flex'>
+                            <div class='d-flex gap-20 ai-center'>
                                 <div class='btn-question-number'><p>Question $i</p></div>
                                 <input class='content-question' value='$question' name='question$i' readonly/>
                             </div>
+                            <img class='" . (($row['image'] != "") ? 'imgQuestion' : 'd-none') . "' src='" . (isset($image) ? ('../../../images/upload/' . $image) : '') . "' />
                             $result_answer
-                        </div>
+                        </div>                    
                     ";
                     }
                     $_SESSION['allQuestion'] = $allQuestion;
