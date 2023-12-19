@@ -145,7 +145,7 @@ echo $_SESSION['score'];
                         $i++;
                         $question = $row['question'];
                         $answers = unserialize($row['answer']);
-                        $answerCorrect = unserialize($row['answerCorrect']);
+                        $answerCorrect = unserialize(empty($row['answerCorrect'])? $row['answerCorrect'] : '');
                         array_push($allQuestion, ['type' => $row['type'], 'answer' => $answers, 'answerCorrect' => $answerCorrect]);
                         $result_answer = "";
                         if ($row['type'] == "text") {
